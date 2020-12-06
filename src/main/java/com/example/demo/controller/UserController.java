@@ -342,6 +342,8 @@ public class UserController {
         LocalDate startDate = nowLD.minusDays(nowLD.getDayOfMonth() - 1).minusMonths(5);
         System.out.println(startDate.toString());
 
+        System.out.println("git commit success");
+
     }
 
     public static int test(){
