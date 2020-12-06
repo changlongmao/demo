@@ -1,0 +1,361 @@
+package com.example.demo.controller;
+
+import cn.hutool.core.lang.UUID;
+import cn.hutool.core.util.RandomUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.example.demo.entity.NewAndOldList;
+import com.example.demo.entity.RestResponse;
+import com.example.demo.entity.RunnableDemo;
+import com.example.demo.entity.User;
+import com.example.demo.jwt.AuthUser;
+import com.example.demo.jwt.AuthUserInfo;
+import com.example.demo.jwt.Authorization;
+import com.example.demo.jwt.JwtTokenUtil;
+import com.example.demo.service.UserService;
+import com.example.demo.util.DateUtil;
+import com.example.demo.util.MD5Util;
+import lombok.extern.slf4j.Slf4j;
+import net.logstash.logback.encoder.org.apache.commons.lang.text.StrBuilder;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+import org.apache.poi.ss.formula.functions.T;
+import org.apache.shiro.crypto.hash.Sha256Hash;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import sun.misc.BASE64Encoder;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.lang.String;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
+
+@Slf4j
+@RestController
+@RequestMapping("/user")
+public class UserController {
+
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private RedissonClient redisson;
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    @Qualifier(value = "taskExecutor")
+    private ThreadPoolTaskExecutor taskExecutor;
+
+    @RequestMapping(value = "/save", method = RequestMethod.GET)
+    public RestResponse save(String code) {
+        RLock lock = redisson.getLock("confirmUserType_" + code);
+        if (lock.isLocked()) {
+            return RestResponse.error("点击过快，请勿重复请求");
+        }
+        long startTime = System.currentTimeMillis();
+        try {
+            lock.lock(60L, TimeUnit.SECONDS);
+            new Thread().start();
+            for (int i = 0; i < 10; i++) {
+                taskExecutor.execute(new RunnableDemo(userService, i, startTime));
+                if (i == 8) {
+                    int activeCount = taskExecutor.getActiveCount();
+                    System.out.println("获取当前线程池活动的线程数：" + activeCount);
+                }
+            }
+
+
+            return RestResponse.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return RestResponse.error("操作异常");
+        } finally {
+            lock.unlock();
+            Long endTime = System.currentTimeMillis();
+            System.out.println("外进程共用时" + (endTime - startTime) + "ms");
+        }
+
+    }
+
+
+    @RequestMapping(value = "/mybatisPlusBatchInsert", method = RequestMethod.POST)
+    public RestResponse mybatisPlusBatchInsert(HttpServletRequest request) {
+        long startTime = System.currentTimeMillis();
+
+        List<User> users = new ArrayList<>();
+
+        for (int i = 0; i < 100; i++) {
+            User user = new User();
+            user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+            user.setUsername("setUsername" + i * 1000);
+            user.setPassword("setPassword" + i * 1000);
+            user.setRearName("setRearName" + i * 1000);
+            users.add(user);
+        }
+
+        userService.saveBatch(users);
+        Long endTime = System.currentTimeMillis();
+        System.out.println("mybatisPlusBatchInsert批量插入数据共用时" + (endTime - startTime) + "ms");
+        return RestResponse.success().put("users", users);
+    }
+
+    @RequestMapping(value = "/myBatchInsert", method = RequestMethod.POST)
+    public RestResponse myBatchInsert(@RequestBody String a, HttpServletRequest request) {
+        long startTime = System.currentTimeMillis();
+
+        List<User> users = new ArrayList<>();
+//        ThreadPoolExecutor executor1 = new ThreadPoolExecutor(10, 20, 3000, TimeUnit.SECONDS, new SynchronousQueue<>());
+//        executor1.execute(() -> {
+//            int x = 1;
+//            System.out.println("开启了一个线程"+x);
+//        });
+        for (int i = 0; i < 10000; i++) {
+            User user = new User();
+            user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+            user.setUsername("setUsername" + i * 1000);
+            user.setPassword("setPassword" + i * 1000);
+            user.setRearName("setRearName" + i * 1000);
+            userService.save(user);
+            users.add(user);
+            System.out.println("插入了数据"+users.size());
+        }
+
+//        executor1.shutdown();
+        Long endTime = System.currentTimeMillis();
+        System.out.println("myBatchInsert批量插入数据共用时" + (endTime - startTime) + "ms");
+        return RestResponse.success().put("users", users);
+    }
+
+    @RequestMapping(value = "/batchInsert", method = RequestMethod.POST)
+    public RestResponse batchInsert(HttpServletRequest request) {
+        long startTime = System.currentTimeMillis();
+
+        List<User> users = new ArrayList<>();
+
+        for (int i = 0; i < 100; i++) {
+            User user = new User();
+            user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+            user.setPassword("setPassword" + i * 1000);
+            user.setUsername("setUsername" + i * 1000);
+            user.setRearName("setRearName" + i * 1000);
+            users.add(user);
+        }
+        log.info("我要报错");
+        userService.batchInsert(users);
+        Long endTime = System.currentTimeMillis();
+        System.out.println("batchInsert批量插入数据共用时" + (endTime - startTime) + "ms");
+        return RestResponse.success().put("users", users);
+    }
+
+    @RequestMapping(value = "/testSelect", method = RequestMethod.GET)
+    public RestResponse testSelect(HttpServletRequest request) {
+        long startTime = System.currentTimeMillis();
+
+        log.info(request.getRemoteAddr());
+        log.info(request.getRemoteHost());
+        List<User> list = userService.selectList();
+//        List<User> list = userService.list();
+        Long endTime = System.currentTimeMillis();
+        System.out.println("查询数据共用时" + (endTime - startTime) + "ms");
+        return RestResponse.success().put("count", list);
+    }
+
+    @RequestMapping(value = "/count", method = RequestMethod.GET)
+    public RestResponse count(String id) {
+        long startTime = System.currentTimeMillis();
+
+        int b = userService.count();
+        Long endTime = System.currentTimeMillis();
+        System.out.println("查询数据共用时" + (endTime - startTime) + "ms");
+        return RestResponse.success().put("count", b);
+    }
+
+    @RequestMapping(value = "/selectOne", method = RequestMethod.GET)
+    public RestResponse selectOne(String id) {
+        long startTime = System.currentTimeMillis();
+
+        User user = userService.getById(id);
+        Long endTime = System.currentTimeMillis();
+        System.out.println("查询数据共用时" + (endTime - startTime) + "ms");
+        return RestResponse.success().put("User", user);
+    }
+
+    @RequestMapping(value = "/delete", method = RequestMethod.GET)
+    public RestResponse delete() {
+        long startTime = System.currentTimeMillis();
+
+        userService.remove(new QueryWrapper<User>().eq("PASSWORD", "123"));
+        Long endTime = System.currentTimeMillis();
+        System.out.println("查询数据共用时" + (endTime - startTime) + "ms");
+        return RestResponse.success();
+    }
+
+
+    @RequestMapping(value = "/getToken", method = RequestMethod.GET)
+    public RestResponse getToken() {
+        String token = jwtTokenUtil.generateToken("1169156293848969218", 1);
+
+        return RestResponse.success().put("token", token);
+    }
+
+    @RequestMapping(value = "/getBase64", method = RequestMethod.POST)
+    public RestResponse getBase64(@RequestParam MultipartFile file) throws IOException {
+        File tmp = File.createTempFile("tem", null);
+        file.transferTo(tmp);
+        tmp.deleteOnExit();
+        FileInputStream inputFile = new FileInputStream(tmp);
+        byte[] buffer = new byte[(int) tmp.length()];
+        inputFile.read(buffer);
+        inputFile.close();
+        String base64 = new BASE64Encoder().encode(buffer);
+//        BASE64Encoder base64Encoder =new BASE64Encoder();
+//        String base64EncoderImg = file.getOriginalFilename()+","+ base64Encoder.encode(file.getBytes());
+
+        String s = base64.replaceAll("[\\s*\t\n\r]", "");
+        return RestResponse.success().put("base64", s);
+    }
+
+
+    @Authorization
+    @RequestMapping(value = "/testAuthorization", method = RequestMethod.GET)
+    public RestResponse testAuthorization(@AuthUser AuthUserInfo userInfo, @RequestParam String user) {
+        System.out.println(userInfo);
+        System.out.println(user);
+        return RestResponse.success();
+    }
+
+    public static void main(String[] args) {
+
+//        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new ConcurrentHashMap<>();
+        ThreadPoolExecutor executor1 = new ThreadPoolExecutor(3, 6, 300, TimeUnit.SECONDS, new SynchronousQueue<>());
+        executor1.execute(() -> {
+            for (int i = 0; i < 10000; i++) {
+                map.put("x"+i,"y"+i);
+                map.get("x"+i);
+                System.out.println("打印："+map.toString());
+                System.out.println(map.size());
+            }
+        });
+
+        executor1.shutdown();
+
+        System.out.println(map.size());
+
+
+        /*LocalDate nowLD = LocalDate.now();
+        LocalDate endDate = nowLD.minusDays(nowLD.getDayOfMonth());
+        LocalDate startDate = nowLD.minusDays(nowLD.getDayOfMonth() - 1).minusYears(2);
+        System.System.out.println(endDate);
+        System.System.out.println(startDate);
+        List<String> xAxis = new ArrayList<>();
+        while (!endDate.isBefore(startDate)) {
+            xAxis.add(startDate.format(DateTimeFormatter.ISO_LOCAL_DATE).substring(0,7));
+            startDate = startDate.plusMonths(1);
+        }
+        System.System.out.println(xAxis.toString());*/
+
+//        System.System.out.println(System.currentTimeMillis());
+
+        /*SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+        String aaa = "20200416101801000";
+        String substring = aaa.substring(0, 14);
+        System.System.out.println(substring);
+        Date parseDate = DateUtil.parseDate(substring);
+        System.System.out.println(parseDate);
+        Date date = format.parse("20200416101801");
+        System.System.out.println(date.toString());*/
+
+
+//        String format = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE).replaceAll("-", "");
+//        String string2MD5 = MD5Util.string2MD5(format.substring(0, 4) + "appletSaveEvent" + format.substring(4));
+//        String string2MD5 = MD5Util.string2MD5("2020appletSaveEvent0527");
+//        System.out.println(string2MD5);
+
+        // TODO: 2020/6/12 待优化
+        // FIXME: 2020/6/12 待修复
+
+//        String s = new Sha256Hash("chang123", "YzcmCZNvbXocrsz9dm8e").toHex();
+//        System.out.println(s);
+//
+//        List<String> split = Arrays.asList("医疗机构使用药品质量检查记录表.xls".split("."));
+//
+//        Date date = DateUtil.parseDate("2020/09/01 11:22:33");
+//        System.out.println(date.toString());
+//
+//        String regulatory = "123";
+//        System.out.println(regulatory.substring(0, regulatory.length() - 1));
+//
+//        Set<Map<String,String>> set = new HashSet<>();
+//        Map<String, String> hashMap1 = new HashMap<>();
+//        hashMap1.put("name","123");
+//        hashMap1.put("age","456");
+//        set.add(hashMap1);
+//        Map<String, String> hashMap2 = new HashMap<>();
+//        hashMap2.put("name","123");
+//        hashMap2.put("age","456");
+//        set.add(hashMap2);
+//        Map<String, String> hashMap3 = new HashMap<>();
+//        hashMap3.put("name","123");
+//        hashMap3.put("age","45");
+//        set.add(hashMap3);
+//        System.out.println(set.toString());
+
+        System.out.println(test());
+        int x = 1;
+        x+= 3-2;
+        System.out.println(x);
+        System.out.println("abc".substring("abc".length()-2));
+        List<String> allDailySupervisionList = Arrays.asList("医疗机构使用药品质量检查记录表.xls","123");
+        List<String> dailySupervisionList = allDailySupervisionList.stream().filter(e -> e.equals("aaa"))
+                .collect(Collectors.toList());
+        for (String s1 : dailySupervisionList) {
+            System.out.println(s1.length());
+        }
+
+        LocalDate nowLD = LocalDate.now();
+        LocalDate startDate = nowLD.minusDays(nowLD.getDayOfMonth() - 1).minusMonths(5);
+        System.out.println(startDate.toString());
+
+    }
+
+    public static int test(){
+        try {
+            System.out.println("try");
+//            int i = 1/0;
+            return 1;
+        }catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("catch");
+            return 0;
+        }finally {
+            System.out.println("finally");
+            return 2;
+        }
+    }
+}

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <property name="PATH" value="logs"/>
+    <property name="PATTERN" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{20} - [%method,%line] - %msg%n"/>
+
+    <!-- 控制台输出 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>utf-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 开发、测试环境 -->
+        <!-- INFO信息输出 -->
+        <appender name="LOG_INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${PATH}/cr-info.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <!-- 按天回滚 daily -->
+                <fileNamePattern>${PATH}/cr-info.%d{yyyy-MM-dd}.log</fileNamePattern>
+                <!-- 日志最大的历史 15天 -->
+                <maxHistory>15</maxHistory>
+            </rollingPolicy>
+            <encoder>
+                <pattern>${FILE_LOG_PATTERN}</pattern>
+                <charset>utf-8</charset>
+            </encoder>
+            <filter class="ch.qos.logback.classic.filter.LevelFilter">
+                <level>INFO</level>
+                <onMatch>ACCEPT</onMatch>
+                <onMismatch>DENY</onMismatch>
+            </filter>
+        </appender>
+        <appender name="LOG_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${PATH}/cr-error.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${PATH}/cr-error.%d{yyyy-MM-dd}.log</fileNamePattern>
+                <!-- 日志最大的历史 15天 -->
+                <maxHistory>15</maxHistory>
+            </rollingPolicy>
+            <encoder>
+                <pattern>${FILE_LOG_PATTERN}</pattern>
+                <charset>utf-8</charset>
+            </encoder>
+            <filter class="ch.qos.logback.classic.filter.LevelFilter">
+                <level>ERROR</level>
+                <onMatch>ACCEPT</onMatch>
+                <onMismatch>DENY</onMismatch>
+            </filter>
+        </appender>
+
+
+<!--    <logger name="com.example.demo.mapper" level="DEBUG"/>-->
+
+    <root level="info">
+        <appender-ref ref="console"/>
+        <appender-ref ref="LOG_ERROR"/>
+        <appender-ref ref="LOG_INFO"/>
+    </root>
+
+</configuration>

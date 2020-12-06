@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <classPathEntry location="D:\repository\mysql\mysql-connector-java\5.1.36\mysql-connector-java-5.1.36.jar" />
+
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/changlf?useUnicode=true&amp;characterEncoding=UTF-8"
+                        userId="root"
+                        password="root">
+        </jdbcConnection>
+
+
+        <javaTypeResolver >
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+
+        <javaModelGenerator targetPackage="com.example.demo.entity" targetProject="demo\src\main\java" >
+            <!--     	<property name="rootClass" value="com.common.bean.BaseBean" /> -->
+        </javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="mybatis"  targetProject="demo\src\main\resources" >
+        </sqlMapGenerator>
+
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.example.demo.mapper"  targetProject="demo\src\main\java"  >
+        </javaClientGenerator>
+
+        <table schema="" tableName="cr_product_info" domainObjectName="CrProductInfo"></table>
+
+
+    </context>
+</generatorConfiguration>

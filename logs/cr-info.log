@@ -1,0 +1,534 @@
+2020-10-30 11:30:47.824  INFO 13044 --- [restartedMain] com.example.demo.DemoApplication         : Starting DemoApplication on DESKTOP-9R82UJ9 with PID 13044 (D:\myProject\demo\target\classes started by LongFei in D:\myProject\demo)
+2020-10-30 11:30:47.832  INFO 13044 --- [restartedMain] com.example.demo.DemoApplication         : No active profile set, falling back to default profiles: default
+2020-10-30 11:30:47.934  INFO 13044 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-10-30 11:30:47.935  INFO 13044 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-10-30 11:30:49.003  INFO 13044 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9999 (http)
+2020-10-30 11:30:49.020  INFO 13044 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-10-30 11:30:49.020  INFO 13044 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.21]
+2020-10-30 11:30:49.123  INFO 13044 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-10-30 11:30:49.123  INFO 13044 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1187 ms
+2020-10-30 11:30:49.220  INFO 13044 --- [restartedMain] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2020-10-30 11:30:49.389  INFO 13044 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2020-10-30 11:30:49.502  INFO 13044 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2020-10-30 11:30:49.504  INFO 13044 --- [restartedMain] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2020-10-30 11:30:49.515  INFO 13044 --- [restartedMain] ConditionEvaluationReportLoggingListener : 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+2020-10-30 11:31:36.712  INFO 12132 --- [restartedMain] com.example.demo.DemoApplication         : Starting DemoApplication on DESKTOP-9R82UJ9 with PID 12132 (D:\myProject\demo\target\classes started by LongFei in D:\myProject\demo)
+2020-10-30 11:31:36.715  INFO 12132 --- [restartedMain] com.example.demo.DemoApplication         : No active profile set, falling back to default profiles: default
+2020-10-30 11:31:36.754  INFO 12132 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-10-30 11:31:36.754  INFO 12132 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-10-30 11:31:37.804  INFO 12132 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9999 (http)
+2020-10-30 11:31:37.821  INFO 12132 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-10-30 11:31:37.821  INFO 12132 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.21]
+2020-10-30 11:31:37.927  INFO 12132 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-10-30 11:31:37.928  INFO 12132 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1174 ms
+2020-10-30 11:31:38.033  INFO 12132 --- [restartedMain] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2020-10-30 11:31:38.201  INFO 12132 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2020-10-30 11:31:39.163  INFO 12132 --- [restartedMain] org.redisson.Version                     : Redisson 3.10.5
+2020-10-30 11:31:40.323  INFO 12132 --- [redisson-netty-1-3] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 11:31:40.323  INFO 12132 --- [redisson-netty-1-2] o.r.c.pool.MasterConnectionPool          : 32 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 11:31:40.381  INFO 12132 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'taskExecutor'
+2020-10-30 11:31:40.782  INFO 12132 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-10-30 11:31:40.829  INFO 12132 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9999 (http) with context path ''
+2020-10-30 11:31:40.833  INFO 12132 --- [restartedMain] com.example.demo.DemoApplication         : Started DemoApplication in 4.75 seconds (JVM running for 5.861)
+2020-10-30 11:32:53.702  INFO 12132 --- [http-nio-9999-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-10-30 11:32:53.703  INFO 12132 --- [http-nio-9999-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-10-30 11:32:53.710  INFO 12132 --- [http-nio-9999-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 7 ms
+2020-10-30 11:33:50.817  INFO 12132 --- [Thread-15] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'taskExecutor'
+2020-10-30 11:33:50.996  INFO 12132 --- [Thread-15] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2020-10-30 11:33:51.661  INFO 12132 --- [restartedMain] com.example.demo.DemoApplication         : Starting DemoApplication on DESKTOP-9R82UJ9 with PID 12132 (D:\myProject\demo\target\classes started by LongFei in D:\myProject\demo)
+2020-10-30 11:33:51.661  INFO 12132 --- [restartedMain] com.example.demo.DemoApplication         : No active profile set, falling back to default profiles: default
+2020-10-30 11:33:52.280  INFO 12132 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9999 (http)
+2020-10-30 11:33:52.281  INFO 12132 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-10-30 11:33:52.282  INFO 12132 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.21]
+2020-10-30 11:33:52.315  INFO 12132 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-10-30 11:33:52.315  INFO 12132 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 650 ms
+2020-10-30 11:33:52.353  INFO 12132 --- [restartedMain] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2020-10-30 11:33:52.378  INFO 12132 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-2} inited
+2020-10-30 11:33:52.550  INFO 12132 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'taskExecutor'
+2020-10-30 11:33:52.569  INFO 12132 --- [restartedMain] org.redisson.Version                     : Redisson 3.10.5
+2020-10-30 11:33:52.609  INFO 12132 --- [redisson-netty-4-20] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 11:33:52.612  INFO 12132 --- [redisson-netty-4-3] o.r.c.pool.MasterConnectionPool          : 32 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 11:33:52.740  INFO 12132 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-10-30 11:33:52.772  INFO 12132 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9999 (http) with context path ''
+2020-10-30 11:33:52.773  INFO 12132 --- [restartedMain] com.example.demo.DemoApplication         : Started DemoApplication in 1.17 seconds (JVM running for 137.801)
+2020-10-30 11:33:52.778  INFO 12132 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2020-10-30 11:33:57.398  INFO 12132 --- [http-nio-9999-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-10-30 11:33:57.398  INFO 12132 --- [http-nio-9999-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-10-30 11:33:57.403  INFO 12132 --- [http-nio-9999-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 5 ms
+2020-10-30 11:34:05.092  INFO 12132 --- [Thread-28] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'taskExecutor'
+2020-10-30 11:34:05.094  INFO 12132 --- [Thread-28] com.alibaba.druid.pool.DruidDataSource   : {dataSource-2} closed
+2020-10-30 11:34:10.017  INFO 5760 --- [restartedMain] com.example.demo.DemoApplication         : Starting DemoApplication on DESKTOP-9R82UJ9 with PID 5760 (D:\myProject\demo\target\classes started by LongFei in D:\myProject\demo)
+2020-10-30 11:34:10.020  INFO 5760 --- [restartedMain] com.example.demo.DemoApplication         : No active profile set, falling back to default profiles: default
+2020-10-30 11:34:10.122  INFO 5760 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-10-30 11:34:10.122  INFO 5760 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-10-30 11:34:11.277  INFO 5760 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9999 (http)
+2020-10-30 11:34:11.294  INFO 5760 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-10-30 11:34:11.294  INFO 5760 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.21]
+2020-10-30 11:34:11.427  INFO 5760 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-10-30 11:34:11.427  INFO 5760 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1304 ms
+2020-10-30 11:34:11.570  INFO 5760 --- [restartedMain] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2020-10-30 11:34:11.723  INFO 5760 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2020-10-30 11:34:12.581  INFO 5760 --- [restartedMain] org.redisson.Version                     : Redisson 3.10.5
+2020-10-30 11:34:13.578  INFO 5760 --- [redisson-netty-1-3] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 11:34:13.578  INFO 5760 --- [redisson-netty-1-2] o.r.c.pool.MasterConnectionPool          : 32 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 11:34:13.629  INFO 5760 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'taskExecutor'
+2020-10-30 11:34:14.002  INFO 5760 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-10-30 11:34:14.049  INFO 5760 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9999 (http) with context path ''
+2020-10-30 11:34:14.052  INFO 5760 --- [restartedMain] com.example.demo.DemoApplication         : Started DemoApplication in 4.632 seconds (JVM running for 5.773)
+2020-10-30 11:34:22.413  INFO 5760 --- [Thread-18] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'taskExecutor'
+2020-10-30 11:34:22.558  INFO 5760 --- [Thread-18] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2020-10-30 11:34:45.384  INFO 12168 --- [restartedMain] com.example.demo.DemoApplication         : Starting DemoApplication on DESKTOP-9R82UJ9 with PID 12168 (D:\myProject\demo\target\classes started by LongFei in D:\myProject\demo)
+2020-10-30 11:34:45.387  INFO 12168 --- [restartedMain] com.example.demo.DemoApplication         : No active profile set, falling back to default profiles: default
+2020-10-30 11:34:45.460  INFO 12168 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-10-30 11:34:45.460  INFO 12168 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-10-30 11:34:46.517  INFO 12168 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9999 (http)
+2020-10-30 11:34:46.534  INFO 12168 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-10-30 11:34:46.535  INFO 12168 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.21]
+2020-10-30 11:34:46.641  INFO 12168 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-10-30 11:34:46.641  INFO 12168 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1180 ms
+2020-10-30 11:34:46.739  INFO 12168 --- [restartedMain] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2020-10-30 11:34:46.885  INFO 12168 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2020-10-30 11:34:47.756  INFO 12168 --- [restartedMain] org.redisson.Version                     : Redisson 3.10.5
+2020-10-30 11:34:48.755  INFO 12168 --- [redisson-netty-1-3] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 11:34:48.755  INFO 12168 --- [redisson-netty-1-2] o.r.c.pool.MasterConnectionPool          : 32 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 11:34:48.807  INFO 12168 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'taskExecutor'
+2020-10-30 11:34:49.179  INFO 12168 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-10-30 11:34:49.222  INFO 12168 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9999 (http) with context path ''
+2020-10-30 11:34:49.225  INFO 12168 --- [restartedMain] com.example.demo.DemoApplication         : Started DemoApplication in 4.422 seconds (JVM running for 5.505)
+2020-10-30 11:34:52.965  INFO 12168 --- [http-nio-9999-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-10-30 11:34:52.966  INFO 12168 --- [http-nio-9999-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-10-30 11:34:52.973  INFO 12168 --- [http-nio-9999-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 7 ms
+2020-10-30 11:35:08.959  INFO 12168 --- [http-nio-9999-exec-8] c.e.demo.controller.UserController       : 我要报错
+2020-10-30 11:35:31.440  INFO 12168 --- [http-nio-9999-exec-11] c.e.demo.controller.UserController       : 我要报错
+2020-10-30 11:51:36.149  INFO 12168 --- [Thread-18] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'taskExecutor'
+2020-10-30 11:51:36.281  INFO 12168 --- [Thread-18] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2020-10-30 13:58:46.610  INFO 3420 --- [restartedMain] com.example.demo.DemoApplication         : Starting DemoApplication on DESKTOP-9R82UJ9 with PID 3420 (D:\myProject\demo\target\classes started by LongFei in D:\myProject\demo)
+2020-10-30 13:58:46.613  INFO 3420 --- [restartedMain] com.example.demo.DemoApplication         : No active profile set, falling back to default profiles: default
+2020-10-30 13:58:46.687  INFO 3420 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-10-30 13:58:46.687  INFO 3420 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-10-30 13:58:47.838  INFO 3420 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9999 (http)
+2020-10-30 13:58:47.855  INFO 3420 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-10-30 13:58:47.856  INFO 3420 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.21]
+2020-10-30 13:58:47.971  INFO 3420 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-10-30 13:58:47.971  INFO 3420 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1284 ms
+2020-10-30 13:58:48.073  INFO 3420 --- [restartedMain] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2020-10-30 13:58:48.223  INFO 3420 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2020-10-30 13:58:49.078  INFO 3420 --- [restartedMain] org.redisson.Version                     : Redisson 3.10.5
+2020-10-30 13:58:50.162  INFO 3420 --- [redisson-netty-1-2] o.r.c.pool.MasterConnectionPool          : 32 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 13:58:50.162  INFO 3420 --- [redisson-netty-1-3] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 13:58:50.215  INFO 3420 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'taskExecutor'
+2020-10-30 13:58:50.627  INFO 3420 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-10-30 13:58:50.676  INFO 3420 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9999 (http) with context path ''
+2020-10-30 13:58:50.678  INFO 3420 --- [restartedMain] com.example.demo.DemoApplication         : Started DemoApplication in 4.618 seconds (JVM running for 5.883)
+2020-10-30 13:58:57.437  INFO 3420 --- [http-nio-9999-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-10-30 13:58:57.437  INFO 3420 --- [http-nio-9999-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-10-30 13:58:57.444  INFO 3420 --- [http-nio-9999-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 7 ms
+2020-10-30 14:03:23.175  INFO 3420 --- [Thread-18] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'taskExecutor'
+2020-10-30 14:03:23.349  INFO 3420 --- [Thread-18] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2020-10-30 14:03:28.841  INFO 18392 --- [restartedMain] com.example.demo.DemoApplication         : Starting DemoApplication on DESKTOP-9R82UJ9 with PID 18392 (D:\myProject\demo\target\classes started by LongFei in D:\myProject\demo)
+2020-10-30 14:03:28.876  INFO 18392 --- [restartedMain] com.example.demo.DemoApplication         : No active profile set, falling back to default profiles: default
+2020-10-30 14:03:28.916  INFO 18392 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-10-30 14:03:28.916  INFO 18392 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-10-30 14:03:29.969  INFO 18392 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9999 (http)
+2020-10-30 14:03:29.986  INFO 18392 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-10-30 14:03:29.986  INFO 18392 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.21]
+2020-10-30 14:03:30.101  INFO 18392 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-10-30 14:03:30.101  INFO 18392 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1185 ms
+2020-10-30 14:03:30.200  INFO 18392 --- [restartedMain] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2020-10-30 14:03:30.348  INFO 18392 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2020-10-30 14:03:31.205  INFO 18392 --- [restartedMain] org.redisson.Version                     : Redisson 3.10.5
+2020-10-30 14:03:32.176  INFO 18392 --- [redisson-netty-1-2] o.r.c.pool.MasterConnectionPool          : 32 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:03:32.176  INFO 18392 --- [redisson-netty-1-3] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:03:32.233  INFO 18392 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'taskExecutor'
+2020-10-30 14:03:32.589  INFO 18392 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-10-30 14:03:32.631  INFO 18392 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9999 (http) with context path ''
+2020-10-30 14:03:32.633  INFO 18392 --- [restartedMain] com.example.demo.DemoApplication         : Started DemoApplication in 4.378 seconds (JVM running for 5.472)
+2020-10-30 14:03:37.182  INFO 18392 --- [http-nio-9999-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-10-30 14:03:37.182  INFO 18392 --- [http-nio-9999-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-10-30 14:03:37.187  INFO 18392 --- [http-nio-9999-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 5 ms
+2020-10-30 14:05:17.563  INFO 18392 --- [Thread-18] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'taskExecutor'
+2020-10-30 14:05:17.734  INFO 18392 --- [Thread-18] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2020-10-30 14:05:23.900  INFO 14752 --- [restartedMain] com.example.demo.DemoApplication         : Starting DemoApplication on DESKTOP-9R82UJ9 with PID 14752 (D:\myProject\demo\target\classes started by LongFei in D:\myProject\demo)
+2020-10-30 14:05:23.939  INFO 14752 --- [restartedMain] com.example.demo.DemoApplication         : No active profile set, falling back to default profiles: default
+2020-10-30 14:05:23.983  INFO 14752 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-10-30 14:05:23.984  INFO 14752 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-10-30 14:05:25.093  INFO 14752 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9999 (http)
+2020-10-30 14:05:25.113  INFO 14752 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-10-30 14:05:25.113  INFO 14752 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.21]
+2020-10-30 14:05:25.220  INFO 14752 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-10-30 14:05:25.220  INFO 14752 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1236 ms
+2020-10-30 14:05:25.319  INFO 14752 --- [restartedMain] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2020-10-30 14:05:25.472  INFO 14752 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2020-10-30 14:05:26.339  INFO 14752 --- [restartedMain] org.redisson.Version                     : Redisson 3.10.5
+2020-10-30 14:05:27.344  INFO 14752 --- [redisson-netty-1-3] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:05:27.344  INFO 14752 --- [redisson-netty-1-2] o.r.c.pool.MasterConnectionPool          : 32 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:05:27.396  INFO 14752 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'taskExecutor'
+2020-10-30 14:05:27.757  INFO 14752 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-10-30 14:05:27.799  INFO 14752 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9999 (http) with context path ''
+2020-10-30 14:05:27.801  INFO 14752 --- [restartedMain] com.example.demo.DemoApplication         : Started DemoApplication in 4.516 seconds (JVM running for 5.639)
+2020-10-30 14:05:34.373  INFO 14752 --- [http-nio-9999-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-10-30 14:05:34.373  INFO 14752 --- [http-nio-9999-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-10-30 14:05:34.379  INFO 14752 --- [http-nio-9999-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 6 ms
+2020-10-30 14:06:48.221  INFO 14752 --- [Thread-18] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'taskExecutor'
+2020-10-30 14:07:22.131  INFO 15696 --- [restartedMain] com.example.demo.DemoApplication         : Starting DemoApplication on DESKTOP-9R82UJ9 with PID 15696 (D:\myProject\demo\target\classes started by LongFei in D:\myProject\demo)
+2020-10-30 14:07:22.175  INFO 15696 --- [restartedMain] com.example.demo.DemoApplication         : No active profile set, falling back to default profiles: default
+2020-10-30 14:07:22.231  INFO 15696 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-10-30 14:07:22.231  INFO 15696 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-10-30 14:07:23.464  INFO 15696 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9999 (http)
+2020-10-30 14:07:23.483  INFO 15696 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-10-30 14:07:23.483  INFO 15696 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.21]
+2020-10-30 14:07:23.603  INFO 15696 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-10-30 14:07:23.604  INFO 15696 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1373 ms
+2020-10-30 14:07:23.722  INFO 15696 --- [restartedMain] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2020-10-30 14:07:23.904  INFO 15696 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2020-10-30 14:07:24.850  INFO 15696 --- [restartedMain] org.redisson.Version                     : Redisson 3.10.5
+2020-10-30 14:07:25.894  INFO 15696 --- [redisson-netty-1-2] o.r.c.pool.MasterConnectionPool          : 32 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:07:25.894  INFO 15696 --- [redisson-netty-1-3] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:07:25.952  INFO 15696 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'taskExecutor'
+2020-10-30 14:07:26.322  INFO 15696 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-10-30 14:07:26.365  INFO 15696 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9999 (http) with context path ''
+2020-10-30 14:07:26.367  INFO 15696 --- [restartedMain] com.example.demo.DemoApplication         : Started DemoApplication in 4.849 seconds (JVM running for 5.912)
+2020-10-30 14:07:33.862  INFO 15696 --- [http-nio-9999-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-10-30 14:07:33.862  INFO 15696 --- [http-nio-9999-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-10-30 14:07:33.869  INFO 15696 --- [http-nio-9999-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 7 ms
+2020-10-30 14:07:58.190  INFO 15696 --- [Thread-19] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'taskExecutor'
+2020-10-30 14:07:58.329  INFO 15696 --- [Thread-19] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2020-10-30 14:08:18.492  INFO 3668 --- [restartedMain] com.example.demo.DemoApplication         : Starting DemoApplication on DESKTOP-9R82UJ9 with PID 3668 (D:\myProject\demo\target\classes started by LongFei in D:\myProject\demo)
+2020-10-30 14:08:18.495  INFO 3668 --- [restartedMain] com.example.demo.DemoApplication         : No active profile set, falling back to default profiles: default
+2020-10-30 14:08:18.577  INFO 3668 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-10-30 14:08:18.577  INFO 3668 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-10-30 14:08:19.679  INFO 3668 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9999 (http)
+2020-10-30 14:08:19.698  INFO 3668 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-10-30 14:08:19.698  INFO 3668 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.21]
+2020-10-30 14:08:19.805  INFO 3668 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-10-30 14:08:19.805  INFO 3668 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1228 ms
+2020-10-30 14:08:19.909  INFO 3668 --- [restartedMain] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2020-10-30 14:08:20.063  INFO 3668 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2020-10-30 14:08:20.934  INFO 3668 --- [restartedMain] org.redisson.Version                     : Redisson 3.10.5
+2020-10-30 14:08:21.912  INFO 3668 --- [redisson-netty-1-29] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:08:21.914  INFO 3668 --- [redisson-netty-1-3] o.r.c.pool.MasterConnectionPool          : 32 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:08:21.968  INFO 3668 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'taskExecutor'
+2020-10-30 14:08:22.337  INFO 3668 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-10-30 14:08:22.382  INFO 3668 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9999 (http) with context path ''
+2020-10-30 14:08:22.384  INFO 3668 --- [restartedMain] com.example.demo.DemoApplication         : Started DemoApplication in 4.49 seconds (JVM running for 5.569)
+2020-10-30 14:08:26.324  INFO 3668 --- [http-nio-9999-exec-3] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-10-30 14:08:26.324  INFO 3668 --- [http-nio-9999-exec-3] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-10-30 14:08:26.333  INFO 3668 --- [http-nio-9999-exec-3] o.s.web.servlet.DispatcherServlet        : Completed initialization in 9 ms
+2020-10-30 14:09:34.551  INFO 3668 --- [Thread-18] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'taskExecutor'
+2020-10-30 14:09:34.712  INFO 3668 --- [Thread-18] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2020-10-30 14:09:48.371  INFO 3096 --- [restartedMain] com.example.demo.DemoApplication         : Starting DemoApplication on DESKTOP-9R82UJ9 with PID 3096 (D:\myProject\demo\target\classes started by LongFei in D:\myProject\demo)
+2020-10-30 14:09:48.374  INFO 3096 --- [restartedMain] com.example.demo.DemoApplication         : No active profile set, falling back to default profiles: default
+2020-10-30 14:09:48.418  INFO 3096 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-10-30 14:09:48.418  INFO 3096 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-10-30 14:09:49.533  INFO 3096 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9999 (http)
+2020-10-30 14:09:49.550  INFO 3096 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-10-30 14:09:49.550  INFO 3096 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.21]
+2020-10-30 14:09:49.655  INFO 3096 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-10-30 14:09:49.656  INFO 3096 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1238 ms
+2020-10-30 14:09:49.757  INFO 3096 --- [restartedMain] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2020-10-30 14:09:49.948  INFO 3096 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2020-10-30 14:09:50.796  INFO 3096 --- [restartedMain] org.redisson.Version                     : Redisson 3.10.5
+2020-10-30 14:09:51.773  INFO 3096 --- [redisson-netty-1-2] o.r.c.pool.MasterConnectionPool          : 32 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:09:51.773  INFO 3096 --- [redisson-netty-1-3] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:09:51.831  INFO 3096 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'taskExecutor'
+2020-10-30 14:09:52.219  INFO 3096 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-10-30 14:09:52.259  INFO 3096 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9999 (http) with context path ''
+2020-10-30 14:09:52.262  INFO 3096 --- [restartedMain] com.example.demo.DemoApplication         : Started DemoApplication in 4.534 seconds (JVM running for 5.644)
+2020-10-30 14:09:55.790  INFO 3096 --- [http-nio-9999-exec-3] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-10-30 14:09:55.791  INFO 3096 --- [http-nio-9999-exec-3] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-10-30 14:09:55.797  INFO 3096 --- [http-nio-9999-exec-3] o.s.web.servlet.DispatcherServlet        : Completed initialization in 6 ms
+2020-10-30 14:10:56.290  INFO 3096 --- [Thread-18] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'taskExecutor'
+2020-10-30 14:10:56.469  INFO 3096 --- [Thread-18] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2020-10-30 14:11:02.786  INFO 15236 --- [restartedMain] com.example.demo.DemoApplication         : Starting DemoApplication on DESKTOP-9R82UJ9 with PID 15236 (D:\myProject\demo\target\classes started by LongFei in D:\myProject\demo)
+2020-10-30 14:11:02.789  INFO 15236 --- [restartedMain] com.example.demo.DemoApplication         : No active profile set, falling back to default profiles: default
+2020-10-30 14:11:02.824  INFO 15236 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-10-30 14:11:02.824  INFO 15236 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-10-30 14:11:03.946  INFO 15236 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9999 (http)
+2020-10-30 14:11:03.970  INFO 15236 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-10-30 14:11:03.971  INFO 15236 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.21]
+2020-10-30 14:11:04.090  INFO 15236 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-10-30 14:11:04.090  INFO 15236 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1265 ms
+2020-10-30 14:11:04.193  INFO 15236 --- [restartedMain] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2020-10-30 14:11:04.387  INFO 15236 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2020-10-30 14:11:05.304  INFO 15236 --- [restartedMain] org.redisson.Version                     : Redisson 3.10.5
+2020-10-30 14:11:06.300  INFO 15236 --- [redisson-netty-1-2] o.r.c.pool.MasterConnectionPool          : 32 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:11:06.300  INFO 15236 --- [redisson-netty-1-3] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:11:06.354  INFO 15236 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'taskExecutor'
+2020-10-30 14:11:06.710  INFO 15236 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-10-30 14:11:06.753  INFO 15236 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9999 (http) with context path ''
+2020-10-30 14:11:06.756  INFO 15236 --- [restartedMain] com.example.demo.DemoApplication         : Started DemoApplication in 4.629 seconds (JVM running for 5.721)
+2020-10-30 14:11:43.842  INFO 15236 --- [http-nio-9999-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-10-30 14:11:43.842  INFO 15236 --- [http-nio-9999-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-10-30 14:11:43.849  INFO 15236 --- [http-nio-9999-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 7 ms
+2020-10-30 14:12:09.422  INFO 15236 --- [Thread-18] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'taskExecutor'
+2020-10-30 14:12:09.540  INFO 15236 --- [Thread-18] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2020-10-30 14:21:47.245  INFO 5332 --- [restartedMain] com.example.demo.DemoApplication         : Starting DemoApplication on DESKTOP-9R82UJ9 with PID 5332 (D:\myProject\demo\target\classes started by LongFei in D:\myProject\demo)
+2020-10-30 14:21:47.303  INFO 5332 --- [restartedMain] com.example.demo.DemoApplication         : No active profile set, falling back to default profiles: default
+2020-10-30 14:21:47.347  INFO 5332 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-10-30 14:21:47.348  INFO 5332 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-10-30 14:21:48.389  INFO 5332 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9999 (http)
+2020-10-30 14:21:48.405  INFO 5332 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-10-30 14:21:48.405  INFO 5332 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.21]
+2020-10-30 14:21:48.506  INFO 5332 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-10-30 14:21:48.506  INFO 5332 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1158 ms
+2020-10-30 14:21:48.595  INFO 5332 --- [restartedMain] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2020-10-30 14:21:48.755  INFO 5332 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2020-10-30 14:21:49.624  INFO 5332 --- [restartedMain] org.redisson.Version                     : Redisson 3.10.5
+2020-10-30 14:21:50.643  INFO 5332 --- [redisson-netty-1-2] o.r.c.pool.MasterConnectionPool          : 32 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:21:50.643  INFO 5332 --- [redisson-netty-1-3] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:21:50.692  INFO 5332 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'taskExecutor'
+2020-10-30 14:21:51.029  INFO 5332 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-10-30 14:21:51.070  INFO 5332 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9999 (http) with context path ''
+2020-10-30 14:21:51.072  INFO 5332 --- [restartedMain] com.example.demo.DemoApplication         : Started DemoApplication in 4.327 seconds (JVM running for 5.351)
+2020-10-30 14:21:59.288  INFO 5332 --- [http-nio-9999-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-10-30 14:21:59.289  INFO 5332 --- [http-nio-9999-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-10-30 14:21:59.294  INFO 5332 --- [http-nio-9999-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 5 ms
+2020-10-30 14:23:50.594  INFO 12124 --- [restartedMain] com.example.demo.DemoApplication         : Starting DemoApplication on DESKTOP-9R82UJ9 with PID 12124 (D:\myProject\demo\target\classes started by LongFei in D:\myProject\demo)
+2020-10-30 14:23:50.598  INFO 12124 --- [restartedMain] com.example.demo.DemoApplication         : No active profile set, falling back to default profiles: default
+2020-10-30 14:23:50.691  INFO 12124 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-10-30 14:23:50.691  INFO 12124 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-10-30 14:23:51.859  INFO 12124 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9999 (http)
+2020-10-30 14:23:51.878  INFO 12124 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-10-30 14:23:51.878  INFO 12124 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.21]
+2020-10-30 14:23:51.995  INFO 12124 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-10-30 14:23:51.995  INFO 12124 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1304 ms
+2020-10-30 14:23:52.102  INFO 12124 --- [restartedMain] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2020-10-30 14:23:52.256  INFO 12124 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2020-10-30 14:23:53.168  INFO 12124 --- [restartedMain] org.redisson.Version                     : Redisson 3.10.5
+2020-10-30 14:23:54.209  INFO 12124 --- [redisson-netty-1-3] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:23:54.209  INFO 12124 --- [redisson-netty-1-2] o.r.c.pool.MasterConnectionPool          : 32 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:23:54.265  INFO 12124 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'taskExecutor'
+2020-10-30 14:23:54.660  INFO 12124 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-10-30 14:23:54.708  INFO 12124 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9999 (http) with context path ''
+2020-10-30 14:23:54.711  INFO 12124 --- [restartedMain] com.example.demo.DemoApplication         : Started DemoApplication in 4.751 seconds (JVM running for 5.903)
+2020-10-30 14:23:58.733  INFO 12124 --- [http-nio-9999-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-10-30 14:23:58.733  INFO 12124 --- [http-nio-9999-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-10-30 14:23:58.740  INFO 12124 --- [http-nio-9999-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 7 ms
+2020-10-30 14:24:39.069  INFO 12124 --- [Thread-18] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'taskExecutor'
+2020-10-30 14:24:39.205  INFO 12124 --- [Thread-18] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2020-10-30 14:24:45.214  INFO 17316 --- [restartedMain] com.example.demo.DemoApplication         : Starting DemoApplication on DESKTOP-9R82UJ9 with PID 17316 (D:\myProject\demo\target\classes started by LongFei in D:\myProject\demo)
+2020-10-30 14:24:45.218  INFO 17316 --- [restartedMain] com.example.demo.DemoApplication         : No active profile set, falling back to default profiles: default
+2020-10-30 14:24:45.258  INFO 17316 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-10-30 14:24:45.259  INFO 17316 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-10-30 14:24:46.373  INFO 17316 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9999 (http)
+2020-10-30 14:24:46.392  INFO 17316 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-10-30 14:24:46.392  INFO 17316 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.21]
+2020-10-30 14:24:46.510  INFO 17316 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-10-30 14:24:46.511  INFO 17316 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1252 ms
+2020-10-30 14:24:46.618  INFO 17316 --- [restartedMain] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2020-10-30 14:24:46.778  INFO 17316 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2020-10-30 14:24:47.668  INFO 17316 --- [restartedMain] org.redisson.Version                     : Redisson 3.10.5
+2020-10-30 14:24:48.692  INFO 17316 --- [redisson-netty-1-3] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:24:48.692  INFO 17316 --- [redisson-netty-1-2] o.r.c.pool.MasterConnectionPool          : 32 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:24:48.747  INFO 17316 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'taskExecutor'
+2020-10-30 14:24:49.125  INFO 17316 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-10-30 14:24:49.168  INFO 17316 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9999 (http) with context path ''
+2020-10-30 14:24:49.171  INFO 17316 --- [restartedMain] com.example.demo.DemoApplication         : Started DemoApplication in 4.62 seconds (JVM running for 5.868)
+2020-10-30 14:24:53.943  INFO 17316 --- [http-nio-9999-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-10-30 14:24:53.943  INFO 17316 --- [http-nio-9999-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-10-30 14:24:53.950  INFO 17316 --- [http-nio-9999-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 7 ms
+2020-10-30 14:29:34.908  INFO 17316 --- [Thread-18] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'taskExecutor'
+2020-10-30 14:39:21.534  INFO 17452 --- [restartedMain] com.example.demo.DemoApplication         : Starting DemoApplication on DESKTOP-9R82UJ9 with PID 17452 (D:\myProject\demo\target\classes started by LongFei in D:\myProject\demo)
+2020-10-30 14:39:21.538  INFO 17452 --- [restartedMain] com.example.demo.DemoApplication         : No active profile set, falling back to default profiles: default
+2020-10-30 14:39:21.630  INFO 17452 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-10-30 14:39:21.630  INFO 17452 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-10-30 14:39:22.923  INFO 17452 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9999 (http)
+2020-10-30 14:39:22.945  INFO 17452 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-10-30 14:39:22.945  INFO 17452 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.21]
+2020-10-30 14:39:23.061  INFO 17452 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-10-30 14:39:23.061  INFO 17452 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1431 ms
+2020-10-30 14:39:23.171  INFO 17452 --- [restartedMain] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2020-10-30 14:39:23.332  INFO 17452 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2020-10-30 14:39:24.189  INFO 17452 --- [restartedMain] org.redisson.Version                     : Redisson 3.10.5
+2020-10-30 14:39:25.165  INFO 17452 --- [redisson-netty-1-2] o.r.c.pool.MasterConnectionPool          : 32 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:39:25.166  INFO 17452 --- [redisson-netty-1-3] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:39:25.222  INFO 17452 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'taskExecutor'
+2020-10-30 14:39:25.605  INFO 17452 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-10-30 14:39:25.646  INFO 17452 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9999 (http) with context path ''
+2020-10-30 14:39:25.649  INFO 17452 --- [restartedMain] com.example.demo.DemoApplication         : Started DemoApplication in 4.695 seconds (JVM running for 5.812)
+2020-10-30 14:39:27.786  INFO 17452 --- [http-nio-9999-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-10-30 14:39:27.786  INFO 17452 --- [http-nio-9999-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-10-30 14:39:27.794  INFO 17452 --- [http-nio-9999-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 8 ms
+2020-10-30 14:43:32.620  INFO 17452 --- [Thread-18] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'taskExecutor'
+2020-10-30 14:43:32.770  INFO 17452 --- [Thread-18] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2020-10-30 14:43:38.727  INFO 10776 --- [restartedMain] com.example.demo.DemoApplication         : Starting DemoApplication on DESKTOP-9R82UJ9 with PID 10776 (D:\myProject\demo\target\classes started by LongFei in D:\myProject\demo)
+2020-10-30 14:43:38.729  INFO 10776 --- [restartedMain] com.example.demo.DemoApplication         : No active profile set, falling back to default profiles: default
+2020-10-30 14:43:38.771  INFO 10776 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-10-30 14:43:38.771  INFO 10776 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-10-30 14:43:40.016  INFO 10776 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9999 (http)
+2020-10-30 14:43:40.036  INFO 10776 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-10-30 14:43:40.036  INFO 10776 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.21]
+2020-10-30 14:43:40.150  INFO 10776 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-10-30 14:43:40.150  INFO 10776 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1378 ms
+2020-10-30 14:43:40.263  INFO 10776 --- [restartedMain] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2020-10-30 14:43:40.411  INFO 10776 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2020-10-30 14:43:41.271  INFO 10776 --- [restartedMain] org.redisson.Version                     : Redisson 3.10.5
+2020-10-30 14:43:42.310  INFO 10776 --- [redisson-netty-1-19] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:43:42.314  INFO 10776 --- [redisson-netty-1-3] o.r.c.pool.MasterConnectionPool          : 32 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:43:42.368  INFO 10776 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'taskExecutor'
+2020-10-30 14:43:42.753  INFO 10776 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-10-30 14:43:42.795  INFO 10776 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9999 (http) with context path ''
+2020-10-30 14:43:42.798  INFO 10776 --- [restartedMain] com.example.demo.DemoApplication         : Started DemoApplication in 4.719 seconds (JVM running for 5.848)
+2020-10-30 14:43:50.252  INFO 10776 --- [http-nio-9999-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-10-30 14:43:50.253  INFO 10776 --- [http-nio-9999-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-10-30 14:43:50.259  INFO 10776 --- [http-nio-9999-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 6 ms
+2020-10-30 14:44:01.393  INFO 10776 --- [Thread-16] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'taskExecutor'
+2020-10-30 14:44:01.556  INFO 10776 --- [Thread-16] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2020-10-30 14:44:02.152  INFO 10776 --- [restartedMain] com.example.demo.DemoApplication         : Starting DemoApplication on DESKTOP-9R82UJ9 with PID 10776 (D:\myProject\demo\target\classes started by LongFei in D:\myProject\demo)
+2020-10-30 14:44:02.152  INFO 10776 --- [restartedMain] com.example.demo.DemoApplication         : No active profile set, falling back to default profiles: default
+2020-10-30 14:44:02.703  INFO 10776 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9999 (http)
+2020-10-30 14:44:02.704  INFO 10776 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-10-30 14:44:02.704  INFO 10776 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.21]
+2020-10-30 14:44:02.736  INFO 10776 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-10-30 14:44:02.737  INFO 10776 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 582 ms
+2020-10-30 14:44:02.788  INFO 10776 --- [restartedMain] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2020-10-30 14:44:02.822  INFO 10776 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-2} inited
+2020-10-30 14:44:02.996  INFO 10776 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'taskExecutor'
+2020-10-30 14:44:03.019  INFO 10776 --- [restartedMain] org.redisson.Version                     : Redisson 3.10.5
+2020-10-30 14:44:03.053  INFO 10776 --- [redisson-netty-4-24] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:44:03.055  INFO 10776 --- [redisson-netty-4-32] o.r.c.pool.MasterConnectionPool          : 32 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:44:03.184  INFO 10776 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-10-30 14:44:03.218  INFO 10776 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9999 (http) with context path ''
+2020-10-30 14:44:03.218  INFO 10776 --- [restartedMain] com.example.demo.DemoApplication         : Started DemoApplication in 1.12 seconds (JVM running for 26.268)
+2020-10-30 14:44:03.221  INFO 10776 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2020-10-30 14:44:06.171  INFO 10776 --- [Thread-29] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'taskExecutor'
+2020-10-30 14:44:06.173  INFO 10776 --- [Thread-29] com.alibaba.druid.pool.DruidDataSource   : {dataSource-2} closed
+2020-10-30 14:44:09.795  INFO 17472 --- [restartedMain] com.example.demo.DemoApplication         : Starting DemoApplication on DESKTOP-9R82UJ9 with PID 17472 (D:\myProject\demo\target\classes started by LongFei in D:\myProject\demo)
+2020-10-30 14:44:09.798  INFO 17472 --- [restartedMain] com.example.demo.DemoApplication         : No active profile set, falling back to default profiles: default
+2020-10-30 14:44:09.885  INFO 17472 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-10-30 14:44:09.885  INFO 17472 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-10-30 14:44:10.974  INFO 17472 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9999 (http)
+2020-10-30 14:44:10.991  INFO 17472 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-10-30 14:44:10.991  INFO 17472 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.21]
+2020-10-30 14:44:11.104  INFO 17472 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-10-30 14:44:11.104  INFO 17472 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1219 ms
+2020-10-30 14:44:11.204  INFO 17472 --- [restartedMain] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2020-10-30 14:44:11.352  INFO 17472 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2020-10-30 14:44:12.240  INFO 17472 --- [restartedMain] org.redisson.Version                     : Redisson 3.10.5
+2020-10-30 14:44:13.250  INFO 17472 --- [redisson-netty-1-2] o.r.c.pool.MasterConnectionPool          : 32 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:44:13.250  INFO 17472 --- [redisson-netty-1-3] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:44:13.302  INFO 17472 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'taskExecutor'
+2020-10-30 14:44:13.660  INFO 17472 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-10-30 14:44:13.701  INFO 17472 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9999 (http) with context path ''
+2020-10-30 14:44:13.704  INFO 17472 --- [restartedMain] com.example.demo.DemoApplication         : Started DemoApplication in 4.503 seconds (JVM running for 5.579)
+2020-10-30 14:44:18.629  INFO 17472 --- [http-nio-9999-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-10-30 14:44:18.629  INFO 17472 --- [http-nio-9999-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-10-30 14:44:18.634  INFO 17472 --- [http-nio-9999-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 5 ms
+2020-10-30 14:44:45.560  INFO 17472 --- [Thread-18] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'taskExecutor'
+2020-10-30 14:44:45.660  INFO 17472 --- [Thread-18] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2020-10-30 14:45:13.995  INFO 18276 --- [restartedMain] com.example.demo.DemoApplication         : Starting DemoApplication on DESKTOP-9R82UJ9 with PID 18276 (D:\myProject\demo\target\classes started by LongFei in D:\myProject\demo)
+2020-10-30 14:45:13.998  INFO 18276 --- [restartedMain] com.example.demo.DemoApplication         : No active profile set, falling back to default profiles: default
+2020-10-30 14:45:14.080  INFO 18276 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-10-30 14:45:14.081  INFO 18276 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-10-30 14:45:15.217  INFO 18276 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9999 (http)
+2020-10-30 14:45:15.236  INFO 18276 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-10-30 14:45:15.236  INFO 18276 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.21]
+2020-10-30 14:45:15.348  INFO 18276 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-10-30 14:45:15.348  INFO 18276 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1267 ms
+2020-10-30 14:45:15.446  INFO 18276 --- [restartedMain] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2020-10-30 14:45:15.593  INFO 18276 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2020-10-30 14:45:16.447  INFO 18276 --- [restartedMain] org.redisson.Version                     : Redisson 3.10.5
+2020-10-30 14:45:17.444  INFO 18276 --- [redisson-netty-1-3] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:45:17.444  INFO 18276 --- [redisson-netty-1-2] o.r.c.pool.MasterConnectionPool          : 32 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:45:17.495  INFO 18276 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'taskExecutor'
+2020-10-30 14:45:17.855  INFO 18276 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-10-30 14:45:17.898  INFO 18276 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9999 (http) with context path ''
+2020-10-30 14:45:17.900  INFO 18276 --- [restartedMain] com.example.demo.DemoApplication         : Started DemoApplication in 4.471 seconds (JVM running for 5.53)
+2020-10-30 14:45:24.151  INFO 18276 --- [http-nio-9999-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-10-30 14:45:24.151  INFO 18276 --- [http-nio-9999-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-10-30 14:45:24.159  INFO 18276 --- [http-nio-9999-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 8 ms
+2020-10-30 14:45:56.752  INFO 18276 --- [Thread-15] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'taskExecutor'
+2020-10-30 14:45:56.925  INFO 18276 --- [Thread-15] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2020-10-30 14:45:57.536  INFO 18276 --- [restartedMain] com.example.demo.DemoApplication         : Starting DemoApplication on DESKTOP-9R82UJ9 with PID 18276 (D:\myProject\demo\target\classes started by LongFei in D:\myProject\demo)
+2020-10-30 14:45:57.536  INFO 18276 --- [restartedMain] com.example.demo.DemoApplication         : No active profile set, falling back to default profiles: default
+2020-10-30 14:45:57.997  INFO 18276 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9999 (http)
+2020-10-30 14:45:57.999  INFO 18276 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-10-30 14:45:57.999  INFO 18276 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.21]
+2020-10-30 14:45:58.034  INFO 18276 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-10-30 14:45:58.034  INFO 18276 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 492 ms
+2020-10-30 14:45:58.071  INFO 18276 --- [restartedMain] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2020-10-30 14:45:58.097  INFO 18276 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-2} inited
+2020-10-30 14:45:58.247  INFO 18276 --- [restartedMain] org.redisson.Version                     : Redisson 3.10.5
+2020-10-30 14:45:58.287  INFO 18276 --- [redisson-netty-4-23] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:45:58.290  INFO 18276 --- [redisson-netty-4-3] o.r.c.pool.MasterConnectionPool          : 32 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:45:58.301  INFO 18276 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'taskExecutor'
+2020-10-30 14:45:58.455  INFO 18276 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-10-30 14:45:58.488  INFO 18276 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9999 (http) with context path ''
+2020-10-30 14:45:58.489  INFO 18276 --- [restartedMain] com.example.demo.DemoApplication         : Started DemoApplication in 1.011 seconds (JVM running for 46.119)
+2020-10-30 14:45:58.493  INFO 18276 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2020-10-30 14:46:01.722  INFO 18276 --- [http-nio-9999-exec-4] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-10-30 14:46:01.722  INFO 18276 --- [http-nio-9999-exec-4] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-10-30 14:46:01.726  INFO 18276 --- [http-nio-9999-exec-4] o.s.web.servlet.DispatcherServlet        : Completed initialization in 4 ms
+2020-10-30 14:46:37.495  INFO 18276 --- [Thread-28] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'taskExecutor'
+2020-10-30 14:46:37.612  INFO 18276 --- [Thread-28] com.alibaba.druid.pool.DruidDataSource   : {dataSource-2} closed
+2020-10-30 14:46:43.465  INFO 3744 --- [restartedMain] com.example.demo.DemoApplication         : Starting DemoApplication on DESKTOP-9R82UJ9 with PID 3744 (D:\myProject\demo\target\classes started by LongFei in D:\myProject\demo)
+2020-10-30 14:46:43.469  INFO 3744 --- [restartedMain] com.example.demo.DemoApplication         : No active profile set, falling back to default profiles: default
+2020-10-30 14:46:43.512  INFO 3744 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-10-30 14:46:43.512  INFO 3744 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-10-30 14:46:44.701  INFO 3744 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9999 (http)
+2020-10-30 14:46:44.718  INFO 3744 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-10-30 14:46:44.718  INFO 3744 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.21]
+2020-10-30 14:46:44.824  INFO 3744 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-10-30 14:46:44.824  INFO 3744 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1312 ms
+2020-10-30 14:46:44.924  INFO 3744 --- [restartedMain] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2020-10-30 14:46:45.104  INFO 3744 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2020-10-30 14:46:45.959  INFO 3744 --- [restartedMain] org.redisson.Version                     : Redisson 3.10.5
+2020-10-30 14:46:47.000  INFO 3744 --- [redisson-netty-1-2] o.r.c.pool.MasterConnectionPool          : 32 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:46:47.000  INFO 3744 --- [redisson-netty-1-3] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:46:47.060  INFO 3744 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'taskExecutor'
+2020-10-30 14:46:47.439  INFO 3744 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-10-30 14:46:47.483  INFO 3744 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9999 (http) with context path ''
+2020-10-30 14:46:47.485  INFO 3744 --- [restartedMain] com.example.demo.DemoApplication         : Started DemoApplication in 4.645 seconds (JVM running for 5.768)
+2020-10-30 14:46:50.961  INFO 3744 --- [http-nio-9999-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-10-30 14:46:50.962  INFO 3744 --- [http-nio-9999-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-10-30 14:46:50.968  INFO 3744 --- [http-nio-9999-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 6 ms
+2020-10-30 14:47:31.020  INFO 3744 --- [Thread-18] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'taskExecutor'
+2020-10-30 14:47:31.116  INFO 3744 --- [Thread-18] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2020-10-30 14:47:38.195  INFO 16564 --- [restartedMain] com.example.demo.DemoApplication         : Starting DemoApplication on DESKTOP-9R82UJ9 with PID 16564 (D:\myProject\demo\target\classes started by LongFei in D:\myProject\demo)
+2020-10-30 14:47:38.198  INFO 16564 --- [restartedMain] com.example.demo.DemoApplication         : No active profile set, falling back to default profiles: default
+2020-10-30 14:47:38.240  INFO 16564 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-10-30 14:47:38.241  INFO 16564 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-10-30 14:47:39.359  INFO 16564 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9999 (http)
+2020-10-30 14:47:39.377  INFO 16564 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-10-30 14:47:39.377  INFO 16564 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.21]
+2020-10-30 14:47:39.490  INFO 16564 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-10-30 14:47:39.491  INFO 16564 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1250 ms
+2020-10-30 14:47:39.589  INFO 16564 --- [restartedMain] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2020-10-30 14:47:39.737  INFO 16564 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2020-10-30 14:47:40.639  INFO 16564 --- [restartedMain] org.redisson.Version                     : Redisson 3.10.5
+2020-10-30 14:47:41.647  INFO 16564 --- [redisson-netty-1-2] o.r.c.pool.MasterConnectionPool          : 32 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:47:41.647  INFO 16564 --- [redisson-netty-1-3] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:47:41.698  INFO 16564 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'taskExecutor'
+2020-10-30 14:47:42.052  INFO 16564 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-10-30 14:47:42.093  INFO 16564 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9999 (http) with context path ''
+2020-10-30 14:47:42.096  INFO 16564 --- [restartedMain] com.example.demo.DemoApplication         : Started DemoApplication in 4.549 seconds (JVM running for 5.612)
+2020-10-30 14:47:47.382  INFO 16564 --- [http-nio-9999-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-10-30 14:47:47.382  INFO 16564 --- [http-nio-9999-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-10-30 14:47:47.387  INFO 16564 --- [http-nio-9999-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 5 ms
+2020-10-30 14:48:25.251  INFO 16564 --- [Thread-19] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'taskExecutor'
+2020-10-30 14:48:25.365  INFO 16564 --- [Thread-19] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2020-10-30 14:48:31.134  INFO 18568 --- [restartedMain] com.example.demo.DemoApplication         : Starting DemoApplication on DESKTOP-9R82UJ9 with PID 18568 (D:\myProject\demo\target\classes started by LongFei in D:\myProject\demo)
+2020-10-30 14:48:31.137  INFO 18568 --- [restartedMain] com.example.demo.DemoApplication         : No active profile set, falling back to default profiles: default
+2020-10-30 14:48:31.173  INFO 18568 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-10-30 14:48:31.173  INFO 18568 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-10-30 14:48:32.333  INFO 18568 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9999 (http)
+2020-10-30 14:48:32.356  INFO 18568 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-10-30 14:48:32.356  INFO 18568 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.21]
+2020-10-30 14:48:32.486  INFO 18568 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-10-30 14:48:32.486  INFO 18568 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1312 ms
+2020-10-30 14:48:32.609  INFO 18568 --- [restartedMain] c.a.d.s.b.a.DruidDataSourceAutoConfigure : Init DruidDataSource
+2020-10-30 14:48:32.774  INFO 18568 --- [restartedMain] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2020-10-30 14:48:33.637  INFO 18568 --- [restartedMain] org.redisson.Version                     : Redisson 3.10.5
+2020-10-30 14:48:34.624  INFO 18568 --- [redisson-netty-1-2] o.r.c.pool.MasterConnectionPool          : 32 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:48:34.624  INFO 18568 --- [redisson-netty-1-3] o.r.c.pool.MasterPubSubConnectionPool    : 1 connections initialized for 127.0.0.1/127.0.0.1:6379
+2020-10-30 14:48:34.675  INFO 18568 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'taskExecutor'
+2020-10-30 14:48:35.026  INFO 18568 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-10-30 14:48:35.067  INFO 18568 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9999 (http) with context path ''
+2020-10-30 14:48:35.069  INFO 18568 --- [restartedMain] com.example.demo.DemoApplication         : Started DemoApplication in 4.604 seconds (JVM running for 5.726)
+2020-10-30 14:48:36.516  INFO 18568 --- [http-nio-9999-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-10-30 14:48:36.516  INFO 18568 --- [http-nio-9999-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-10-30 14:48:36.522  INFO 18568 --- [http-nio-9999-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 5 ms
+2020-10-30 15:01:49.690  INFO 18568 --- [Thread-18] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'taskExecutor'
+2020-10-30 15:01:49.812  INFO 18568 --- [Thread-18] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
