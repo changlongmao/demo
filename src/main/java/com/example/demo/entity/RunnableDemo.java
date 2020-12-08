@@ -24,19 +24,24 @@ public class RunnableDemo implements Runnable {
 
     @Override
     public void run() {
-
-        for (int j = 0; j < 10; j++) {
-            User user = new User();
-            user.setUsername("longMao" + i);
-            user.setPassword("123");
-            user.setRearName("龙猫" + i);
-            user.setCreateTime(new Date());
-            userService.save(user);
+        for (int j = 0; j <1000; j++) {
+            System.out.println("i："+ i);
         }
+//        while (true) {
+//        }
+
+//        for (int j = 0; j < 10; j++) {
+//            User user = new User();
+//            user.setUsername("longMao" + i);
+//            user.setPassword("123");
+//            user.setRearName("龙猫" + i);
+//            user.setCreateTime(new Date());
+//            userService.save(user);
+//        }
 
 
-        if (i == 9999){
-            System.out.println("已保存数据"+i+" ,"+(System.currentTimeMillis()-startTime+"ms"));
-        }
+//        if (i == 9999){
+//            System.out.println("已保存数据"+i+" ,"+(System.currentTimeMillis()-startTime+"ms"));
+//        }
     }
 }
