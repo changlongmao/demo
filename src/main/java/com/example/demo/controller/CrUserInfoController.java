@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.example.demo.entity.Constant;
 import com.example.demo.entity.CrUserInfoEntity;
 import com.example.demo.entity.RestResponse;
 import com.example.demo.entity.SysLog;
@@ -110,11 +109,11 @@ public class CrUserInfoController {
         CrUserInfoEntity crConsultantInfo = new CrUserInfoEntity();
         crConsultantInfo.setId(id);
         String salt = RandomStringUtils.randomAlphanumeric(15);
-        crConsultantInfo.setPassword(new Sha256Hash(Constant.DEFAULT_PW, salt).toHex());
+//        crConsultantInfo.setPassword(new Sha256Hash(Constant.DEFAULT_PW, salt).toHex());
         crConsultantInfo.setSalt(salt);
         crConsultantInfo.setUpdateTime(null);
         crConsultantInfoService.update(crConsultantInfo);
-        return RestResponse.success("密码已重置为" + Constant.DEFAULT_PW);
+        return RestResponse.success("密码已重置为" + "");
     }
 
     /**

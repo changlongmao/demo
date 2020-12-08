@@ -34,10 +34,12 @@ import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import sun.misc.BASE64Encoder;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.net.URI;
@@ -67,11 +69,10 @@ public class UserController {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    @Autowired
-    @Qualifier(value = "taskExecutor")
+    @Resource
     private ThreadPoolTaskExecutor taskExecutor;
 
-    @RequestMapping(value = "/save", method = RequestMethod.GET)
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
     public RestResponse save(String code) {
         RLock lock = redisson.getLock("confirmUserType_" + code);
         if (lock.isLocked()) {
@@ -80,16 +81,9 @@ public class UserController {
         long startTime = System.currentTimeMillis();
         try {
             lock.lock(60L, TimeUnit.SECONDS);
-            new Thread().start();
             for (int i = 0; i < 10; i++) {
                 taskExecutor.execute(new RunnableDemo(userService, i, startTime));
-                if (i == 8) {
-                    int activeCount = taskExecutor.getActiveCount();
-                    System.out.println("获取当前线程池活动的线程数：" + activeCount);
-                }
             }
-
-
             return RestResponse.success();
         } catch (Exception e) {
             e.printStackTrace();
@@ -125,30 +119,33 @@ public class UserController {
     }
 
     @RequestMapping(value = "/myBatchInsert", method = RequestMethod.POST)
+    @Transactional(rollbackFor = Exception.class)
     public RestResponse myBatchInsert(@RequestBody String a, HttpServletRequest request) {
         long startTime = System.currentTimeMillis();
 
+        ThreadPoolExecutor executor1 = new ThreadPoolExecutor(10, 20, 3000, TimeUnit.SECONDS, new SynchronousQueue<>());
         List<User> users = new ArrayList<>();
-//        ThreadPoolExecutor executor1 = new ThreadPoolExecutor(10, 20, 3000, TimeUnit.SECONDS, new SynchronousQueue<>());
-//        executor1.execute(() -> {
-//            int x = 1;
-//            System.out.println("开启了一个线程"+x);
-//        });
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 100000; i++) {
             User user = new User();
             user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
             user.setUsername("setUsername" + i * 1000);
             user.setPassword("setPassword" + i * 1000);
             user.setRearName("setRearName" + i * 1000);
-            userService.save(user);
             users.add(user);
-            System.out.println("插入了数据"+users.size());
+        }
+        int j = 0;
+        for (int i = 10000; i <= 100000; i += 10000) {
+            List<User> list = users.subList(j, i);
+            executor1.execute(() -> {
+                userService.batchInsert(list);
+            });
+            j = i;
         }
 
-//        executor1.shutdown();
+        executor1.shutdown();
         Long endTime = System.currentTimeMillis();
         System.out.println("myBatchInsert批量插入数据共用时" + (endTime - startTime) + "ms");
-        return RestResponse.success().put("users", users);
+        return RestResponse.success();
     }
 
     @RequestMapping(value = "/batchInsert", method = RequestMethod.POST)
@@ -256,9 +253,9 @@ public class UserController {
         ThreadPoolExecutor executor1 = new ThreadPoolExecutor(3, 6, 300, TimeUnit.SECONDS, new SynchronousQueue<>());
         executor1.execute(() -> {
             for (int i = 0; i < 10000; i++) {
-                map.put("x"+i,"y"+i);
-                map.get("x"+i);
-                System.out.println("打印："+map.toString());
+                map.put("x" + i, "y" + i);
+                map.get("x" + i);
+                System.out.println("打印：" + map.toString());
                 System.out.println(map.size());
             }
         });
@@ -328,10 +325,10 @@ public class UserController {
 
         System.out.println(test());
         int x = 1;
-        x+= 3-2;
+        x += 3 - 2;
         System.out.println(x);
-        System.out.println("abc".substring("abc".length()-2));
-        List<String> allDailySupervisionList = Arrays.asList("医疗机构使用药品质量检查记录表.xls","123");
+        System.out.println("abc".substring("abc".length() - 2));
+        List<String> allDailySupervisionList = Arrays.asList("医疗机构使用药品质量检查记录表.xls", "123");
         List<String> dailySupervisionList = allDailySupervisionList.stream().filter(e -> e.equals("aaa"))
                 .collect(Collectors.toList());
         for (String s1 : dailySupervisionList) {
@@ -346,16 +343,16 @@ public class UserController {
 
     }
 
-    public static int test(){
+    public static int test() {
         try {
             System.out.println("try");
 //            int i = 1/0;
             return 1;
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             System.out.println("catch");
             return 0;
-        }finally {
+        } finally {
             System.out.println("finally");
             return 2;
         }

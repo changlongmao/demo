@@ -1,5 +1,6 @@
 package com.example.demo.util;
 
+import com.alibaba.fastjson.JSON;
 import org.apache.http.HeaderElement;
 import org.apache.http.HeaderElementIterator;
 import org.apache.http.HttpEntity;
@@ -134,7 +135,7 @@ public class HttpClientUtil {
         String resultInfo = "";
         HttpPost httpPost = new HttpPost(url);
         httpPost.addHeader("Content-Type", "application/json;charset=utf-8");
-        httpPost.setEntity(new StringEntity(params.toString(), "utf-8"));
+        httpPost.setEntity(new StringEntity(JSON.toJSONString(params), "utf-8"));
         try (CloseableHttpResponse resp = httpClient.execute(httpPost)){
             // 获取响应entity
             HttpEntity entity = resp.getEntity();
@@ -205,7 +206,7 @@ public class HttpClientUtil {
             builder.addTextBody("filename", fileName);
             // 类似浏览器表单提交，对应input的name和value
             if (params != null && params.size() > 0) {
-                params.forEach((k,v) -> builder.addTextBody(k,v.toString()));
+                params.forEach((k,v) -> builder.addTextBody(k,String.valueOf(v)));
             }
             builder.setCharset(Charset.forName("UTF-8"));
             builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
