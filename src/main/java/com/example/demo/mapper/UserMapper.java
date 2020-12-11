@@ -17,4 +17,8 @@ public interface UserMapper extends BaseMapper<User> {
     List<User> queryUserList();
 
     void batchInsert(List<User> list);
+
+    void updateUserById(User user);
+
+    void updateUserByName(User user);
 }

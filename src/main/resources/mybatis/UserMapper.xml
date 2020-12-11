@@ -1,5 +1,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.mapper.UserMapper">
+    <update id="updateUserById">
+        update user set username = #{username} where id = #{id}
+    </update>
+    <update id="updateUserByName">
+        update user set rear_name = #{rearName} where username = #{username}
+    </update>
 
     <select id="queryUserList" resultType="com.example.demo.entity.User">
         select id from user

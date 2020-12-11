@@ -16,6 +16,7 @@ import com.example.demo.jwt.Authorization;
 import com.example.demo.jwt.JwtTokenUtil;
 import com.example.demo.service.UserService;
 import com.example.demo.util.DateUtil;
+import com.example.demo.util.HttpClientUtil;
 import com.example.demo.util.MD5Util;
 import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.encoder.org.apache.commons.lang.text.StrBuilder;
@@ -26,6 +27,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
 import org.apache.poi.ss.formula.functions.T;
 import org.apache.shiro.crypto.hash.Sha256Hash;
@@ -50,10 +52,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.lang.String;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 
@@ -62,7 +61,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/user")
 public class UserController {
 
-    @Autowired
+    @Resource
     private UserService userService;
     @Autowired
     private RedissonClient redisson;
@@ -118,14 +117,14 @@ public class UserController {
         return RestResponse.success().put("users", users);
     }
 
-    @RequestMapping(value = "/myBatchInsert", method = RequestMethod.POST)
+    @GetMapping(value = "/myBatchInsert")
     @Transactional(rollbackFor = Exception.class)
-    public RestResponse myBatchInsert(@RequestBody String a, HttpServletRequest request) {
+    public RestResponse myBatchInsert(HttpServletRequest request) throws Exception {
         long startTime = System.currentTimeMillis();
 
         ThreadPoolExecutor executor1 = new ThreadPoolExecutor(10, 20, 3000, TimeUnit.SECONDS, new SynchronousQueue<>());
         List<User> users = new ArrayList<>();
-        for (int i = 0; i < 100000; i++) {
+        for (int i = 0; i < 1000; i++) {
             User user = new User();
             user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
             user.setUsername("setUsername" + i * 1000);
@@ -133,14 +132,25 @@ public class UserController {
             user.setRearName("setRearName" + i * 1000);
             users.add(user);
         }
-        int j = 0;
-        for (int i = 10000; i <= 100000; i += 10000) {
-            List<User> list = users.subList(j, i);
-            executor1.execute(() -> {
-                userService.batchInsert(list);
-            });
-            j = i;
-        }
+//        userService.batchInsert(users);
+        User user = new User();
+        user.setId("00001d7567a64e358fc9903403f025f8");
+        user.setUsername("myBatchInsert123");
+        user.setRearName("myBatchInsert456");
+        userService.updateUserById(user);
+//        userService.getById("00001d7567a64e358fc9903403f025f8");
+//        userService.updateUserByName(user);
+        Thread.sleep(30000);
+
+//        Long addEndTime = System.currentTimeMillis();
+//        System.out.println("添加数据共用时" + (addEndTime - startTime) + "ms");
+//        int j = 0;
+//        for (int i = 10000; i <= 100000; i += 10000) {
+//            List<User> list = users.subList(j, i);
+//            Future<?> submit = executor1.submit(() -> {
+//            });
+//            j = i;
+//        }
 
         executor1.shutdown();
         Long endTime = System.currentTimeMillis();
@@ -148,13 +158,14 @@ public class UserController {
         return RestResponse.success();
     }
 
-    @RequestMapping(value = "/batchInsert", method = RequestMethod.POST)
-    public RestResponse batchInsert(HttpServletRequest request) {
+    @GetMapping(value = "/batchInsert")
+    @Transactional(rollbackFor = Exception.class)
+    public RestResponse batchInsert(HttpServletRequest request) throws Exception {
         long startTime = System.currentTimeMillis();
 
         List<User> users = new ArrayList<>();
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1000; i++) {
             User user = new User();
             user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
             user.setPassword("setPassword" + i * 1000);
@@ -162,11 +173,31 @@ public class UserController {
             user.setRearName("setRearName" + i * 1000);
             users.add(user);
         }
-        log.info("我要报错");
-        userService.batchInsert(users);
+
+//        int batchSize = 500;
+//        int i = 1;
+//        List<User> nextList = new ArrayList<>();
+//        for (User user : users) {
+//            nextList.add(user);
+//            if (i == users.size() || i % batchSize == 0) {
+//                userService.batchInsert(nextList);
+//                nextList.clear();
+//            }
+//            i++;
+//        }
+        User user = new User();
+        user.setId("00001778060a40daa35073621c175f14");
+        user.setUsername("setUsername955698000");
+        user.setRearName("batchInsert456");
+//        userService.updateUserById(user);
+        User userById1 = userService.getById("00001d7567a64e358fc9903403f025f8");
+//        userService.updateUserByName(user);
+        Thread.sleep(30000);
         Long endTime = System.currentTimeMillis();
+        User userById2 = userService.getById("00001d7567a64e358fc9903403f025f8");
+
         System.out.println("batchInsert批量插入数据共用时" + (endTime - startTime) + "ms");
-        return RestResponse.success().put("users", users);
+        return RestResponse.success().put("userById1",userById1).put("userById2",userById2);
     }
 
     @RequestMapping(value = "/testSelect", method = RequestMethod.GET)

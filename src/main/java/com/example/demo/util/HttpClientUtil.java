@@ -64,11 +64,13 @@ public class HttpClientUtil {
             System.out.println("初始化HttpClient开始");
             SSLContextBuilder builder = new SSLContextBuilder();
             builder.loadTrustMaterial(null, new TrustSelfSignedStrategy());
-            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(builder.build());
-            // 配置同时支持 HTTP 和 HTPPS
-            Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory> create()
+            SSLConnectionSocketFactory sslSocketFactory = new SSLConnectionSocketFactory(builder.build());
+            // 配置同时支持 HTTP 和 HTPPs
+            Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder
+                    .<ConnectionSocketFactory> create()
                     .register("http", PlainConnectionSocketFactory.getSocketFactory())
-                    .register("https", sslsf).build();
+                    .register("https", sslSocketFactory)
+                    .build();
             // 初始化连接池管理器
             PoolingHttpClientConnectionManager poolConnManager = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
             // 将最大连接数增加到500
@@ -210,14 +212,13 @@ public class HttpClientUtil {
             }
             builder.setCharset(Charset.forName("UTF-8"));
             builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-            HttpEntity entity = builder.build();
-            httpPost.setEntity(entity);
+            httpPost.setEntity(builder.build());
             try (CloseableHttpResponse response = httpClient.execute(httpPost)){
                 // 执行提交
-                HttpEntity responseEntity = response.getEntity();
-                if (responseEntity != null) {
+                HttpEntity entity = response.getEntity();
+                if (entity != null) {
                     // 将响应内容转换为字符串
-                    result = EntityUtils.toString(responseEntity, Charset.forName("UTF-8"));
+                    result = EntityUtils.toString(entity, Charset.forName("UTF-8"));
                 }
                 // 关闭连接
                 EntityUtils.consume(entity);
