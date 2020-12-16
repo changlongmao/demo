@@ -124,7 +124,7 @@ public class UserController {
 
         ThreadPoolExecutor executor1 = new ThreadPoolExecutor(10, 20, 3000, TimeUnit.SECONDS, new SynchronousQueue<>());
         List<User> users = new ArrayList<>();
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 9999; i++) {
             User user = new User();
             user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
             user.setUsername("setUsername" + i * 1000);
@@ -133,14 +133,14 @@ public class UserController {
             users.add(user);
         }
 //        userService.batchInsert(users);
-        User user = new User();
-        user.setId("00001d7567a64e358fc9903403f025f8");
-        user.setUsername("myBatchInsert123");
-        user.setRearName("myBatchInsert456");
-        userService.updateUserById(user);
+//        User user = new User();
+//        user.setId("00002b33bbd14cf187e7c769238e452b");
+//        user.setUsername("myBatchInsert123");
+//        user.setRearName("myBatchInsert456");
+//        userService.updateUserById(user);
 //        userService.getById("00001d7567a64e358fc9903403f025f8");
 //        userService.updateUserByName(user);
-        Thread.sleep(30000);
+//        Thread.sleep(30000);
 
 //        Long addEndTime = System.currentTimeMillis();
 //        System.out.println("添加数据共用时" + (addEndTime - startTime) + "ms");
@@ -150,6 +150,26 @@ public class UserController {
 //            Future<?> submit = executor1.submit(() -> {
 //            });
 //            j = i;
+//        }
+        System.out.println(users.size());
+//        int j = 0;
+//        int i = 1000;
+//        boolean breakFlag = false;
+//        while (true) {
+//            if (i >= users.size()) {
+//                i = users.size();
+//                breakFlag = true;
+//            }
+//            List<User> nextList = users.subList(j, i);
+////            executor1.execute(() -> {
+////                userService.batchInsert(users);
+////            });
+//            System.out.println(nextList.size());
+//            if (breakFlag) {
+//                break;
+//            }
+//            j = i;
+//            i += 1000;
 //        }
 
         executor1.shutdown();
@@ -190,11 +210,11 @@ public class UserController {
         user.setUsername("setUsername955698000");
         user.setRearName("batchInsert456");
 //        userService.updateUserById(user);
-        User userById1 = userService.getById("00001d7567a64e358fc9903403f025f8");
+        User userById1 = userService.getById("00002b33bbd14cf187e7c769238e452b");
 //        userService.updateUserByName(user);
         Thread.sleep(30000);
         Long endTime = System.currentTimeMillis();
-        User userById2 = userService.getById("00001d7567a64e358fc9903403f025f8");
+        User userById2 = userService.getById("00002b33bbd14cf187e7c769238e452b");
 
         System.out.println("batchInsert批量插入数据共用时" + (endTime - startTime) + "ms");
         return RestResponse.success().put("userById1",userById1).put("userById2",userById2);
@@ -280,20 +300,20 @@ public class UserController {
     public static void main(String[] args) {
 
 //        Map<String, Object> map = new HashMap<>();
-        Map<String, Object> map = new ConcurrentHashMap<>();
-        ThreadPoolExecutor executor1 = new ThreadPoolExecutor(3, 6, 300, TimeUnit.SECONDS, new SynchronousQueue<>());
-        executor1.execute(() -> {
-            for (int i = 0; i < 10000; i++) {
-                map.put("x" + i, "y" + i);
-                map.get("x" + i);
-                System.out.println("打印：" + map.toString());
-                System.out.println(map.size());
-            }
-        });
-
-        executor1.shutdown();
-
-        System.out.println(map.size());
+//        Map<String, Object> map = new ConcurrentHashMap<>();
+//        ThreadPoolExecutor executor1 = new ThreadPoolExecutor(3, 6, 300, TimeUnit.SECONDS, new SynchronousQueue<>());
+//        executor1.execute(() -> {
+//            for (int i = 0; i < 10000; i++) {
+//                map.put("x" + i, "y" + i);
+//                map.get("x" + i);
+//                System.out.println("打印：" + map.toString());
+//                System.out.println(map.size());
+//            }
+//        });
+//
+//        executor1.shutdown();
+//
+//        System.out.println(map.size());
 
 
         /*LocalDate nowLD = LocalDate.now();
@@ -371,6 +391,13 @@ public class UserController {
         System.out.println(startDate.toString());
 
         System.out.println("git commit success");
+
+        List<String> stringList = new ArrayList<>();
+        stringList.add("123");
+        stringList.add("456");
+        stringList.add("789");
+        stringList.add("aaa");
+        System.out.println(stringList.subList(0,4).toString());
 
     }
 
