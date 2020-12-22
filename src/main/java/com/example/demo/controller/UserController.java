@@ -18,6 +18,7 @@ import com.example.demo.service.UserService;
 import com.example.demo.util.DateUtil;
 import com.example.demo.util.HttpClientUtil;
 import com.example.demo.util.MD5Util;
+import com.example.demo.util.MapUtil;
 import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.encoder.org.apache.commons.lang.text.StrBuilder;
 import org.apache.commons.collections.CollectionUtils;
@@ -44,6 +45,7 @@ import sun.misc.BASE64Encoder;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
+import java.lang.reflect.Array;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.ParseException;
@@ -122,9 +124,8 @@ public class UserController {
     public RestResponse myBatchInsert(HttpServletRequest request) throws Exception {
         long startTime = System.currentTimeMillis();
 
-        ThreadPoolExecutor executor1 = new ThreadPoolExecutor(10, 20, 3000, TimeUnit.SECONDS, new SynchronousQueue<>());
         List<User> users = new ArrayList<>();
-        for (int i = 0; i < 9999; i++) {
+        for (int i = 0; i < 500000; i++) {
             User user = new User();
             user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
             user.setUsername("setUsername" + i * 1000);
@@ -132,6 +133,35 @@ public class UserController {
             user.setRearName("setRearName" + i * 1000);
             users.add(user);
         }
+        log.info("批量新增之前："+users.size());
+//        userService.batchInsert(users);
+//        log.info("批量新增之后："+users.size());
+
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 20, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
+        int j = 0;
+        int i = 1000;
+        boolean breakFlag = false;
+        while (true) {
+            if (i >= users.size()) {
+                i = users.size();
+                breakFlag = true;
+            }
+            List<User> nextList = users.subList(j, i);
+            executor.execute(() -> {
+                userService.batchInsert(nextList);
+                log.info("批量新增" + nextList.size() + "条");
+            });
+            if (breakFlag) {
+                break;
+            }
+            j = i;
+            i += 1000;
+        }
+        executor.shutdown();
+
+        log.info("调用awaitTermination之前："+executor.isTerminated());
+        executor.awaitTermination(5, TimeUnit.MINUTES);
+        log.info("调用awaitTermination之后："+executor.isTerminated());
 //        userService.batchInsert(users);
 //        User user = new User();
 //        user.setId("00002b33bbd14cf187e7c769238e452b");
@@ -142,37 +172,7 @@ public class UserController {
 //        userService.updateUserByName(user);
 //        Thread.sleep(30000);
 
-//        Long addEndTime = System.currentTimeMillis();
-//        System.out.println("添加数据共用时" + (addEndTime - startTime) + "ms");
-//        int j = 0;
-//        for (int i = 10000; i <= 100000; i += 10000) {
-//            List<User> list = users.subList(j, i);
-//            Future<?> submit = executor1.submit(() -> {
-//            });
-//            j = i;
-//        }
         System.out.println(users.size());
-//        int j = 0;
-//        int i = 1000;
-//        boolean breakFlag = false;
-//        while (true) {
-//            if (i >= users.size()) {
-//                i = users.size();
-//                breakFlag = true;
-//            }
-//            List<User> nextList = users.subList(j, i);
-////            executor1.execute(() -> {
-////                userService.batchInsert(users);
-////            });
-//            System.out.println(nextList.size());
-//            if (breakFlag) {
-//                break;
-//            }
-//            j = i;
-//            i += 1000;
-//        }
-
-        executor1.shutdown();
         Long endTime = System.currentTimeMillis();
         System.out.println("myBatchInsert批量插入数据共用时" + (endTime - startTime) + "ms");
         return RestResponse.success();
@@ -217,20 +217,40 @@ public class UserController {
         User userById2 = userService.getById("00002b33bbd14cf187e7c769238e452b");
 
         System.out.println("batchInsert批量插入数据共用时" + (endTime - startTime) + "ms");
-        return RestResponse.success().put("userById1",userById1).put("userById2",userById2);
+        return RestResponse.success().put("userById1", userById1).put("userById2", userById2);
     }
 
-    @RequestMapping(value = "/testSelect", method = RequestMethod.GET)
-    public RestResponse testSelect(HttpServletRequest request) {
+    @RequestMapping(value = "/testForEach", method = RequestMethod.GET)
+    public RestResponse testForEach(HttpServletRequest request) throws Exception{
         long startTime = System.currentTimeMillis();
+//        List<User> users = new ArrayList<>();
+//        List<User> users = new CopyOnWriteArrayList<>();
+        List<User> users = new Vector<>();
+//        List<User> users = Collections.synchronizedList(new ArrayList<>());
 
-        log.info(request.getRemoteAddr());
-        log.info(request.getRemoteHost());
-        List<User> list = userService.selectList();
-//        List<User> list = userService.list();
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 20, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
+        for (int j = 0; j < 20; j++) {
+            executor.execute(() -> {
+                for (int i = 0; i < 10000; i++) {
+                    User user = new User();
+                    user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+                    user.setPassword("setPassword" + i * 1000);
+                    user.setUsername("setUsername" + i * 1000);
+                    user.setRearName("setRearName" + i * 1000);
+                    users.add(user);
+                }
+            });
+        }
+        executor.shutdown();
+
+        log.info("调用awaitTermination之前："+executor.isTerminated());
+        executor.awaitTermination(5, TimeUnit.MINUTES);
+        log.info("调用awaitTermination之后："+executor.isTerminated());
+        log.info("循环add数据: " + users.size() + "条");
+
         Long endTime = System.currentTimeMillis();
-        System.out.println("查询数据共用时" + (endTime - startTime) + "ms");
-        return RestResponse.success().put("count", list);
+        System.out.println("循环add数据共用时" + (endTime - startTime) + "ms");
+        return RestResponse.success();
     }
 
     @RequestMapping(value = "/count", method = RequestMethod.GET)
@@ -298,6 +318,7 @@ public class UserController {
     }
 
     public static void main(String[] args) {
+
 
 //        Map<String, Object> map = new HashMap<>();
 //        Map<String, Object> map = new ConcurrentHashMap<>();
@@ -397,8 +418,14 @@ public class UserController {
         stringList.add("456");
         stringList.add("789");
         stringList.add("aaa");
-        System.out.println(stringList.subList(0,4).toString());
+        System.out.println(stringList.subList(0, 4).toString());
 
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", "12356434fddsfsgs");
+        map.put("username", "fdsa3f344e");
+        User user = new User();
+        MapUtil.mapToBean(map, user);
+        System.out.println(user.toString());
     }
 
     public static int test() {
