@@ -35,4 +35,11 @@ public class User {
         private String id;
     }
 
+    public void testSynchronized() {
+        synchronized (User.class) {
+
+        }
+    }
+
+
 }

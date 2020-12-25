@@ -50,11 +50,15 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.lang.String;
 import java.util.concurrent.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 
@@ -133,7 +137,7 @@ public class UserController {
             user.setRearName("setRearName" + i * 1000);
             users.add(user);
         }
-        log.info("批量新增之前："+users.size());
+        log.info("批量新增之前：" + users.size());
 //        userService.batchInsert(users);
 //        log.info("批量新增之后："+users.size());
 
@@ -159,9 +163,9 @@ public class UserController {
         }
         executor.shutdown();
 
-        log.info("调用awaitTermination之前："+executor.isTerminated());
+        log.info("调用awaitTermination之前：" + executor.isTerminated());
         executor.awaitTermination(5, TimeUnit.MINUTES);
-        log.info("调用awaitTermination之后："+executor.isTerminated());
+        log.info("调用awaitTermination之后：" + executor.isTerminated());
 //        userService.batchInsert(users);
 //        User user = new User();
 //        user.setId("00002b33bbd14cf187e7c769238e452b");
@@ -221,7 +225,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/testForEach", method = RequestMethod.GET)
-    public RestResponse testForEach(HttpServletRequest request) throws Exception{
+    public RestResponse testForEach(HttpServletRequest request) throws Exception {
         long startTime = System.currentTimeMillis();
 //        List<User> users = new ArrayList<>();
 //        List<User> users = new CopyOnWriteArrayList<>();
@@ -243,9 +247,9 @@ public class UserController {
         }
         executor.shutdown();
 
-        log.info("调用awaitTermination之前："+executor.isTerminated());
+        log.info("调用awaitTermination之前：" + executor.isTerminated());
         executor.awaitTermination(5, TimeUnit.MINUTES);
-        log.info("调用awaitTermination之后："+executor.isTerminated());
+        log.info("调用awaitTermination之后：" + executor.isTerminated());
         log.info("循环add数据: " + users.size() + "条");
 
         Long endTime = System.currentTimeMillis();
@@ -317,25 +321,7 @@ public class UserController {
         return RestResponse.success();
     }
 
-    public static void main(String[] args) {
-
-
-//        Map<String, Object> map = new HashMap<>();
-//        Map<String, Object> map = new ConcurrentHashMap<>();
-//        ThreadPoolExecutor executor1 = new ThreadPoolExecutor(3, 6, 300, TimeUnit.SECONDS, new SynchronousQueue<>());
-//        executor1.execute(() -> {
-//            for (int i = 0; i < 10000; i++) {
-//                map.put("x" + i, "y" + i);
-//                map.get("x" + i);
-//                System.out.println("打印：" + map.toString());
-//                System.out.println(map.size());
-//            }
-//        });
-//
-//        executor1.shutdown();
-//
-//        System.out.println(map.size());
-
+    public static void main(String[] args) throws Exception {
 
         /*LocalDate nowLD = LocalDate.now();
         LocalDate endDate = nowLD.minusDays(nowLD.getDayOfMonth());
@@ -372,14 +358,6 @@ public class UserController {
 //        String s = new Sha256Hash("chang123", "YzcmCZNvbXocrsz9dm8e").toHex();
 //        System.out.println(s);
 //
-//        List<String> split = Arrays.asList("医疗机构使用药品质量检查记录表.xls".split("."));
-//
-//        Date date = DateUtil.parseDate("2020/09/01 11:22:33");
-//        System.out.println(date.toString());
-//
-//        String regulatory = "123";
-//        System.out.println(regulatory.substring(0, regulatory.length() - 1));
-//
 //        Set<Map<String,String>> set = new HashSet<>();
 //        Map<String, String> hashMap1 = new HashMap<>();
 //        hashMap1.put("name","123");
@@ -395,40 +373,81 @@ public class UserController {
 //        set.add(hashMap3);
 //        System.out.println(set.toString());
 
-        System.out.println(test());
-        int x = 1;
-        x += 3 - 2;
-        System.out.println(x);
-        System.out.println("abc".substring("abc".length() - 2));
-        List<String> allDailySupervisionList = Arrays.asList("医疗机构使用药品质量检查记录表.xls", "123");
-        List<String> dailySupervisionList = allDailySupervisionList.stream().filter(e -> e.equals("aaa"))
-                .collect(Collectors.toList());
-        for (String s1 : dailySupervisionList) {
-            System.out.println(s1.length());
-        }
+//        System.out.println(test());
 
         LocalDate nowLD = LocalDate.now();
         LocalDate startDate = nowLD.minusDays(nowLD.getDayOfMonth() - 1).minusMonths(5);
         System.out.println(startDate.toString());
 
-        System.out.println("git commit success");
-
-        List<String> stringList = new ArrayList<>();
-        stringList.add("123");
-        stringList.add("456");
-        stringList.add("789");
-        stringList.add("aaa");
-        System.out.println(stringList.subList(0, 4).toString());
-
+        List<User> users = new ArrayList<>();
+        List<User> collect = users.stream().sorted(Comparator.comparing(User::getCreateTime)).collect(Collectors.toList());
+        List<Map<String, Object>> list = new ArrayList<>();
         Map<String, Object> map = new HashMap<>();
-        map.put("id", "12356434fddsfsgs");
-        map.put("username", "fdsa3f344e");
-        User user = new User();
-        MapUtil.mapToBean(map, user);
-        System.out.println(user.toString());
+        map.put("age", 123);
+        map.put("date", "2020-01-20");
+        list.add(map);
+        Map<String, Object> map1 = new HashMap<>();
+        map1.put("age", 456);
+        map1.put("date", "2020-12-20");
+        list.add(map1);
+        Map<String, Object> map2 = new HashMap<>();
+        map2.put("age", 11);
+        map2.put("date", "2020-08-20");
+        list.add(map2);
+        System.out.println(list.toString());
+        list.sort(Comparator.comparing(o -> (int) o.get("age")));
+        System.out.println(list.toString());
+        list.sort(Comparator.comparing(o -> DateUtil.parseDate(o.get("date").toString()).getTime()));
+        System.out.println(list.toString());
+//        List<String> strings = new ArrayList<>();
+//        strings.add("a");
+//        strings.add("b");
+//        strings.add("c");
+//        strings.add("d");
+//        String s = strings.stream().reduce((a, b) -> b + "," + a).get();
+//        System.out.println(s);
+//        byte[] plain = "Hello, encrypt use RSA".getBytes("UTF-8");
+//        long timeMillis = System.currentTimeMillis();
+//        System.out.println(timeMillis);
+//        for (int i = 0; i < 100000; i++) {
+//            long millis = System.currentTimeMillis();
+//            if (timeMillis != millis) {
+//                System.out.println(millis + ",i:" + i);
+//                break;
+//            }
+//        }
+//        long nanoTime = System.nanoTime();
+//        System.out.println(nanoTime);
+//        for (int i = 0; i < 100000; i++) {
+//            long time = System.nanoTime();
+//            if (nanoTime != time) {
+//                System.out.println(time + ",i:" + i);
+//                break;
+//            }
+//        }
+
+//        Instant now = Instant.now();
+//        int nano = now.getNano();
+//        System.out.println(nano);
+//        for (int i = 0; i < 100000; i++) {
+//            long time = Instant.now().getNano();
+//            if (nano != time) {
+//                System.out.println(time + ",i:" + i);
+//                break;
+//            }
+//        }
+
+        long nanoTime = System.nanoTime();
+        System.out.println(nanoTime);
+        Thread.sleep(1000);
+        long nanoTime1 = System.nanoTime();
+        System.out.println(nanoTime1);
+        System.out.println(nanoTime1-nanoTime);
+
+
     }
 
-    public static int test() {
+    public static synchronized int test() {
         try {
             System.out.println("try");
 //            int i = 1/0;

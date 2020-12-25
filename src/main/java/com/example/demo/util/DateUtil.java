@@ -188,7 +188,7 @@ public class DateUtil {
      * @return yyyy-MM-dd格式化的日期
      */
     public static String getDateYMD(Date date) {
-        return getFormattedDate(date, "yyyy-MM-dd");
+        return shortSdf.format(date);
     }
 
     /**
