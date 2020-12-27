@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class User {
+public class User implements UserInterface{
 
     private String id;
     private String username;
@@ -27,6 +27,12 @@ public class User {
 
     public User(String id) {
         this.id = id;
+    }
+
+    @Override
+    public Object sort() {
+
+        return "user";
     }
 
 

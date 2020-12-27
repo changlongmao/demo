@@ -6,10 +6,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.example.demo.entity.NewAndOldList;
-import com.example.demo.entity.RestResponse;
-import com.example.demo.entity.RunnableDemo;
-import com.example.demo.entity.User;
+import com.example.demo.entity.*;
 import com.example.demo.jwt.AuthUser;
 import com.example.demo.jwt.AuthUserInfo;
 import com.example.demo.jwt.Authorization;
@@ -443,8 +440,45 @@ public class UserController {
         long nanoTime1 = System.nanoTime();
         System.out.println(nanoTime1);
         System.out.println(nanoTime1-nanoTime);
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 10, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
 
+        List<User> list1 = new ArrayList<>();
+        testInterface(() -> {
+            System.out.println("测试成功");
+            return "xxx";
+        });
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("测试Runnable");
+            }
+        }).start();
+        for (int i = 0; i < 10; i++) {
+            Future<Object> submit = executor.submit(new Callable<Object>() {
+                @Override
+                public Object call() throws Exception {
+                    List<String> strings = new ArrayList<>();
+                    for (int j = 0; j < 10000; j++) {
+                        strings.add(j+"aa");
+                    }
+                    Thread.sleep(1000);
+                    System.out.println(strings.size());
+                    return strings;
+                }
+            });
+            submit.get();
+        }
 
+        System.out.println(executor.submit(() -> "111").get());
+        Future<?> future = executor.submit(() -> System.out.println("111111"));
+        System.out.println(future.get());
+
+        executor.shutdown();
+
+    }
+
+    public static void testInterface(UserInterface userInterface) {
+        System.out.println(userInterface.sort());
     }
 
     public static synchronized int test() {
