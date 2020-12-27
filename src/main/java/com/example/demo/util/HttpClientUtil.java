@@ -1,5 +1,6 @@
 package com.example.demo.util;
 
+import com.alibaba.fastjson.JSON;
 import org.apache.http.HeaderElement;
 import org.apache.http.HeaderElementIterator;
 import org.apache.http.HttpEntity;
@@ -63,11 +64,13 @@ public class HttpClientUtil {
             System.out.println("初始化HttpClient开始");
             SSLContextBuilder builder = new SSLContextBuilder();
             builder.loadTrustMaterial(null, new TrustSelfSignedStrategy());
-            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(builder.build());
-            // 配置同时支持 HTTP 和 HTPPS
-            Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory> create()
+            SSLConnectionSocketFactory sslSocketFactory = new SSLConnectionSocketFactory(builder.build());
+            // 配置同时支持 HTTP 和 HTPPs
+            Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder
+                    .<ConnectionSocketFactory>create()
                     .register("http", PlainConnectionSocketFactory.getSocketFactory())
-                    .register("https", sslsf).build();
+                    .register("https", sslSocketFactory)
+                    .build();
             // 初始化连接池管理器
             PoolingHttpClientConnectionManager poolConnManager = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
             // 将最大连接数增加到500
@@ -109,7 +112,7 @@ public class HttpClientUtil {
                     .setKeepAliveStrategy(keepAliveStrategy)
                     .build();
 
-            if (poolConnManager != null && poolConnManager.getTotalStats() != null){
+            if (poolConnManager != null && poolConnManager.getTotalStats() != null) {
                 System.out.println("连接池的状态：" + poolConnManager.getTotalStats().toString());
             }
             System.out.println("初始化HttpClient结束");
@@ -134,8 +137,8 @@ public class HttpClientUtil {
         String resultInfo = "";
         HttpPost httpPost = new HttpPost(url);
         httpPost.addHeader("Content-Type", "application/json;charset=utf-8");
-        httpPost.setEntity(new StringEntity(params.toString(), "utf-8"));
-        try (CloseableHttpResponse resp = httpClient.execute(httpPost)){
+        httpPost.setEntity(new StringEntity(JSON.toJSONString(params), "utf-8"));
+        try (CloseableHttpResponse resp = httpClient.execute(httpPost)) {
             // 获取响应entity
             HttpEntity entity = resp.getEntity();
             if (entity != null) {
@@ -143,7 +146,7 @@ public class HttpClientUtil {
             }
             // 关闭连接
             EntityUtils.consume(entity);
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return resultInfo;
@@ -157,19 +160,19 @@ public class HttpClientUtil {
      * @Date 2020/10/14 15:24
      * @Return java.lang.String
      **/
-    public static String doGet(String url, Map<String, Object> params){
+    public static String doGet(String url, Map<String, Object> params) {
         String resultInfo = "";
         try {
             URIBuilder builder = new URIBuilder(url);
             if (params != null) {
-                params.forEach((k,v) -> builder.addParameter(k,v.toString()));
+                params.forEach((k, v) -> builder.addParameter(k, v.toString()));
             }
             // 创建http GET请求
             HttpGet httpGet = new HttpGet(builder.build());
             httpGet.setHeader("Content-Type", "application/x-www-form-urlencoded");
 
             // 执行请求并获取返回
-            try (CloseableHttpResponse response = httpClient.execute(httpGet)){
+            try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
                 HttpEntity entity = response.getEntity();
                 System.out.println("返回状态码：" + response.getStatusLine());
                 if (entity != null) {
@@ -205,18 +208,17 @@ public class HttpClientUtil {
             builder.addTextBody("filename", fileName);
             // 类似浏览器表单提交，对应input的name和value
             if (params != null && params.size() > 0) {
-                params.forEach((k,v) -> builder.addTextBody(k,v.toString()));
+                params.forEach((k, v) -> builder.addTextBody(k, String.valueOf(v)));
             }
             builder.setCharset(Charset.forName("UTF-8"));
             builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-            HttpEntity entity = builder.build();
-            httpPost.setEntity(entity);
-            try (CloseableHttpResponse response = httpClient.execute(httpPost)){
+            httpPost.setEntity(builder.build());
+            try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
                 // 执行提交
-                HttpEntity responseEntity = response.getEntity();
-                if (responseEntity != null) {
+                HttpEntity entity = response.getEntity();
+                if (entity != null) {
                     // 将响应内容转换为字符串
-                    result = EntityUtils.toString(responseEntity, Charset.forName("UTF-8"));
+                    result = EntityUtils.toString(entity, Charset.forName("UTF-8"));
                 }
                 // 关闭连接
                 EntityUtils.consume(entity);

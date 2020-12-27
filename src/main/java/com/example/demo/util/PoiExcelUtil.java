@@ -1,13 +1,15 @@
 package com.example.demo.util;
 
+import com.example.demo.exception.BusinessException;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.SheetUtil;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -24,6 +26,11 @@ import java.util.*;
  * @Date: 2020/06/05 10:15
  **/
 public class PoiExcelUtil {
+
+    private static final Logger logger = LoggerFactory.getLogger(PoiExcelUtil.class);
+
+    private static final String EXCEL_XLS = "xls";
+    private static final String EXCEL_XLSX = "xlsx";
 
 
     /**
@@ -47,6 +54,8 @@ public class PoiExcelUtil {
         HSSFCellStyle columnTopStyle = getColumnTopStyle(wb);
         //获取单元格样式
         HSSFCellStyle style = getStyle(wb);
+        // 获取日期格式的单元格格式
+        HSSFCellStyle dateFormatStyle = getDateFormatStyle(wb);
 
         // 获取标题和字段名
         List<String> titleName = (List<String>) params.get("titleName");
@@ -59,7 +68,7 @@ public class PoiExcelUtil {
         HSSFRow titleRow = sheet.createRow(0);
 
         //创建单元格并设置单元格内容
-        for (int i = 0;i < titleName.size();i++){
+        for (int i = 0; i < titleName.size(); i++) {
             HSSFCell cell1 = titleRow.createCell(i);
             cell1.setCellValue(titleName.get(i));
             cell1.setCellStyle(columnTopStyle);
@@ -71,11 +80,19 @@ public class PoiExcelUtil {
             for (int i = 0; i < data.size(); i++) {
                 HSSFRow rown = sheet.createRow(i + 1);
                 rown.setHeightInPoints(25);
-                for (int j = 0;j < columnName.size();j++){
+                for (int j = 0; j < columnName.size(); j++) {
                     HSSFCell cell = rown.createCell(j);
                     Object value = data.get(i).get(columnName.get(j));
-                    cell.setCellValue(value == null ? "" : value.toString());
-                    cell.setCellStyle(style);
+                    if (value == null) {
+                        cell.setCellValue("");
+                        cell.setCellStyle(style);
+                    }else if (value instanceof Date) {
+                        cell.setCellValue((Date) value);
+                        cell.setCellStyle(dateFormatStyle);
+                    }else {
+                        cell.setCellValue(value.toString());
+                        cell.setCellStyle(style);
+                    }
                 }
             }
         }
@@ -99,24 +116,27 @@ public class PoiExcelUtil {
             }
         }
 
-        // 让列宽随着导出的列长自动适应,最大列宽不能超过50
+        //让列宽随着导出的列长自动适应，最大50，最小10
         for (int colNum = 0; colNum < titleName.size(); colNum++) {
             double width = SheetUtil.getColumnWidth(sheet, colNum, false);
             if (width != -1) {
                 width *= 256;
                 int maxColumnWidth = 50 * 256;
+                int minColumnWidth = 10 * 256;
                 if (width > maxColumnWidth) {
                     width = maxColumnWidth;
+                }else if (width < minColumnWidth) {
+                    width = minColumnWidth;
                 }
             }
             sheet.setColumnWidth(colNum, (int) (width));
         }
         //输出Excel文件
-        try (OutputStream output = response.getOutputStream()){
+        try (OutputStream output = response.getOutputStream()) {
             String filename = params.get("excelFilename") + ".xls";
 
             response.reset();
-            response.setHeader("Content-disposition", "attachment; filename="+ URLEncoder.encode(filename,"UTF-8"));
+            response.setHeader("Content-disposition", "attachment; filename=" + URLEncoder.encode(filename, "UTF-8"));
             response.setContentType("application/ms-excel");
             wb.write(output);
         } catch (IOException e) {
@@ -125,30 +145,60 @@ public class PoiExcelUtil {
     }
 
     /**
+     * @Param: workbook
      * @Author Chang
-     * @Description 导入excel表，InputStream需为excel表file生成的输入流
-     * @Date 2020/9/25 14:17
-     * @Return com.fy.common.bean.base.BaseResponse
+     * @Description 获取日期格式
+     * @Date 2020/12/17 14:19
+     * @Return org.apache.poi.hssf.usermodel.HSSFCellStyle
      **/
-    public static List<Map<String,String>> importExcel(InputStream inputStream) {
+    private static HSSFCellStyle getDateFormatStyle(HSSFWorkbook workbook) {
+        // 获取格式
+        HSSFCellStyle style = workbook.createCellStyle();
+        // 获取日期格式
+        HSSFDataFormat format= workbook.createDataFormat();
+        // 设置日期格式
+        style.setDataFormat(format.getFormat("yyyy/m/d h:mm:ss"));
+        // 设置字体
+        HSSFFont font = workbook.createFont();
+        //设置字体大小
+        font.setFontHeightInPoints((short) 10);
+        //在样式用应用设置的字体;
+        style.setFont(font);
+        //设置自动换行;
+        style.setWrapText(true);
+        //设置水平对齐的样式为居中对齐;
+        style.setAlignment(HorizontalAlignment.CENTER);
+        //设置垂直对齐的样式为居中对齐;
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+        return style;
+    }
+
+    /**
+     * @Param: file
+     * @Author Chang
+     * @Description 导入excel表，支持xls和xlsx格式
+     * @Date 2020/12/16 10:06
+     * @Return java.util.List<java.util.Map < java.lang.String, java.lang.String>>
+     **/
+    public static List<Map<String, String>> importExcelMatchFormat(MultipartFile file) {
+
+        // 检查问题
+        checkFile(file);
+
+        // 根据文件类型获取workbook
+        Workbook workbook = getWorkBook(file);
+
         List<Map<String, String>> list = new ArrayList<>();
-        HSSFWorkbook workbook = null;
-        try {
-            // 读取Excel文件
-            workbook = new HSSFWorkbook(inputStream);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         // 获取表单
-        HSSFSheet hssfSheet = workbook.getSheetAt(0);
-        if (hssfSheet == null) {
+        Sheet sheet = workbook.getSheetAt(0);
+        if (sheet == null) {
             return list;
         }
         DataFormatter dataFormatter = new DataFormatter();
 
         // 读取第一行数据获取表头
-        HSSFRow firstRow = hssfSheet.getRow(0);
+        Row firstRow = sheet.getRow(0);
         List<String> titleList = new ArrayList<>();
         for (int i = 0; i < firstRow.getLastCellNum(); i++) {
             String cellValue = dataFormatter.formatCellValue(firstRow.getCell(i));
@@ -161,25 +211,16 @@ public class PoiExcelUtil {
         }
 
         // 读取每一行数据
-        for (int rowNum = 1; rowNum <= hssfSheet.getLastRowNum(); rowNum++) {
-            HSSFRow hssfRow = hssfSheet.getRow(rowNum);
-            if (hssfRow == null) {
+        for (int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++) {
+            Row row = sheet.getRow(rowNum);
+            if (row == null) {
                 continue;
             }
             Map<String, String> map = new HashMap<>();
             boolean flag = false;
-            for (int i = 0; i < hssfRow.getLastCellNum(); i++) {
-                HSSFCell cell = hssfRow.getCell(i);
-                String cellValue = "";
-                if (cell != null && cell.getCellTypeEnum() != CellType.STRING && HSSFDateUtil.isCellDateFormatted(cell)){
-                    // 对日期类型数据处理
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-                    Date date = HSSFDateUtil.getJavaDate(cell.getNumericCellValue());
-                    cellValue = sdf.format(date);
-                }else {
-                    cellValue = dataFormatter.formatCellValue(cell);
-                }
+            for (int i = 0; i < titleList.size(); i++) {
+                Cell cell = row.getCell(i);
+                String cellValue = getCellValue(cell);
                 map.put(titleList.get(i), cellValue);
                 if (StringUtils.isNotBlank(cellValue)) {
                     flag = true;
@@ -189,7 +230,101 @@ public class PoiExcelUtil {
                 list.add(map);
             }
         }
+        try {
+            workbook.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return list;
+    }
+
+    private static String getCellValue(Cell cell) {
+        String cellValue = "";
+        if (cell == null) {
+            return cellValue;
+        }
+
+        DataFormatter dataFormatter = new DataFormatter();
+
+        switch (cell.getCellTypeEnum()) {
+            case NUMERIC:
+                if (HSSFDateUtil.isCellDateFormatted(cell)) {
+                    // 对日期类型数据处理
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date date = HSSFDateUtil.getJavaDate(cell.getNumericCellValue());
+                    cellValue = sdf.format(date);
+                } else {
+                    cellValue = dataFormatter.formatCellValue(cell);
+                }
+                break;
+            case STRING:
+                cellValue = dataFormatter.formatCellValue(cell);
+                break;
+            case FORMULA:
+                cellValue = String.valueOf(cell.getNumericCellValue());
+                break;
+            case BLANK:
+                cellValue = "";
+                break;
+            case ERROR:
+                cellValue = "非法字符";
+                break;
+            default:
+                cellValue = "未知类型";
+                break;
+        }
+        return cellValue;
+    }
+
+    /**
+     * @Param: file
+     * @Author Chang
+     * @Description 检查文件
+     * @Date 2020/12/16 10:40
+     * @Return void
+     **/
+    private static void checkFile(MultipartFile file) {
+
+        if (null == file) {
+            logger.error("文件不存在！");
+            throw new BusinessException("文件不存在！");
+        }
+
+        String fileName = file.getOriginalFilename();
+
+        if (!fileName.endsWith(EXCEL_XLS) && !fileName.endsWith(EXCEL_XLSX)) {
+            logger.error(fileName + "不是excel文件");
+            throw new BusinessException(fileName + "不是excel文件");
+        }
+    }
+
+    /**
+     * @Param: file
+     * @Author Chang
+     * @Description 获取workbook
+     * @Date 2020/12/16 10:40
+     * @Return org.apache.poi.ss.usermodel.Workbook
+     **/
+    private static Workbook getWorkBook(MultipartFile file) {
+
+        String fileName = file.getOriginalFilename();
+
+        Workbook workbook = null;
+        try {
+
+            InputStream is = file.getInputStream();
+
+            if (fileName.endsWith(EXCEL_XLS)) {
+
+                workbook = new HSSFWorkbook(is);
+            } else if (fileName.endsWith(EXCEL_XLSX)) {
+
+                workbook = new XSSFWorkbook(is);
+            }
+        } catch (IOException e) {
+            logger.info(e.getMessage());
+        }
+        return workbook;
     }
 
     /**
@@ -204,7 +339,7 @@ public class PoiExcelUtil {
         // 设置字体
         HSSFFont font = workbook.createFont();
         //设置字体大小
-        font.setFontHeightInPoints((short)13);
+        font.setFontHeightInPoints((short) 13);
         //字体加粗
         font.setBold(true);
         //设置字体名字
@@ -238,7 +373,7 @@ public class PoiExcelUtil {
         // 设置字体
         HSSFFont font = workbook.createFont();
         //设置字体大小
-        font.setFontHeightInPoints((short)12);
+        font.setFontHeightInPoints((short) 12);
         //设置字体名字
         font.setFontName("微软雅黑");
         //设置样式;

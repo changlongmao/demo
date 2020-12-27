@@ -10,4 +10,8 @@ public interface UserService extends IService<User> {
     List<User> selectList();
 
     void batchInsert(List<User> users);
+
+    void updateUserById(User user);
+
+    void updateUserByName(User user);
 }
