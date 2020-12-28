@@ -1,5 +1,6 @@
 package com.example.demo.util;
 
+import com.example.demo.entity.Constant;
 
 import java.util.Collection;
 import java.util.Map;
@@ -28,6 +29,26 @@ public class StringUtils {
         return true;
     }
 
+
+    public static String addOne(String parentId, String maxId) {
+        int ten = 10;
+        if (Constant.STR_ZERO.equals(parentId)) {
+            parentId = "";
+        }
+        if (isNullOrEmpty(maxId)) {
+            return parentId + "01";
+        }
+
+        maxId = maxId.substring(maxId.length() - 2);
+
+        int result = Integer.parseInt(maxId) + 1;
+
+        if (result < ten) {
+            return parentId + "0" + result;
+        } else {
+            return parentId + result + "";
+        }
+    }
 
 
     public static boolean isNullOrEmpty(Object obj) {
@@ -64,4 +85,13 @@ public class StringUtils {
         return false;
     }
 
+
+    public static String genKey(String prefix, String className, String methodName) {
+        return prefix + "userId_" +
+                ShiroUtils.getUserId() +
+                "_" +
+                className +
+                "." +
+                methodName;
+    }
 }
