@@ -139,6 +139,7 @@ public class PoiExcelUtil {
             response.setHeader("Content-disposition", "attachment; filename=" + URLEncoder.encode(filename, "UTF-8"));
             response.setContentType("application/ms-excel");
             wb.write(output);
+            wb.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
