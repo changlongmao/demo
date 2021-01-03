@@ -31,7 +31,7 @@ public class ExecutorConfig {
         // 线程池维护线程所允许的空闲时间
         poolTaskExecutor.setKeepAliveSeconds(30000);
         // 设置默认线程名称
-        poolTaskExecutor.setThreadNamePrefix("pmc-");
+        poolTaskExecutor.setThreadNamePrefix("async-service-");
         // 设置拒绝策略
         poolTaskExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         // 等待所有任务结束后再关闭线程池

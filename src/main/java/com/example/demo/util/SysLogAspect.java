@@ -20,7 +20,7 @@ import java.util.Date;
 
 
 @Aspect
-@Component
+//@Component
 public class SysLogAspect {
     @Autowired
     private SysLogService sysLogService;
@@ -79,8 +79,8 @@ public class SysLogAspect {
             sysLog.setCreateTime(new Date());
 
             sysLogService.save(sysLog);
-        } catch (Exception ignored) {
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

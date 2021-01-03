@@ -14,4 +14,7 @@ public interface UserService extends IService<User> {
     void updateUserById(User user);
 
     void updateUserByName(User user);
+
+    void executeAsync();
+
 }

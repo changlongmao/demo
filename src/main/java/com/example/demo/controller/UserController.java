@@ -12,10 +12,7 @@ import com.example.demo.jwt.AuthUserInfo;
 import com.example.demo.jwt.Authorization;
 import com.example.demo.jwt.JwtTokenUtil;
 import com.example.demo.service.UserService;
-import com.example.demo.util.DateUtil;
-import com.example.demo.util.HttpClientUtil;
-import com.example.demo.util.MD5Util;
-import com.example.demo.util.MapUtil;
+import com.example.demo.util.*;
 import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.encoder.org.apache.commons.lang.text.StrBuilder;
 import org.apache.commons.collections.CollectionUtils;
@@ -70,6 +67,8 @@ public class UserController {
     private RedissonClient redisson;
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
+    @Autowired
+    private JedisUtil jedisUtil;
 
     @Resource
     private ThreadPoolTaskExecutor taskExecutor;
@@ -285,11 +284,48 @@ public class UserController {
     }
 
 
+    @SysLog("获取token")
     @RequestMapping(value = "/getToken", method = RequestMethod.GET)
-    public RestResponse getToken() {
-        String token = jwtTokenUtil.generateToken("1169156293848969218", 1);
+    public RestResponse getToken(@RequestParam Map<String, Object> params) throws Exception {
+        Thread.sleep(1000);
+        String token = jwtTokenUtil.generateToken("1154218600098865154", 1);
 
         return RestResponse.success().put("token", token);
+    }
+
+    @SysLog("测试AspectAdvice")
+    @Authorization
+    @PostMapping(value = "/testAspectAdvice")
+    public RestResponse testAspectAdvice(@AuthUser AuthUserInfo userInfo, @RequestBody Map<String, Object> params) throws Exception {
+
+        int i = 1/0;
+        Thread.sleep(5000);
+        String token = jwtTokenUtil.generateToken("1154218600098865154", 1);
+
+        return RestResponse.success().put("token", token);
+    }
+
+    @RequestMapping(value = "/testJedis", method = RequestMethod.GET)
+    public RestResponse testJedis(@RequestParam Map<String, Object> params) throws Exception {
+//        jedisUtil.del("testJedis");
+
+        String testJedis = jedisUtil.get("testJedis");
+        if (StringUtils.isNotBlank(testJedis)) {
+            log.info("从redis取数据");
+            return RestResponse.success().put("testJedis", testJedis);
+        }
+        log.info("从后台取数据");
+        String a = "aaa";
+        jedisUtil.set("testJedis", "aaa", 60);
+
+        return RestResponse.success().put("testJedis", a);
+    }
+
+    @RequestMapping(value = "/executeAsync", method = RequestMethod.GET)
+    public RestResponse executeAsync(@AuthUser AuthUserInfo userInfo) throws Exception {
+        userService.executeAsync();
+
+        return RestResponse.success();
     }
 
     @RequestMapping(value = "/getBase64", method = RequestMethod.POST)
@@ -376,64 +412,56 @@ public class UserController {
         LocalDate startDate = nowLD.minusDays(nowLD.getDayOfMonth() - 1).minusMonths(5);
         System.out.println(startDate.toString());
 
-        List<User> users = new ArrayList<>();
-        List<User> collect = users.stream().sorted(Comparator.comparing(User::getCreateTime)).collect(Collectors.toList());
-        List<Map<String, Object>> list = new ArrayList<>();
-        Map<String, Object> map = new HashMap<>();
-        map.put("age", 123);
-        map.put("date", "2020-01-20");
-        list.add(map);
-        Map<String, Object> map1 = new HashMap<>();
-        map1.put("age", 456);
-        map1.put("date", "2020-12-20");
-        list.add(map1);
-        Map<String, Object> map2 = new HashMap<>();
-        map2.put("age", 11);
-        map2.put("date", "2020-08-20");
-        list.add(map2);
-        System.out.println(list.toString());
-        list.sort(Comparator.comparing(o -> (int) o.get("age")));
-        System.out.println(list.toString());
-        list.sort(Comparator.comparing(o -> DateUtil.parseDate(o.get("date").toString()).getTime()));
-        System.out.println(list.toString());
+//        List<User> users = new ArrayList<>();
+//        List<User> collect = users.stream().sorted(Comparator.comparing(User::getCreateTime)).collect(Collectors.toList());
+//        List<Map<String, Object>> list = new ArrayList<>();
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("age", 123);
+//        map.put("date", "2020-01-20");
+//        list.add(map);
+//        Map<String, Object> map1 = new HashMap<>();
+//        map1.put("age", 456);
+//        map1.put("date", "2020-12-20");
+//        list.add(map1);
+//        Map<String, Object> map2 = new HashMap<>();
+//        map2.put("age", 11);
+//        map2.put("date", "2020-08-20");
+//        list.add(map2);
+//        System.out.println(list.toString());
+//        list.sort(Comparator.comparing(o -> (int) o.get("age")));
+//        System.out.println(list.toString());
+//        list.sort(Comparator.comparing(o -> DateUtil.parseDate(o.get("date").toString()).getTime()));
+//        System.out.println(list.toString());
 //        List<String> strings = new ArrayList<>();
 //        strings.add("a");
 //        strings.add("b");
-//        strings.add("c");
-//        strings.add("d");
 //        String s = strings.stream().reduce((a, b) -> b + "," + a).get();
 //        System.out.println(s);
-//        byte[] plain = "Hello, encrypt use RSA".getBytes("UTF-8");
 //        long timeMillis = System.currentTimeMillis();
-//        System.out.println(timeMillis);
-//        for (int i = 0; i < 100000; i++) {
-//            long millis = System.currentTimeMillis();
-//            if (timeMillis != millis) {
-//                System.out.println(millis + ",i:" + i);
-//                break;
-//            }
-//        }
 //        long nanoTime = System.nanoTime();
 //        System.out.println(nanoTime);
-//        for (int i = 0; i < 100000; i++) {
-//            long time = System.nanoTime();
-//            if (nanoTime != time) {
-//                System.out.println(time + ",i:" + i);
-//                break;
-//            }
-//        }
 
-//        Instant now = Instant.now();
-//        int nano = now.getNano();
-//        System.out.println(nano);
-//        for (int i = 0; i < 100000; i++) {
-//            long time = Instant.now().getNano();
-//            if (nano != time) {
-//                System.out.println(time + ",i:" + i);
-//                break;
-//            }
-//        }
+//        int nano = Instant.now().getNano();
 
+//        long nanoTime = System.nanoTime();
+//        System.out.println(nanoTime);
+//        Thread.sleep(1000);
+//        long nanoTime1 = System.nanoTime();
+//        System.out.println(nanoTime1);
+//        System.out.println(nanoTime1-nanoTime);
+
+        Map<String, List<User>> result = new HashMap<>(10);
+
+        List<User> users = new ArrayList<>();
+        users.add(new User("123"));
+        result.put("users", users);
+
+        List<User> newUsers = result.computeIfAbsent("newUsers", k -> new ArrayList<>());
+        newUsers.add(new User("456"));
+        List<User> users1 = result.computeIfAbsent("users", k -> new ArrayList<>());
+        users1.add(new User("789"));
+
+        System.out.println(result.toString());
         long nanoTime = System.nanoTime();
         System.out.println(nanoTime);
         Thread.sleep(1000);
