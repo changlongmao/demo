@@ -11,6 +11,7 @@ import com.example.demo.jwt.AuthUser;
 import com.example.demo.jwt.AuthUserInfo;
 import com.example.demo.jwt.Authorization;
 import com.example.demo.jwt.JwtTokenUtil;
+import com.example.demo.service.Impl.UserServiceImpl;
 import com.example.demo.service.UserService;
 import com.example.demo.util.*;
 import lombok.extern.slf4j.Slf4j;
@@ -61,6 +62,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/user")
 public class UserController {
 
+    private static final ThreadLocal<Object> threadLocal = new ThreadLocal<>();
+
     @Resource
     private UserService userService;
     @Autowired
@@ -97,6 +100,38 @@ public class UserController {
 
     }
 
+    @GetMapping(value = "/testThreadLocal")
+    public RestResponse testThreadLocal() {
+
+        TestThreadController.threadLocal.set("123");
+        Object obj = userService.getThreadLocal();
+        return RestResponse.success().put("obj",obj);
+    }
+
+    @GetMapping(value = "/testForEach")
+    public RestResponse testForEach() {
+        long start = System.currentTimeMillis();
+//        StringBuilder sb = new StringBuilder();
+//        long start = System.currentTimeMillis();
+//        for (int i = 0; i < 10000; i++) {
+//            for (int j = 0; j < 10000; j++) {
+//                sb.append(i + "");
+//            }
+//        }
+//        System.out.println(sb.length());
+        int x = 1;
+        Map<String, Object> map = new HashMap<>();
+        for (int i = 0; i < 100; i++) {
+            for (int j = 0; j < 100; j++) {
+                map.put(x + "", x);
+                x++;
+            }
+        }
+        System.out.println(map.size());
+        long end = System.currentTimeMillis();
+        System.out.println((end-start) + "ms");
+        return RestResponse.success();
+    }
 
     @RequestMapping(value = "/mybatisPlusBatchInsert", method = RequestMethod.POST)
     public RestResponse mybatisPlusBatchInsert(HttpServletRequest request) {
@@ -125,7 +160,7 @@ public class UserController {
         long startTime = System.currentTimeMillis();
 
         List<User> users = new ArrayList<>();
-        for (int i = 0; i < 500000; i++) {
+        for (int i = 0; i < 100; i++) {
             User user = new User();
             user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
             user.setUsername("setUsername" + i * 1000);
@@ -163,13 +198,13 @@ public class UserController {
         executor.awaitTermination(5, TimeUnit.MINUTES);
         log.info("调用awaitTermination之后：" + executor.isTerminated());
 //        userService.batchInsert(users);
-//        User user = new User();
-//        user.setId("00002b33bbd14cf187e7c769238e452b");
-//        user.setUsername("myBatchInsert123");
-//        user.setRearName("myBatchInsert456");
-//        userService.updateUserById(user);
-//        userService.getById("00001d7567a64e358fc9903403f025f8");
-//        userService.updateUserByName(user);
+        User user = new User();
+        user.setId("00002b33bbd14cf187e7c769238e452b");
+        user.setUsername("myBatchInsert123");
+        user.setRearName("myBatchInsert456");
+        userService.updateUserById(user);
+        userService.getById("00001d7567a64e358fc9903403f025f8");
+        userService.updateUserByName(user);
 //        Thread.sleep(30000);
 
         System.out.println(users.size());
@@ -220,8 +255,8 @@ public class UserController {
         return RestResponse.success().put("userById1", userById1).put("userById2", userById2);
     }
 
-    @RequestMapping(value = "/testForEach", method = RequestMethod.GET)
-    public RestResponse testForEach(HttpServletRequest request) throws Exception {
+    @RequestMapping(value = "/testList", method = RequestMethod.GET)
+    public RestResponse testList(HttpServletRequest request) throws Exception {
         long startTime = System.currentTimeMillis();
 //        List<User> users = new ArrayList<>();
 //        List<User> users = new CopyOnWriteArrayList<>();
@@ -438,11 +473,9 @@ public class UserController {
 //        String s = strings.stream().reduce((a, b) -> b + "," + a).get();
 //        System.out.println(s);
 //        long timeMillis = System.currentTimeMillis();
-//        long nanoTime = System.nanoTime();
-//        System.out.println(nanoTime);
-
+//
 //        int nano = Instant.now().getNano();
-
+//
 //        long nanoTime = System.nanoTime();
 //        System.out.println(nanoTime);
 //        Thread.sleep(1000);

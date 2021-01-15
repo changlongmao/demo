@@ -13,7 +13,7 @@ spring:
     database: 0
     host: 127.0.0.1
     port: 6379
-    password:  redis1244656FYKJ508HzBJYfdxFyZn # 密码（默认为空）
+    password: redis1244656FYKJ508HzBJYfdxFyZn # 密码（默认为空）
     timeout: 6000ms  # 连接超时时长（毫秒）
     expire-time: 1800 # redis过期时间是30分钟30*60
     jedis:
@@ -24,6 +24,14 @@ spring:
         min-idle: 0       # 连接池中的最小空闲连接
   main:
     allow-bean-definition-overriding: true
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML5
+    encoding: UTF-8
+    cache: false
+    servlet:
+      content-type: text/html
 server:
   tomcat:
     uri-encoding: UTF-8
@@ -38,8 +46,8 @@ server:
 mybatis-plus:
   typeAliasesPackage: com.example.demo.entity
   mapper-locations: classpath*:mybatis/**/*.xml
-#  configuration:
-#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  #  configuration:
+  #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     banner: false
     db-config:

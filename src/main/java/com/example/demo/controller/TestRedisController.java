@@ -7,8 +7,6 @@ import com.example.demo.entity.User;
 import com.example.demo.util.AESUtil;
 import com.example.demo.util.JedisUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.exception.ExceptionUtils;
-import org.docx4j.wml.U;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.NamedThreadLocal;
 import org.springframework.web.bind.annotation.GetMapping;
