@@ -1,10 +1,5 @@
 package com.example.demo.controller;
 
-import cn.hutool.core.lang.UUID;
-import cn.hutool.core.util.RandomUtil;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.demo.entity.*;
 import com.example.demo.jwt.AuthUser;
@@ -160,7 +155,7 @@ public class UserController {
         long startTime = System.currentTimeMillis();
 
         List<User> users = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1000000; i++) {
             User user = new User();
             user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
             user.setUsername("setUsername" + i * 1000);
@@ -198,13 +193,13 @@ public class UserController {
         executor.awaitTermination(5, TimeUnit.MINUTES);
         log.info("调用awaitTermination之后：" + executor.isTerminated());
 //        userService.batchInsert(users);
-        User user = new User();
-        user.setId("00002b33bbd14cf187e7c769238e452b");
-        user.setUsername("myBatchInsert123");
-        user.setRearName("myBatchInsert456");
-        userService.updateUserById(user);
-        userService.getById("00001d7567a64e358fc9903403f025f8");
-        userService.updateUserByName(user);
+//        User user = new User();
+//        user.setId("00002b33bbd14cf187e7c769238e452b");
+//        user.setUsername("myBatchInsert123");
+//        user.setRearName("myBatchInsert456");
+//        userService.updateUserById(user);
+//        userService.getById("00001d7567a64e358fc9903403f025f8");
+//        userService.updateUserByName(user);
 //        Thread.sleep(30000);
 
         System.out.println(users.size());
@@ -262,9 +257,17 @@ public class UserController {
 //        List<User> users = new CopyOnWriteArrayList<>();
         List<User> users = new Vector<>();
 //        List<User> users = Collections.synchronizedList(new ArrayList<>());
+//        for (int i = 0; i < 500000; i++) {
+//            User user = new User();
+//            user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+//            user.setPassword("setPassword" + i * 1000);
+//            user.setUsername("setUsername" + i * 1000);
+//            user.setRearName("setRearName" + i * 1000);
+//            users.add(user);
+//        }
 
-        ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 20, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
-        for (int j = 0; j < 20; j++) {
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 10, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
+        for (int j = 0; j < 50; j++) {
             executor.execute(() -> {
                 for (int i = 0; i < 10000; i++) {
                     User user = new User();
@@ -285,6 +288,46 @@ public class UserController {
 
         Long endTime = System.currentTimeMillis();
         System.out.println("循环add数据共用时" + (endTime - startTime) + "ms");
+        return RestResponse.success();
+    }
+
+    @GetMapping(value = "/testMap")
+    public RestResponse testMap() throws Exception {
+        long startTime = System.currentTimeMillis();
+        Map<String, User> users = new HashMap<>();
+//        Map<String, User> users = new Hashtable<>();
+//        Map<String, User> users = new ConcurrentHashMap<>();
+        for (int i = 0; i < 3000000; i++) {
+            User user = new User();
+            user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+            user.setPassword("setPassword" + i * 1000);
+            user.setUsername("setUsername" + i * 1000);
+            user.setRearName("setRearName" + i * 1000);
+            users.put(user.getId(), user);
+        }
+
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 10, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
+//        for (int j = 0; j < 10; j++) {
+//            executor.execute(() -> {
+//                for (int i = 0; i < 300000; i++) {
+//                    User user = new User();
+//                    user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+//                    user.setPassword("setPassword" + i * 1000);
+//                    user.setUsername("setUsername" + i * 1000);
+//                    user.setRearName("setRearName" + i * 1000);
+//                    users.put(user.getId(), user);
+//                }
+//            });
+//        }
+        executor.shutdown();
+
+        log.info("调用awaitTermination之前：" + executor.isTerminated());
+        executor.awaitTermination(10, TimeUnit.MINUTES);
+        log.info("调用awaitTermination之后：" + executor.isTerminated());
+        log.info("循环put数据: " + users.size() + "条");
+
+        Long endTime = System.currentTimeMillis();
+        System.out.println("循环put数据共用时" + (endTime - startTime) + "ms");
         return RestResponse.success();
     }
 

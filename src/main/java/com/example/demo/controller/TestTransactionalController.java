@@ -31,6 +31,7 @@ public class TestTransactionalController {
         user.setUsername("123");
 //        userService.updateUserById(user);
         userService.updateUserByName(user);
+        log.warn("测试warn");
 
 //        try {
 //            int i = 1/0;
@@ -60,5 +61,9 @@ public class TestTransactionalController {
         user.setUsername("123");
         userService.updateUserById(user);
 //        Thread.sleep(10000);
+    }
+
+    public static void main(String[] args) {
+        log.warn("测试warn");
     }
 }
