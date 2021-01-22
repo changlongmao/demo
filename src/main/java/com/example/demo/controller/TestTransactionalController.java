@@ -84,7 +84,7 @@ public class TestTransactionalController {
             Integer integer = integerList.get(i);
             if (integer > 100 && integer< 1000) {
                 integerList.remove(i);
-//                i--;
+                i--;
             }
         }
 //        for (Integer i : integerList) {
@@ -92,6 +92,11 @@ public class TestTransactionalController {
 //                integerList.remove(i);
 //            }
 //        }
+//        integerList.forEach(i -> {
+//            if (i > 100 && i< 1000) {
+//                integerList.remove(i);
+//            }
+//        });
         System.out.println(integerList.size());
     }
 }
