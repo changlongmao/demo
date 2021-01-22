@@ -84,13 +84,16 @@ public class UserController {
     public RestResponse save(@RequestBody Map<String, Object> params) {
         log.info("code:{}", params.get("code"));
         RLock lock = redisson.getLock("save" + params.get("code"));
-        if (lock.isLocked()) {
-            log.info("未获取到锁，请求失败");
-            return RestResponse.error("点击过快，请勿重复请求");
-        }
+//        if (lock.isLocked()) {
+//            log.info("未获取到锁，请求失败");
+//            return RestResponse.error("点击过快，请勿重复请求");
+//        }
+        boolean tryLock = false;
         long startTime = System.currentTimeMillis();
         try {
-            lock.lock(60L, TimeUnit.SECONDS);
+//            lock.lock(60L, TimeUnit.SECONDS);
+            // waitTime为若没获取到锁的等待时间，超时则放弃获取锁返回false,leaseTime若获取锁超过指定的时间还没释放则自动释放
+            tryLock = lock.tryLock(1, 60, TimeUnit.SECONDS);
             long waitLockTime = System.currentTimeMillis();
             requestNum++;
             log.info("请求{}获取到锁，请求成功", requestNum);
@@ -104,16 +107,19 @@ public class UserController {
                 user.setCreateTime(new Date());
                 userList.add(user);
             }
+            Thread.sleep(200);
             return RestResponse.success("操作成功");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.warn(e.getMessage(), e);
             return RestResponse.error("操作异常");
         } finally {
             log.info("请求{}释放锁", requestNum);
             log.info("请求{}时userList元素个数为：{}个", requestNum, userList.size());
             long requestTime = System.currentTimeMillis();
             log.info("请求{}接口共用时：{}ms", requestNum, requestTime - startTime);
-            lock.unlock();
+            if (tryLock) {
+                lock.unlock();
+            }
         }
 
     }

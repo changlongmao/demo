@@ -31,7 +31,6 @@ public class RedissonConfig {
 
     @Bean
     public RedissonClient getRedisson(){
-        long maxWaitMillis = Long.parseLong(strMaxWaitMillis.replace("ms", ""));
         Integer timeout = Integer.parseInt(strTimeout.replace("ms", ""));
         Config config = new Config();
         config.useSingleServer()
