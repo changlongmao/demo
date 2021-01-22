@@ -59,6 +59,8 @@ public class UserController {
 
     private static final ThreadLocal<Object> threadLocal = new ThreadLocal<>();
 
+    public static int requestNum = 0;
+
     @Resource
     private UserService userService;
     @Autowired
@@ -71,26 +73,47 @@ public class UserController {
     @Resource
     private ThreadPoolTaskExecutor taskExecutor;
 
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public RestResponse save(String code) {
-        RLock lock = redisson.getLock("confirmUserType_" + code);
+    private static final ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 10,
+            30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
+
+    public static final List<User> userList = Collections.synchronizedList(new ArrayList<>());
+
+
+    @PostMapping(value = "/save")
+    @Transactional(rollbackFor = Exception.class)
+    public RestResponse save(@RequestBody Map<String, Object> params) {
+        log.info("code:{}", params.get("code"));
+        RLock lock = redisson.getLock("save" + params.get("code"));
         if (lock.isLocked()) {
+            log.info("未获取到锁，请求失败");
             return RestResponse.error("点击过快，请勿重复请求");
         }
         long startTime = System.currentTimeMillis();
         try {
             lock.lock(60L, TimeUnit.SECONDS);
+            long waitLockTime = System.currentTimeMillis();
+            requestNum++;
+            log.info("请求{}获取到锁，请求成功", requestNum);
+            log.info("请求{}等待获取锁用时：{}ms", requestNum, waitLockTime - startTime);
             for (int i = 0; i < 10; i++) {
-                taskExecutor.execute(new RunnableDemo(userService, i, startTime));
+                User user = new User();
+                user.setId(UUID.randomUUID().toString().replace("-", ""));
+                user.setUsername("longMao" + requestNum);
+                user.setPassword("123");
+                user.setRearName("龙猫" + requestNum);
+                user.setCreateTime(new Date());
+                userList.add(user);
             }
-            return RestResponse.success();
+            return RestResponse.success("操作成功");
         } catch (Exception e) {
             e.printStackTrace();
             return RestResponse.error("操作异常");
         } finally {
+            log.info("请求{}释放锁", requestNum);
+            log.info("请求{}时userList元素个数为：{}个", requestNum, userList.size());
+            long requestTime = System.currentTimeMillis();
+            log.info("请求{}接口共用时：{}ms", requestNum, requestTime - startTime);
             lock.unlock();
-            Long endTime = System.currentTimeMillis();
-            System.out.println("外进程共用时" + (endTime - startTime) + "ms");
         }
 
     }
@@ -100,7 +123,7 @@ public class UserController {
 
         TestThreadController.threadLocal.set("123");
         Object obj = userService.getThreadLocal();
-        return RestResponse.success().put("obj",obj);
+        return RestResponse.success().put("obj", obj);
     }
 
     @GetMapping(value = "/testForEach")
@@ -124,7 +147,7 @@ public class UserController {
         }
         System.out.println(map.size());
         long end = System.currentTimeMillis();
-        System.out.println((end-start) + "ms");
+        System.out.println((end - start) + "ms");
         return RestResponse.success();
     }
 
@@ -250,8 +273,9 @@ public class UserController {
         return RestResponse.success().put("userById1", userById1).put("userById2", userById2);
     }
 
-    @RequestMapping(value = "/testList", method = RequestMethod.GET)
-    public RestResponse testList(HttpServletRequest request) throws Exception {
+    @GetMapping(value = "/testList")
+    public RestResponse testList(@RequestParam Map<String, Object> params) throws Exception {
+        System.out.println(params.toString());
         long startTime = System.currentTimeMillis();
 //        List<User> users = new ArrayList<>();
 //        List<User> users = new CopyOnWriteArrayList<>();
@@ -269,7 +293,7 @@ public class UserController {
         ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 10, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
         for (int j = 0; j < 50; j++) {
             executor.execute(() -> {
-                for (int i = 0; i < 10000; i++) {
+                for (int i = 0; i < 10; i++) {
                     User user = new User();
                     user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
                     user.setPassword("setPassword" + i * 1000);
@@ -376,7 +400,7 @@ public class UserController {
     @PostMapping(value = "/testAspectAdvice")
     public RestResponse testAspectAdvice(@AuthUser AuthUserInfo userInfo, @RequestBody Map<String, Object> params) throws Exception {
 
-        int i = 1/0;
+        int i = 1 / 0;
         Thread.sleep(5000);
         String token = jwtTokenUtil.generateToken("1154218600098865154", 1);
 

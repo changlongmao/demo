@@ -98,8 +98,8 @@ public class TestThreadController {
 //        executor.awaitTermination(5, TimeUnit.MINUTES);
 //        log.info("调用awaitTermination之后：" + executor.isTerminated());
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < 200; i++) {
-            sb.append("a");
+        for (int i = 0; i < 605010000; i++) {
+            sb.append("啊");
         }
 //        StringBuffer sb = new StringBuffer();
 //        for (int i = 0; i < 100000000; i++) {
@@ -113,7 +113,7 @@ public class TestThreadController {
         long end = System.currentTimeMillis();
         System.out.println((end - start) + "ms");
         System.out.println(sb.length());
-        System.out.println(sb);
+//        System.out.println(sb);
 //        String s = "";
 //        System.out.println(11 & 160343085);
 //        System.out.println(15 & 160343085);
