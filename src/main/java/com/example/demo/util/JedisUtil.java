@@ -12,16 +12,15 @@ import redis.clients.jedis.exceptions.JedisException;
 
 import java.util.*;
 
-
 @Slf4j
 @Component
 public class JedisUtil {
+
     @Value("${spring.redis.expire-time}")
     private int expireTime;
 
     @Autowired
     private JedisPool jedisPool;
-
 
     public String get(String key) {
         String value = null;
@@ -41,7 +40,6 @@ public class JedisUtil {
         }
         return value;
     }
-
 
     public Object getObject(String key) {
         Object value = null;
@@ -63,7 +61,6 @@ public class JedisUtil {
         return set(key, value, expireTime);
     }
 
-
     public String set(String key, String value, int cacheSeconds) {
         String result = null;
         Jedis jedis = null;
@@ -82,7 +79,6 @@ public class JedisUtil {
         return result;
     }
 
-
     public void expire(String key, int cacheSeconds) {
         Jedis jedis = null;
         try {
@@ -97,7 +93,6 @@ public class JedisUtil {
             returnResource(jedis);
         }
     }
-
 
     public Long ttl(String key) {
         Jedis jedis = null;
@@ -116,7 +111,6 @@ public class JedisUtil {
         return ttlTime;
     }
 
-
     public String setObject(String key, Object value, int cacheSeconds) {
         String result = null;
         Jedis jedis = null;
@@ -133,11 +127,9 @@ public class JedisUtil {
         return result;
     }
 
-
     public String setObject(String key, Object value) {
         return setObject(key, value, expireTime);
     }
-
 
     public Set<String> keys(String pattern) {
         Set<String> result = Sets.newHashSet();
@@ -153,7 +145,6 @@ public class JedisUtil {
         return result;
     }
 
-
     public List<String> getList(String key) {
         List<String> value = null;
         Jedis jedis = null;
@@ -164,13 +155,11 @@ public class JedisUtil {
             }
         } catch (Exception e) {
             log.warn("getList {}", key, e);
-
         } finally {
             returnResource(jedis);
         }
         return value;
     }
-
 
     public List<Object> getObjectList(String key) {
         List<Object> value = null;
@@ -194,7 +183,6 @@ public class JedisUtil {
         return value;
     }
 
-
     public List<Object> getObjectListByKeyPrefix(String keyPrefix) {
         List<Object> value = new ArrayList<>();
         Jedis jedis = null;
@@ -205,9 +193,7 @@ public class JedisUtil {
                 for (String key : keys) {
                     Object object = getObject(key);
                     value.add(object);
-
                 }
-
             }
         } catch (Exception e) {
             log.warn("getObjectList {} ", keyPrefix, e);
@@ -217,7 +203,6 @@ public class JedisUtil {
         return value;
     }
 
-
     public long setList(String key, List<String> value, int cacheSeconds) {
         long result = 0;
         Jedis jedis = null;
@@ -226,7 +211,7 @@ public class JedisUtil {
             if (jedis.exists(key)) {
                 jedis.del(key);
             }
-            result = jedis.rpush(key, (String[]) value.toArray(new String[value.size()]));
+            result = jedis.rpush(key, value.toArray(new String[value.size()]));
             if (cacheSeconds != 0) {
                 jedis.expire(key, cacheSeconds);
             }
@@ -238,7 +223,6 @@ public class JedisUtil {
         }
         return result;
     }
-
 
     public long setObjectList(String key, List<Object> value,
                               int cacheSeconds) {
@@ -266,7 +250,6 @@ public class JedisUtil {
         return result;
     }
 
-
     public long listAdd(String key, String... value) {
         long result = 0;
         Jedis jedis = null;
@@ -281,7 +264,6 @@ public class JedisUtil {
         }
         return result;
     }
-
 
     public long listObjectAdd(String key, Object... value) {
         long result = 0;
@@ -302,7 +284,6 @@ public class JedisUtil {
         return result;
     }
 
-
     public Set<String> getSet(String key) {
         Set<String> value = null;
         Jedis jedis = null;
@@ -320,7 +301,6 @@ public class JedisUtil {
         return value;
     }
 
-
     public Set<String> getKeysByPrefix(String keyPrefix) {
         Set<String> value = null;
         Jedis jedis = null;
@@ -334,9 +314,7 @@ public class JedisUtil {
             returnResource(jedis);
         }
         return value;
-
     }
-
 
     public Set<Object> getObjectSet(String key) {
         Set<Object> value = null;
@@ -359,7 +337,6 @@ public class JedisUtil {
         return value;
     }
 
-
     public long setSet(String key, Set<String> value, int cacheSeconds) {
         long result = 0;
         Jedis jedis = null;
@@ -380,7 +357,6 @@ public class JedisUtil {
         }
         return result;
     }
-
 
     public long setObjectSet(String key, Set<Object> value,
                              int cacheSeconds) {
@@ -408,7 +384,6 @@ public class JedisUtil {
         return result;
     }
 
-
     public long setSetAdd(String key, String... value) {
         long result = 0;
         Jedis jedis = null;
@@ -423,7 +398,6 @@ public class JedisUtil {
         }
         return result;
     }
-
 
     public long setSetObjectAdd(String key, Object... value) {
         long result = 0;
@@ -444,7 +418,6 @@ public class JedisUtil {
         return result;
     }
 
-
     public Map<String, String> getMap(String key) {
         Map<String, String> value = null;
         Jedis jedis = null;
@@ -461,7 +434,6 @@ public class JedisUtil {
         }
         return value;
     }
-
 
     public Map<String, Object> getObjectMap(String key) {
         Map<String, Object> value = null;
@@ -485,7 +457,6 @@ public class JedisUtil {
         return value;
     }
 
-
     public String setMap(String key, Map<String, String> value,
                          int cacheSeconds) {
         String result = null;
@@ -507,7 +478,6 @@ public class JedisUtil {
         }
         return result;
     }
-
 
     public String setObjectMap(String key, Map<String, Object> value,
                                int cacheSeconds) {
@@ -535,7 +505,6 @@ public class JedisUtil {
         return result;
     }
 
-
     public String mapPut(String key, Map<String, String> value) {
         String result = null;
         Jedis jedis = null;
@@ -550,7 +519,6 @@ public class JedisUtil {
         }
         return result;
     }
-
 
     public String mapObjectPut(String key, Map<String, Object> value) {
         String result = null;
@@ -571,7 +539,6 @@ public class JedisUtil {
         return result;
     }
 
-
     public long mapRemove(String key, String mapKey) {
         long result = 0;
         Jedis jedis = null;
@@ -586,7 +553,6 @@ public class JedisUtil {
         }
         return result;
     }
-
 
     public long mapObjectRemove(String key, String mapKey) {
         long result = 0;
@@ -603,7 +569,6 @@ public class JedisUtil {
         return result;
     }
 
-
     public boolean mapExists(String key, String mapKey) {
         boolean result = false;
         Jedis jedis = null;
@@ -619,7 +584,6 @@ public class JedisUtil {
         return result;
     }
 
-
     public boolean mapObjectExists(String key, String mapKey) {
         boolean result = false;
         Jedis jedis = null;
@@ -634,7 +598,6 @@ public class JedisUtil {
         }
         return result;
     }
-
 
     public long del(String key) {
         long result = 0;
@@ -655,7 +618,6 @@ public class JedisUtil {
         return result;
     }
 
-
     public long delObject(String key) {
         long result = 0;
         Jedis jedis = null;
@@ -675,7 +637,6 @@ public class JedisUtil {
         return result;
     }
 
-
     public boolean exists(String key) {
         boolean result = false;
         Jedis jedis = null;
@@ -690,7 +651,6 @@ public class JedisUtil {
         }
         return result;
     }
-
 
     public boolean existsObject(String key) {
         boolean result = false;
@@ -707,7 +667,6 @@ public class JedisUtil {
         return result;
     }
 
-
     public Jedis getResource() throws JedisException {
         Jedis jedis = null;
         try {
@@ -720,13 +679,11 @@ public class JedisUtil {
         return jedis;
     }
 
-
     public void returnResource(Jedis jedis) {
         if (jedis != null) {
             jedis.close();
         }
     }
-
 
     public byte[] getBytesKey(Object object) {
         if (object instanceof String) {
@@ -735,7 +692,6 @@ public class JedisUtil {
             return ObjectUtils.serialize(object);
         }
     }
-
 
     public Object getObjectKey(byte[] key) {
         try {
@@ -754,20 +710,16 @@ public class JedisUtil {
         return str == null || "".equals(str.trim());
     }
 
-
     public byte[] toBytes(Object object) {
         return ObjectUtils.serialize(object);
     }
-
 
     public Object toObject(byte[] bytes) {
         return ObjectUtils.unserialize(bytes);
     }
 
-
     public void delByClass(String className, String methodName) {
         String key = StringUtils.genKey(Constant.SYS_CACHE, className, methodName);
-
         del(key);
         delObject(key);
     }

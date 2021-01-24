@@ -1,16 +1,12 @@
 package com.example.demo.controller;
 
-import cn.hutool.core.lang.UUID;
-import cn.hutool.core.util.RandomUtil;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.demo.entity.*;
 import com.example.demo.jwt.AuthUser;
 import com.example.demo.jwt.AuthUserInfo;
 import com.example.demo.jwt.Authorization;
 import com.example.demo.jwt.JwtTokenUtil;
+import com.example.demo.service.Impl.UserServiceImpl;
 import com.example.demo.service.UserService;
 import com.example.demo.util.*;
 import lombok.extern.slf4j.Slf4j;
@@ -61,6 +57,10 @@ import java.util.stream.Collectors;
 @RequestMapping("/user")
 public class UserController {
 
+    private static final ThreadLocal<Object> threadLocal = new ThreadLocal<>();
+
+    public static int requestNum = 0;
+
     @Resource
     private UserService userService;
     @Autowired
@@ -73,30 +73,89 @@ public class UserController {
     @Resource
     private ThreadPoolTaskExecutor taskExecutor;
 
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public RestResponse save(String code) {
-        RLock lock = redisson.getLock("confirmUserType_" + code);
-        if (lock.isLocked()) {
-            return RestResponse.error("点击过快，请勿重复请求");
-        }
+    private static final ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 10,
+            30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
+
+    public static final List<User> userList = Collections.synchronizedList(new ArrayList<>());
+
+
+    @PostMapping(value = "/save")
+    @Transactional(rollbackFor = Exception.class)
+    public RestResponse save(@RequestBody Map<String, Object> params) {
+        log.info("code:{}", params.get("code"));
+        RLock lock = redisson.getLock("save" + params.get("code"));
+//        if (lock.isLocked()) {
+//            log.info("未获取到锁，请求失败");
+//            return RestResponse.error("点击过快，请勿重复请求");
+//        }
+        boolean tryLock = false;
         long startTime = System.currentTimeMillis();
         try {
-            lock.lock(60L, TimeUnit.SECONDS);
+//            lock.lock(60L, TimeUnit.SECONDS);
+            // waitTime为若没获取到锁的等待时间，超时则放弃获取锁返回false,leaseTime若获取锁超过指定的时间还没释放则自动释放
+            tryLock = lock.tryLock(1, 60, TimeUnit.SECONDS);
+            long waitLockTime = System.currentTimeMillis();
+            requestNum++;
+            log.info("请求{}获取到锁，请求成功", requestNum);
+            log.info("请求{}等待获取锁用时：{}ms", requestNum, waitLockTime - startTime);
             for (int i = 0; i < 10; i++) {
-                taskExecutor.execute(new RunnableDemo(userService, i, startTime));
+                User user = new User();
+                user.setId(UUID.randomUUID().toString().replace("-", ""));
+                user.setUsername("longMao" + requestNum);
+                user.setPassword("123");
+                user.setRearName("龙猫" + requestNum);
+                user.setCreateTime(new Date());
+                userList.add(user);
             }
-            return RestResponse.success();
+            Thread.sleep(200);
+            return RestResponse.success("操作成功");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.warn(e.getMessage(), e);
             return RestResponse.error("操作异常");
         } finally {
-            lock.unlock();
-            Long endTime = System.currentTimeMillis();
-            System.out.println("外进程共用时" + (endTime - startTime) + "ms");
+            log.info("请求{}释放锁", requestNum);
+            log.info("请求{}时userList元素个数为：{}个", requestNum, userList.size());
+            long requestTime = System.currentTimeMillis();
+            log.info("请求{}接口共用时：{}ms", requestNum, requestTime - startTime);
+            if (tryLock) {
+                lock.unlock();
+            }
         }
 
     }
 
+    @GetMapping(value = "/testThreadLocal")
+    public RestResponse testThreadLocal() {
+
+        TestThreadController.threadLocal.set("123");
+        Object obj = userService.getThreadLocal();
+        return RestResponse.success().put("obj", obj);
+    }
+
+    @GetMapping(value = "/testForEach")
+    public RestResponse testForEach() {
+        long start = System.currentTimeMillis();
+//        StringBuilder sb = new StringBuilder();
+//        long start = System.currentTimeMillis();
+//        for (int i = 0; i < 10000; i++) {
+//            for (int j = 0; j < 10000; j++) {
+//                sb.append(i + "");
+//            }
+//        }
+//        System.out.println(sb.length());
+        int x = 1;
+        Map<String, Object> map = new HashMap<>();
+        for (int i = 0; i < 100; i++) {
+            for (int j = 0; j < 100; j++) {
+                map.put(x + "", x);
+                x++;
+            }
+        }
+        System.out.println(map.size());
+        long end = System.currentTimeMillis();
+        System.out.println((end - start) + "ms");
+        return RestResponse.success();
+    }
 
     @RequestMapping(value = "/mybatisPlusBatchInsert", method = RequestMethod.POST)
     public RestResponse mybatisPlusBatchInsert(HttpServletRequest request) {
@@ -125,7 +184,7 @@ public class UserController {
         long startTime = System.currentTimeMillis();
 
         List<User> users = new ArrayList<>();
-        for (int i = 0; i < 500000; i++) {
+        for (int i = 0; i < 1000000; i++) {
             User user = new User();
             user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
             user.setUsername("setUsername" + i * 1000);
@@ -220,18 +279,27 @@ public class UserController {
         return RestResponse.success().put("userById1", userById1).put("userById2", userById2);
     }
 
-    @RequestMapping(value = "/testForEach", method = RequestMethod.GET)
-    public RestResponse testForEach(HttpServletRequest request) throws Exception {
+    @GetMapping(value = "/testList")
+    public RestResponse testList(@RequestParam Map<String, Object> params) throws Exception {
+        System.out.println(params.toString());
         long startTime = System.currentTimeMillis();
 //        List<User> users = new ArrayList<>();
 //        List<User> users = new CopyOnWriteArrayList<>();
         List<User> users = new Vector<>();
 //        List<User> users = Collections.synchronizedList(new ArrayList<>());
+//        for (int i = 0; i < 500000; i++) {
+//            User user = new User();
+//            user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+//            user.setPassword("setPassword" + i * 1000);
+//            user.setUsername("setUsername" + i * 1000);
+//            user.setRearName("setRearName" + i * 1000);
+//            users.add(user);
+//        }
 
-        ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 20, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
-        for (int j = 0; j < 20; j++) {
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 10, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
+        for (int j = 0; j < 50; j++) {
             executor.execute(() -> {
-                for (int i = 0; i < 10000; i++) {
+                for (int i = 0; i < 10; i++) {
                     User user = new User();
                     user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
                     user.setPassword("setPassword" + i * 1000);
@@ -250,6 +318,46 @@ public class UserController {
 
         Long endTime = System.currentTimeMillis();
         System.out.println("循环add数据共用时" + (endTime - startTime) + "ms");
+        return RestResponse.success();
+    }
+
+    @GetMapping(value = "/testMap")
+    public RestResponse testMap() throws Exception {
+        long startTime = System.currentTimeMillis();
+        Map<String, User> users = new HashMap<>();
+//        Map<String, User> users = new Hashtable<>();
+//        Map<String, User> users = new ConcurrentHashMap<>();
+        for (int i = 0; i < 3000000; i++) {
+            User user = new User();
+            user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+            user.setPassword("setPassword" + i * 1000);
+            user.setUsername("setUsername" + i * 1000);
+            user.setRearName("setRearName" + i * 1000);
+            users.put(user.getId(), user);
+        }
+
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 10, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
+//        for (int j = 0; j < 10; j++) {
+//            executor.execute(() -> {
+//                for (int i = 0; i < 300000; i++) {
+//                    User user = new User();
+//                    user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+//                    user.setPassword("setPassword" + i * 1000);
+//                    user.setUsername("setUsername" + i * 1000);
+//                    user.setRearName("setRearName" + i * 1000);
+//                    users.put(user.getId(), user);
+//                }
+//            });
+//        }
+        executor.shutdown();
+
+        log.info("调用awaitTermination之前：" + executor.isTerminated());
+        executor.awaitTermination(10, TimeUnit.MINUTES);
+        log.info("调用awaitTermination之后：" + executor.isTerminated());
+        log.info("循环put数据: " + users.size() + "条");
+
+        Long endTime = System.currentTimeMillis();
+        System.out.println("循环put数据共用时" + (endTime - startTime) + "ms");
         return RestResponse.success();
     }
 
@@ -298,7 +406,7 @@ public class UserController {
     @PostMapping(value = "/testAspectAdvice")
     public RestResponse testAspectAdvice(@AuthUser AuthUserInfo userInfo, @RequestBody Map<String, Object> params) throws Exception {
 
-        int i = 1/0;
+        int i = 1 / 0;
         Thread.sleep(5000);
         String token = jwtTokenUtil.generateToken("1154218600098865154", 1);
 
@@ -438,11 +546,9 @@ public class UserController {
 //        String s = strings.stream().reduce((a, b) -> b + "," + a).get();
 //        System.out.println(s);
 //        long timeMillis = System.currentTimeMillis();
-//        long nanoTime = System.nanoTime();
-//        System.out.println(nanoTime);
-
+//
 //        int nano = Instant.now().getNano();
-
+//
 //        long nanoTime = System.nanoTime();
 //        System.out.println(nanoTime);
 //        Thread.sleep(1000);

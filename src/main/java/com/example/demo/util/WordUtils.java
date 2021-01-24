@@ -6,11 +6,10 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.math.BigInteger;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -342,6 +341,30 @@ public class WordUtils {
             }
         } catch (FileNotFoundException e) {
 
+            e.printStackTrace();
+        }
+    }
+
+    public static void exportWord(Map<String, Object> params, HttpServletResponse response) throws Exception {
+        if (response == null || params == null || params.size() == 0) {
+            return;
+        }
+
+        XWPFDocument doc = new XWPFDocument();
+
+        // 保存结果文件
+        OutputStream output = null;
+        try {
+            String filename = params.get("wordFilename") + ".docx";
+            response.setCharacterEncoding("utf-8");
+            response.setContentType("application/ms-word");
+            response.setHeader("Content-Disposition", "attachment;filename=".concat(URLEncoder.encode(filename, "UTF-8")));
+            output = response.getOutputStream();
+
+            doc.write(output);
+            output.close();
+            doc.close();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

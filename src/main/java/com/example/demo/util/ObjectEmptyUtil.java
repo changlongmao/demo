@@ -13,7 +13,7 @@ import java.util.Map;
 public class ObjectEmptyUtil {
 
     /**
-     * @Param: o
+     * @Param: obj
      * @Author Chang
      * @Description 非空判断，支持字符串，集合
      * @Date 2020/11/19 11:06
@@ -32,7 +32,7 @@ public class ObjectEmptyUtil {
     }
 
     /**
-     * @Param: o
+     * @Param: obj
      * @Author Chang
      * @Description 非空判断
      * @Date 2020/11/19 11:25

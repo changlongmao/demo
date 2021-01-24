@@ -31,13 +31,13 @@ public class RedissonConfig {
 
     @Bean
     public RedissonClient getRedisson(){
-        long maxWaitMillis = Long.parseLong(strMaxWaitMillis.replace("ms", ""));
         Integer timeout = Integer.parseInt(strTimeout.replace("ms", ""));
         Config config = new Config();
         config.useSingleServer()
                 .setAddress("redis://" + host + ":" + port)
                 .setPassword(password)
-                .setTimeout(timeout).setDatabase(database)
+                .setTimeout(timeout)
+                .setDatabase(database)
                 .setConnectionMinimumIdleSize(minIdle)
                 .setConnectionPoolSize(maxActive);
         return Redisson.create(config);

@@ -4,10 +4,11 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class User implements UserInterface{
+public class User implements Serializable {
 
     private String id;
     private String username;
@@ -29,12 +30,9 @@ public class User implements UserInterface{
         this.id = id;
     }
 
-    @Override
-    public Object sort() {
-
-        return "user";
+    static {
+        System.out.println("静态代码块被调用");
     }
-
 
     @Data
     class LongFei {
@@ -43,7 +41,7 @@ public class User implements UserInterface{
 
     public void testSynchronized() {
         synchronized (User.class) {
-
+            System.out.println("测试synchronized成功");
         }
     }
 

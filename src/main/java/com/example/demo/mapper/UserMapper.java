@@ -21,4 +21,6 @@ public interface UserMapper extends BaseMapper<User> {
     void updateUserById(User user);
 
     void updateUserByName(User user);
+
+    User getById(String id);
 }

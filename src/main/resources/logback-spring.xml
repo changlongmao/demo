@@ -4,6 +4,8 @@
 
     <property name="PATH" value="logs"/>
     <property name="PATTERN" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{20} - [%method,%line] - %msg%n"/>
+    <property name="maxHistory" value="60"/>
+    <property name="maxFileSize" value="10MB"/>
 
     <!-- 控制台输出 -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
@@ -17,10 +19,13 @@
     <appender name="LOG_INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${PATH}/cr-info.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- 按天回滚 daily -->
-            <fileNamePattern>${PATH}/cr-info.%d{yyyy-MM-dd}.log</fileNamePattern>
-            <!-- 日志最大的历史 15天 -->
-            <maxHistory>15</maxHistory>
+            <fileNamePattern>${PATH}/cr-info-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!--日志文件大小 -->
+                <maxFileSize>${maxFileSize}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!--日志文件保留天数-->
+            <maxHistory>${maxHistory}</maxHistory>
         </rollingPolicy>
         <encoder>
             <pattern>${FILE_LOG_PATTERN}</pattern>
@@ -32,12 +37,37 @@
             <onMismatch>DENY</onMismatch>
         </filter>
     </appender>
+    <appender name="LOG_WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${PATH}/cr-warn.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${PATH}/cr-warn-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!--日志文件大小 -->
+                <maxFileSize>${maxFileSize}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!--日志文件保留天数-->
+            <maxHistory>${maxHistory}</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>utf-8</charset>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
     <appender name="LOG_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${PATH}/cr-error.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${PATH}/cr-error.%d{yyyy-MM-dd}.log</fileNamePattern>
-            <!-- 日志最大的历史 15天 -->
-            <maxHistory>15</maxHistory>
+            <fileNamePattern>${PATH}/cr-error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!--日志文件大小 -->
+                <maxFileSize>${maxFileSize}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!--日志文件保留天数-->
+            <maxHistory>${maxHistory}</maxHistory>
         </rollingPolicy>
         <encoder>
             <pattern>${FILE_LOG_PATTERN}</pattern>
@@ -50,12 +80,12 @@
         </filter>
     </appender>
 
+<!--    <logger name="com.example.demo.mapper" level="DEBUG"/>-->
 
-    <logger name="com.example.demo.mapper" level="DEBUG"/>
-
-    <root level="info">
+    <root level="INFO">
         <appender-ref ref="console"/>
         <appender-ref ref="LOG_ERROR"/>
+        <appender-ref ref="LOG_WARN"/>
         <appender-ref ref="LOG_INFO"/>
     </root>
 

@@ -17,4 +17,7 @@ public interface UserService extends IService<User> {
 
     void executeAsync();
 
+    Object getThreadLocal();
+
+    User selectById(String id);
 }
