@@ -23,11 +23,18 @@ public class User implements Serializable {
     @JsonIgnore
     private Integer isDelete;
 
+    public String testClassField;
     public User() {
     }
 
     public User(String id) {
         this.id = id;
+    }
+
+    public User(String id, String username, String rearName) {
+        this.id = id;
+        this.username = username;
+        this.rearName = rearName;
     }
 
     static {
@@ -39,6 +46,10 @@ public class User implements Serializable {
         private String id;
     }
 
+    public String testClassMethod(String s, Integer i){
+        System.out.println("testClassMethod" + s + i);
+        return s + i;
+    }
     public void testSynchronized() {
         synchronized (User.class) {
             System.out.println("测试synchronized成功");
