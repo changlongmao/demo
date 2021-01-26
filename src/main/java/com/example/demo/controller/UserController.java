@@ -93,31 +93,35 @@ public class UserController {
         try {
 //            lock.lock(60L, TimeUnit.SECONDS);
             // waitTime为若没获取到锁的等待时间，超时则放弃获取锁返回false,leaseTime若获取锁超过指定的时间还没释放则自动释放
-            tryLock = lock.tryLock(1, 60, TimeUnit.SECONDS);
-            long waitLockTime = System.currentTimeMillis();
-            requestNum++;
-            log.info("请求{}获取到锁，请求成功", requestNum);
-            log.info("请求{}等待获取锁用时：{}ms", requestNum, waitLockTime - startTime);
-            for (int i = 0; i < 10; i++) {
-                User user = new User();
-                user.setId(UUID.randomUUID().toString().replace("-", ""));
-                user.setUsername("longMao" + requestNum);
-                user.setPassword("123");
-                user.setRearName("龙猫" + requestNum);
-                user.setCreateTime(new Date());
-                userList.add(user);
+            if (tryLock = lock.tryLock(1, 60, TimeUnit.SECONDS)) {
+                long waitLockTime = System.currentTimeMillis();
+                requestNum++;
+                log.info("请求{}获取到锁，请求成功", requestNum);
+                log.info("请求{}等待获取锁用时：{}ms", requestNum, waitLockTime - startTime);
+                for (int i = 0; i < 10; i++) {
+                    User user = new User();
+                    user.setId(UUID.randomUUID().toString().replace("-", ""));
+                    user.setUsername("longMao" + requestNum);
+                    user.setPassword("123");
+                    user.setRearName("龙猫" + requestNum);
+                    user.setCreateTime(new Date());
+                    userList.add(user);
+                }
+                Thread.sleep(300);
+                return RestResponse.success("操作成功");
+            }else {
+                log.warn("没有获取到锁");
+                return RestResponse.error("请求失败");
             }
-            Thread.sleep(200);
-            return RestResponse.success("操作成功");
         } catch (Exception e) {
             log.warn(e.getMessage(), e);
             return RestResponse.error("操作异常");
         } finally {
-            log.info("请求{}释放锁", requestNum);
-            log.info("请求{}时userList元素个数为：{}个", requestNum, userList.size());
-            long requestTime = System.currentTimeMillis();
-            log.info("请求{}接口共用时：{}ms", requestNum, requestTime - startTime);
             if (tryLock) {
+                log.info("请求{}释放锁", requestNum);
+                log.info("请求{}时userList元素个数为：{}个", requestNum, userList.size());
+                long requestTime = System.currentTimeMillis();
+                log.info("请求{}接口共用时：{}ms", requestNum, requestTime - startTime);
                 lock.unlock();
             }
         }

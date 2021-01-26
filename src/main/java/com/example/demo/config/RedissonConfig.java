@@ -34,12 +34,12 @@ public class RedissonConfig {
         Integer timeout = Integer.parseInt(strTimeout.replace("ms", ""));
         Config config = new Config();
         config.useSingleServer()
+                .setPingConnectionInterval(60)
+                .setKeepAlive(true)
                 .setAddress("redis://" + host + ":" + port)
                 .setPassword(password)
                 .setTimeout(timeout)
-                .setDatabase(database)
-                .setConnectionMinimumIdleSize(minIdle)
-                .setConnectionPoolSize(maxActive);
+                .setDatabase(database);
         return Redisson.create(config);
     }
 }
