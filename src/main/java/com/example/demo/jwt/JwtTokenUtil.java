@@ -1,6 +1,5 @@
 package com.example.demo.jwt;
 
-import com.example.demo.properties.JwtProperties;
 import io.jsonwebtoken.*;
 import lombok.Data;
 import org.apache.commons.lang3.RandomStringUtils;

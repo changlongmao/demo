@@ -34,6 +34,7 @@ import sun.misc.BASE64Encoder;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.net.URI;
@@ -188,7 +189,7 @@ public class UserController {
         long startTime = System.currentTimeMillis();
 
         List<User> users = new ArrayList<>();
-        for (int i = 0; i < 1000000; i++) {
+        for (int i = 0; i < 500000; i++) {
             User user = new User();
             user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
             user.setUsername("setUsername" + i * 1000);
@@ -284,7 +285,8 @@ public class UserController {
     }
 
     @GetMapping(value = "/testList")
-    public RestResponse testList(@RequestParam Map<String, Object> params) throws Exception {
+    public RestResponse testList(@RequestParam Map<String, Object> params, HttpSession httpSession) throws Exception {
+        httpSession.setAttribute("aaa", "bbb");
         System.out.println(params.toString());
         long startTime = System.currentTimeMillis();
 //        List<User> users = new ArrayList<>();
@@ -301,14 +303,11 @@ public class UserController {
 //        }
 
         ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 10, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
-        for (int j = 0; j < 50; j++) {
+        for (int j = 0; j < 10; j++) {
             executor.execute(() -> {
-                for (int i = 0; i < 10; i++) {
+                for (int i = 0; i < 5000; i++) {
                     User user = new User();
                     user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
-                    user.setPassword("setPassword" + i * 1000);
-                    user.setUsername("setUsername" + i * 1000);
-                    user.setRearName("setRearName" + i * 1000);
                     users.add(user);
                 }
             });
@@ -328,31 +327,29 @@ public class UserController {
     @GetMapping(value = "/testMap")
     public RestResponse testMap() throws Exception {
         long startTime = System.currentTimeMillis();
-        Map<String, User> users = new HashMap<>();
+//        Map<String, User> users = new HashMap<>();
 //        Map<String, User> users = new Hashtable<>();
+        Map<String, User> users = Collections.synchronizedMap(new HashMap<>());
 //        Map<String, User> users = new ConcurrentHashMap<>();
-        for (int i = 0; i < 3000000; i++) {
-            User user = new User();
-            user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
-            user.setPassword("setPassword" + i * 1000);
-            user.setUsername("setUsername" + i * 1000);
-            user.setRearName("setRearName" + i * 1000);
-            users.put(user.getId(), user);
-        }
+//        for (int i = 0; i < 3000000; i++) {
+//            User user = new User();
+//            user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+//            user.setPassword("setPassword" + i * 1000);
+//            user.setUsername("setUsername" + i * 1000);
+//            user.setRearName("setRearName" + i * 1000);
+//            users.put(user.getId(), user);
+//        }
 
         ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 10, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
-//        for (int j = 0; j < 10; j++) {
-//            executor.execute(() -> {
-//                for (int i = 0; i < 300000; i++) {
-//                    User user = new User();
-//                    user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
-//                    user.setPassword("setPassword" + i * 1000);
-//                    user.setUsername("setUsername" + i * 1000);
-//                    user.setRearName("setRearName" + i * 1000);
-//                    users.put(user.getId(), user);
-//                }
-//            });
-//        }
+        for (int j = 0; j < 10; j++) {
+            executor.execute(() -> {
+                for (int i = 0; i < 600000; i++) {
+                    User user = new User();
+                    user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+                    users.put(user.getId(), user);
+                }
+            });
+        }
         executor.shutdown();
 
         log.info("调用awaitTermination之前：" + executor.isTerminated());
@@ -397,8 +394,9 @@ public class UserController {
 
 
     @SysLog("获取token")
-    @RequestMapping(value = "/getToken", method = RequestMethod.GET)
-    public RestResponse getToken(@RequestParam Map<String, Object> params) throws Exception {
+    @PostMapping(value = "/getToken")
+    public RestResponse getToken(@RequestBody Map<String, Object> params) throws Exception {
+        System.out.println(params.toString());
         Thread.sleep(1000);
         String token = jwtTokenUtil.generateToken("1154218600098865154", 1);
 

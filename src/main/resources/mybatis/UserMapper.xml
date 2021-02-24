@@ -6,12 +6,21 @@
     <update id="updateUserByName">
         update user set rear_name = #{rearName} where username = #{username}
     </update>
+    <update id="optimizeTable">
+        OPTIMIZE TABLE ${tableName}
+    </update>
 
     <select id="queryUserList" resultType="com.example.demo.entity.User">
         select id from user
     </select>
     <select id="getById" resultType="com.example.demo.entity.User">
         select id, username,rear_name, password from user where id = #{id} lock in share mode
+    </select>
+    <select id="getTableName" resultType="java.util.Map">
+        SELECT TABLE_NAME tableName FROM `information_schema`.`TABLES` WHERE table_schema=#{database}
+    </select>
+    <select id="getDatabaseName" resultType="java.util.Map">
+        SELECT distinct table_schema databaseName FROM `information_schema`.`TABLES`
     </select>
 
     <insert id="batchInsert">

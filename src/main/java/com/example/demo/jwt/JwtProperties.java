@@ -1,4 +1,4 @@
-package com.example.demo.properties;
+package com.example.demo.jwt;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

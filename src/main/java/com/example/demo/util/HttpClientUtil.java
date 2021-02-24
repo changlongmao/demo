@@ -84,21 +84,18 @@ public class HttpClientUtil {
                     .setConnectTimeout(10000)
                     .build();
             // 设置保活
-            ConnectionKeepAliveStrategy keepAliveStrategy = new ConnectionKeepAliveStrategy() {
-                @Override
-                public long getKeepAliveDuration(HttpResponse response, HttpContext context) {
-                    HeaderElementIterator it = new BasicHeaderElementIterator(response.headerIterator(HTTP.CONN_KEEP_ALIVE));
-                    while (it.hasNext()) {
-                        HeaderElement he = it.nextElement();
-                        String param = he.getName();
-                        String value = he.getValue();
-                        if (value != null && param.equalsIgnoreCase("timeout")) {
-                            return Long.parseLong(value) * 1000;
-                        }
+            ConnectionKeepAliveStrategy keepAliveStrategy = (response, context) -> {
+                HeaderElementIterator it = new BasicHeaderElementIterator(response.headerIterator(HTTP.CONN_KEEP_ALIVE));
+                while (it.hasNext()) {
+                    HeaderElement he = it.nextElement();
+                    String param = he.getName();
+                    String value = he.getValue();
+                    if (value != null && param.equalsIgnoreCase("timeout")) {
+                        return Long.parseLong(value) * 1000;
                     }
-                    // 如果没有约定，则默认定义时长为60s
-                    return 60 * 1000;
                 }
+                // 如果没有约定，则默认定义时长为60s
+                return 60 * 1000;
             };
             // 初始化httpClient
             httpClient = HttpClients.custom()

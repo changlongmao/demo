@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -64,5 +65,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public User selectById(String id) {
         return baseMapper.getById(id);
+    }
+
+    @Override
+    public List<Map<String, Object>> getTableName(Map<String, Object> params) {
+        return baseMapper.getTableName(params);
+    }
+
+    @Override
+    public List<Map<String, Object>> optimizeTable(String tableName) {
+        baseMapper.optimizeTable(tableName);
+        return null;
+    }
+
+    @Override
+    public List<Map<String, Object>> getDatabaseName(Map<String, Object> params) {
+        return baseMapper.getDatabaseName(params);
     }
 }

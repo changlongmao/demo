@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.springframework.context.ApplicationEvent;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -38,12 +39,26 @@ public class User implements Serializable {
     }
 
     static {
+
         System.out.println("静态代码块被调用");
+    }
+
+    {
+//        System.out.println("示例代码块");
+//        testClassField = "bbb";
+//        testSynchronized();
     }
 
     @Data
     class LongFei {
         private String id;
+
+        public void getFu() {
+//            System.out.println(id);
+//            System.out.println(username);
+//            testSynchronized();
+            testClassMethod("a", 9);
+        }
     }
 
     public String testClassMethod(String s, Integer i){

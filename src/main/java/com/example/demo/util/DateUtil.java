@@ -971,7 +971,7 @@ public class DateUtil {
     }
 
     /**
-     * 获取当前日期是星期几
+     * 获取当前日期是星期几，周日为0
      *
      * @param date
      * @return 日期是星期几

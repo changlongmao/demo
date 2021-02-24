@@ -1,13 +1,27 @@
 package com.example.demo.entity;
 
-public class Singleton {
-    private Singleton(){}
 
-    public static Singleton getInstance(){
-        return SingletonHolder.instance;
+/**
+ * @ClassName: Singleton
+ * @Description: 单例模式
+ * @Author: Chang
+ * @Date: 2021/02/20 14:19
+ **/
+public class Singleton {
+
+    private static Singleton instance;
+
+    private Singleton() {
     }
 
-    private static class SingletonHolder{
-        private static final Singleton instance = new Singleton();
+    public static Singleton getInstance() {
+        if (instance == null) {
+            synchronized (Singleton.class) {
+                if (instance == null) {
+                    instance = new Singleton();
+                }
+            }
+        }
+        return instance;
     }
 }
