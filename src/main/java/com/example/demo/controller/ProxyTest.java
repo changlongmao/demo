@@ -12,7 +12,8 @@ public class ProxyTest {
     public static void main(String[] args) {
         //1.创建真实对象
         Lenovo lenovo = new Lenovo();
-        
+
+        System.out.println("初始对象" +lenovo);
         //2.动态代理增强lenovo对象
         /*
             三个参数：
@@ -36,6 +37,7 @@ public class ProxyTest {
                 System.out.println(args[0]);*/
                 //判断是否是sale方法
                 if(method.getName().equals("sale")){
+                    System.out.println("代理方法" + this);
                     //1.增强参数
                     double money = (double) args[0];
                     money = money * 0.85;
@@ -54,6 +56,7 @@ public class ProxyTest {
 
         //3.调用方法
 
+        System.out.println("代理对象" + proxy_lenovo);
         String computer = proxy_lenovo.sale(8000);
         System.out.println(computer);
 

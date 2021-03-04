@@ -1,6 +1,8 @@
 package com.example.demo.entity;
 
 
+import java.io.ObjectStreamException;
+
 /**
  * @ClassName: Singleton
  * @Description: 单例模式
@@ -9,7 +11,7 @@ package com.example.demo.entity;
  **/
 public class Singleton {
 
-    private static Singleton instance;
+    private static volatile Singleton instance;
 
     private Singleton() {
     }
@@ -23,5 +25,9 @@ public class Singleton {
             }
         }
         return instance;
+    }
+
+    public Object readResolve() throws ObjectStreamException {
+        return getInstance();
     }
 }

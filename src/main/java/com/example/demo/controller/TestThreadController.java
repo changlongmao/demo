@@ -1,9 +1,7 @@
 package com.example.demo.controller;
 
 import cn.hutool.core.lang.Singleton;
-import com.example.demo.entity.Adapter;
-import com.example.demo.entity.RestResponse;
-import com.example.demo.entity.User;
+import com.example.demo.entity.*;
 import com.example.demo.util.DateUtil;
 import com.sun.org.apache.bcel.internal.generic.ArithmeticInstruction;
 import jodd.exception.UncheckedException;
@@ -161,5 +159,8 @@ public class TestThreadController {
         Adapter adpater = new Adapter();
         adpater.charge_byBianKong();
         adpater.charge_byYuanKong();
+        SaleComputer saleComputer = new Lenovo();
+        saleComputer.show();
+        System.out.println(saleComputer);
     }
 }

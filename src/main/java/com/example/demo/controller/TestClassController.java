@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -77,5 +75,23 @@ public class TestClassController {
         RequestMapping annotation1 = testClassControllerClass.getAnnotation(RequestMapping.class);
         System.out.println(Arrays.toString(annotation1.value()));
 
+//        AnnotatedElement
+        Type[] parameterTypes = testClassMethod.getGenericParameterTypes();
+        for (Type type : parameterTypes) {
+            String typeName = type.getTypeName();
+            Class<?> aClass = Class.forName(typeName);
+//            Object newInstance1 = aClass.newInstance();
+//            System.out.println(newInstance1);
+        }
+        Class<? extends Type[]> aClass = parameterTypes.getClass();
+
+        System.out.println(aClass.isArray());
+        System.out.println(Arrays.toString(parameterTypes));
+        System.out.println();
+        ClassLoader loader = userClass.getClassLoader();
+        while (loader != null) {
+            System.out.println(loader.toString());
+            loader = loader.getParent();
+        }
     }
 }

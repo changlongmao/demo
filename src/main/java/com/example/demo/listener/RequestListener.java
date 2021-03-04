@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSessionListener;
  * @Date: 2021/02/24 14:31
  **/
 @Slf4j
-@WebListener
+//@WebListener
 public class RequestListener implements ServletRequestListener {
 
     @Override

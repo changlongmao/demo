@@ -81,6 +81,7 @@ public class TestRedisController {
     public static final String PW_PATTERN = "^(?![A-Za-z0-9]+$)(?![a-z0-9\\W]+$)(?![A-Za-z\\W]+$)(?![A-Z0-9\\W]+$)[a-zA-Z0-9\\W]{8,}$";
 
     public static void main(String[] args) {
+        System.gc();
 
 //        User user = new User(){{
 //            testSynchronized();

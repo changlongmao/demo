@@ -9,7 +9,6 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 /**
  * @author LongFei
  */
-@ServletComponentScan(basePackages = "com.example.demo.*")
 @SpringBootApplication
 public class DemoApplication extends SpringBootServletInitializer {
 

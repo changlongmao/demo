@@ -47,6 +47,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Async("taskExecutor")
     @Override
     public void executeAsync() {
+        System.out.println(this);
         log.info("start executeAsync");
         try{
             Thread.sleep(5000);
@@ -59,6 +60,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public Object getThreadLocal() {
         log.info("service ThreadLocal: {}", threadLocal.get());
+        System.out.println(this);
         return TestThreadController.threadLocal.get();
     }
 

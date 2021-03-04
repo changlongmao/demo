@@ -80,7 +80,7 @@
         </filter>
     </appender>
 
-<!--    <logger name="com.example.demo.mapper" level="DEBUG"/>-->
+    <logger name="com.example.demo.mapper" level="DEBUG"/>
 
     <root level="INFO">
         <appender-ref ref="console"/>

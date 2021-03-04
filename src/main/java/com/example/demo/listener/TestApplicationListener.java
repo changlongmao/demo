@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  * @Date: 2021/02/24 15:16
  **/
 @Slf4j
-@Component
+//@Component
 public class TestApplicationListener implements ApplicationListener<PushOrderEvent> {
 
     @Override

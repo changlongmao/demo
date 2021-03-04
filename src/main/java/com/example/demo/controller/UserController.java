@@ -80,10 +80,23 @@ public class UserController {
     public static final List<User> userList = Collections.synchronizedList(new ArrayList<>());
 
 
-    @PostMapping(value = "/save")
-    @Transactional(rollbackFor = Exception.class)
-    public RestResponse save(@RequestBody Map<String, Object> params) {
-        log.info("code:{}", params.get("code"));
+    @GetMapping(value = "/testHeapMemoryError")
+    public void testHeapMemoryError() {
+
+        try {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < 100000000; i++) {
+                sb.append("啊");
+            }
+        } catch (Exception e) {
+            log.info("----- java HeapDump OnOutOf Memory Error ------");
+        }
+    }
+
+    @GetMapping(value = "/save")
+    public RestResponse save(@RequestParam Map<String, Object> params) {
+        params.put("code", "1234");
+//        log.info("code:{}", params.get("code"));
         RLock lock = redisson.getLock("save" + params.get("code"));
 //        if (lock.isLocked()) {
 //            log.info("未获取到锁，请求失败");
@@ -108,7 +121,7 @@ public class UserController {
                     user.setCreateTime(new Date());
                     userList.add(user);
                 }
-                Thread.sleep(300);
+                Thread.sleep(100);
                 return RestResponse.success("操作成功");
             }else {
                 log.warn("没有获取到锁");
