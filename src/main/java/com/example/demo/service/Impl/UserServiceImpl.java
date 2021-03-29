@@ -84,4 +84,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public List<Map<String, Object>> getDatabaseName(Map<String, Object> params) {
         return baseMapper.getDatabaseName(params);
     }
+
+    @Override
+    public void addOne(User user) {
+        baseMapper.addOne(user);
+    }
 }

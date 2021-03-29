@@ -31,4 +31,6 @@ public interface UserMapper extends BaseMapper<User> {
     void optimizeTable(@Param("tableName") String tableName);
 
     List<Map<String, Object>> getDatabaseName(Map<String, Object> params);
+
+    void addOne(@Param("user") User user);
 }

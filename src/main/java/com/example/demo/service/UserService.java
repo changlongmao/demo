@@ -27,4 +27,6 @@ public interface UserService extends IService<User> {
     List<Map<String, Object>> optimizeTable(String tableName);
 
     List<Map<String, Object>> getDatabaseName(Map<String, Object> params);
+
+    void addOne(User user);
 }

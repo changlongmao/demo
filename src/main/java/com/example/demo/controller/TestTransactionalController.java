@@ -4,6 +4,7 @@ import com.example.demo.entity.RestResponse;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
 import com.example.demo.util.ObjectEmptyUtil;
+import com.example.demo.util.TimeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
+import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @ClassName: TestTransactionalController
@@ -72,10 +76,10 @@ public class TestTransactionalController {
     @GetMapping("/testMvcc2")
 //    @Transactional(rollbackFor = Exception.class)
     public void testMvcc2() throws Exception {
-        User user = new User("00006ad456504308baff9d7532afa079");
-        user.setUsername("123");
-        userService.updateUserById(user);
+        User user = userService.selectById("0000745742864e749b616bd0f7ac9b8a");
 //        Thread.sleep(10000);
+        assert false;
+        System.out.println(user);
     }
 
     @GetMapping("/optimizeTable")
@@ -132,9 +136,18 @@ public class TestTransactionalController {
 //        User user = new User();
 
 //        String[] strings = {"a", "b"};
-        Object[] strings = {new User("efg"), new User("abc")};
-        System.out.println(strings.toString());
-        System.out.println(Arrays.toString(strings));
+//        Object[] strings = {new User("efg"), new User("abc")};
+//        System.out.println(strings.toString());
+//        System.out.println(Arrays.toString(strings));
 
+
+        User user = new User();
+        user.setId("111");
+        Optional.ofNullable(user).map(User::getId).ifPresent(s -> {
+            System.out.println(s);
+        });
+        String now = TimeUtil.parseTime(TimeUtil.getCurrentTime(), TimeUtil.TimeFormat.CUSTOM_DATE_PATTERN_NONE);
+
+        System.out.println(now);
     }
 }

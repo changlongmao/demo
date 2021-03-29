@@ -385,11 +385,15 @@ public class UserController {
         return RestResponse.success().put("count", b);
     }
 
-    @RequestMapping(value = "/selectOne", method = RequestMethod.GET)
-    public RestResponse selectOne(String id) {
+    @RequestMapping(value = "/addOne", method = RequestMethod.GET)
+    public RestResponse addOne(String id) {
         long startTime = System.currentTimeMillis();
 
-        User user = userService.getById(id);
+        User user = new User();
+        user.setUsername("aaa");
+        System.out.println("插入前"+user.getId());
+        userService.addOne(user);
+        System.out.println("插入后"+user.getId());
         Long endTime = System.currentTimeMillis();
         System.out.println("查询数据共用时" + (endTime - startTime) + "ms");
         return RestResponse.success().put("User", user);

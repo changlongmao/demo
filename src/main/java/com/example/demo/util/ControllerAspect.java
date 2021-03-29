@@ -6,7 +6,6 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.*;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
@@ -14,10 +13,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.lang.reflect.Method;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @ClassName: TestAspect
@@ -26,19 +21,19 @@ import java.util.Map;
  * @Date: 2020/12/25 14:32
  **/
 @Slf4j
-@Order(2)
+@Order(1)
 @Aspect
 @Component
-public class TestAspect {
+public class ControllerAspect {
 
-    @Pointcut("@annotation(com.example.demo.entity.SysLog)")
+    @Pointcut("execution(* com.example.demo.controller.*.*(..))")
     public void pointCut() {
     }
 
     @Before("pointCut()")
     public void doBefore(JoinPoint joinPoint) {
-        log.info("TestAspect前置通知");
-        //AOP代理类的信息  
+        log.info("ControllerAspect前置通知");
+        /*//AOP代理类的信息
         joinPoint.getThis();
         //代理的目标对象  
         joinPoint.getTarget();
@@ -50,9 +45,7 @@ public class TestAspect {
         log.info("AOP代理类的名字：" + signature.getDeclaringTypeName());
         //AOP代理类的类（class）信息  
         signature.getDeclaringType();
-        MethodSignature sign = (MethodSignature) joinPoint.getSignature();
-        Method method = sign.getMethod();
-        //获取RequestAttributes
+        //获取RequestAttributes  
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         //从获取RequestAttributes中获取HttpServletRequest的信息  
         HttpServletRequest request = HttpContextUtils.getHttpServletRequest();
@@ -63,7 +56,7 @@ public class TestAspect {
         //获取目标方法的参数信息
         Object[] obj = joinPoint.getArgs();
         String params = new Gson().toJson(obj);
-        log.info("Gson获取的参数：" + params);
+        log.info("Gson获取的参数：" + params);*/
         //获取请求参数
 //        Enumeration<String> enumeration = request.getParameterNames();
 //        Map<String, Object> parameterMap = new HashMap<>();
@@ -74,31 +67,33 @@ public class TestAspect {
 //        log.info("请求的参数信息为：" + parameterMap.toString());
     }
 
-    @AfterReturning(value = "pointCut()",returning = "keys")
-    public void doAfterReturn(JoinPoint joinPoint,Object keys) {
-        log.info("TestAspect后置返回通知" + keys.toString());
+    @AfterReturning(value = "pointCut()",returning = "result")
+    public void doAfterReturn(JoinPoint joinPoint,Object result) {
+        String methedName = joinPoint.getSignature().getName();
+        log.info("The methed {} ends with {}", methedName, result);
+        log.info("ControllerAspect后置返回通知" + result);
     }
 
     @After("pointCut()")
     public void doAfter(JoinPoint joinPoint) {
-        log.info("TestAspect后置通知");
+        log.info("ControllerAspect后置通知");
     }
 
     @AfterThrowing(value = "pointCut()", throwing = "throwable")
     public void doAfterThrowing(JoinPoint joinPoint, Throwable throwable) {
 //        log.error("后置异常通知：", throwable);
-        log.error("TestAspect后置异常通知：" + throwable.getMessage());
+        log.error("ControllerAspect后置异常通知：" + throwable.getMessage(), throwable);
     }
 
     @Around("pointCut()")
     public Object doAround(ProceedingJoinPoint point) throws Throwable {
-        log.info("TestAspect环绕通知的目标方法名：" + point.getSignature().getName());
+        log.info("ControllerAspect环绕通知的目标方法名：" + point.getSignature().getName());
         long beginTime = System.currentTimeMillis();
 
         Object result = point.proceed();
 
         long time = System.currentTimeMillis() - beginTime;
-        log.info("TestAspect方法执行时间：" + time + "ms");
+        log.info("ControllerAspect方法执行时间：" + time + "ms");
         return result;
     }
 }
