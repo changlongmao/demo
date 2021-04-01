@@ -72,7 +72,7 @@ public class UserController {
     private JedisUtil jedisUtil;
 
     @Resource
-    private ThreadPoolTaskExecutor taskExecutor;
+    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     private static final ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 10,
             30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());

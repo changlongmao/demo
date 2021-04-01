@@ -23,7 +23,7 @@ import javax.servlet.http.HttpSession;
 @Slf4j
 @Order(1)
 @Aspect
-@Component
+//@Component
 public class ControllerAspect {
 
     @Pointcut("execution(* com.example.demo.controller.*.*(..))")

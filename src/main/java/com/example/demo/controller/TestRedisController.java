@@ -11,11 +11,14 @@ import com.example.demo.util.JedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.NamedThreadLocal;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 
@@ -31,9 +34,14 @@ import java.util.*;
 @RequestMapping("/testRedis")
 public class TestRedisController {
 
+    @Resource
+    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     @Autowired
     private JedisUtil jedisUtil;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @GetMapping("testJedisObject")
     public RestResponse testJedisObject() throws Exception {
@@ -44,9 +52,12 @@ public class TestRedisController {
         map.put("user", user);
         users.add(map);
 
-        jedisUtil.setObject("a", users, 1);
+        jedisUtil.setObject("a", users, 3600);
         log.info("剩余时间" + jedisUtil.ttl("a"));
 
+        jedisUtil.setObjectMap("testMap", new HashMap<String, Object>() {{
+            put("aaa", user);
+        }}, 3600);
         List<Map<String, Object>> a = (List<Map<String, Object>>) jedisUtil.getObject("a");
         return RestResponse.success().put("a", a.toString());
     }
@@ -56,7 +67,7 @@ public class TestRedisController {
 
         List<String> strings = new ArrayList<>();
         strings.add("111");
-        jedisUtil.setList("strings", strings, 1);
+        jedisUtil.setList("strings", strings, 3600);
         System.out.println(jedisUtil.getList("strings"));
         jedisUtil.listAdd("strings", "222", "333");
         System.out.println(jedisUtil.getList("strings"));
@@ -78,7 +89,20 @@ public class TestRedisController {
         return RestResponse.success();
     }
 
-    public static final String PW_PATTERN = "^(?![A-Za-z0-9]+$)(?![a-z0-9\\W]+$)(?![A-Za-z\\W]+$)(?![A-Z0-9\\W]+$)[a-zA-Z0-9\\W]{8,}$";
+    @GetMapping("testRedisTemplate")
+    public RestResponse testRedisTemplate() throws Exception {
+        // 测试得知redis的自增数字能保证线程安全
+        for (int i = 0; i < 10; i++) {
+            threadPoolTaskExecutor.execute(() -> {
+                for (int j = 0; j < 10; j++) {
+                    Long abc = redisTemplate.opsForValue().increment("abc", 1);
+                    System.out.println(abc);
+                }
+            });
+        }
+
+        return RestResponse.success();
+    }
 
     public static void main(String[] args) {
         System.gc();

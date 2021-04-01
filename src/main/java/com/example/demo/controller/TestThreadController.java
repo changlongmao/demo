@@ -21,12 +21,9 @@ import javax.naming.ServiceUnavailableException;
 import java.math.BigDecimal;
 import java.net.UnknownServiceException;
 import java.text.DecimalFormat;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
@@ -43,8 +40,16 @@ public class TestThreadController {
     public static final ThreadLocal<Object> threadLocal = new ThreadLocal<>();
 
     @Resource
-    private ThreadPoolTaskExecutor taskExecutor;
-    private static Integer index;
+    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
+    @Resource
+    private ScheduledThreadPoolExecutor scheduledThreadPoolExecutor;
+
+    private static final List<Object> list = Collections.synchronizedList(new ArrayList<>());
+    private static final Map<String, Object> map = new ConcurrentHashMap<>();
+
+    private final AtomicInteger atomicInteger = new AtomicInteger(0);
+
+    private static volatile Integer index = 0;
 
     @GetMapping("/testThreadLocal")
     public RestResponse testThreadLocal() throws Exception {
@@ -58,31 +63,85 @@ public class TestThreadController {
         return RestResponse.success().put("threadLocal", threadLocal.get());
     }
 
+
+    @GetMapping("/testScheduledExecutor")
+    public RestResponse testScheduledExecutor(String id) throws Exception {
+        // 创建并执行在给定延迟后启用的一次性操作。
+//        scheduledThreadPoolExecutor.schedule(() ->{
+//            list.add(1);
+//            log.info(Thread.currentThread().getName());
+//        }, 3, TimeUnit.SECONDS);
+        // scheduleWithFixedDelay 方法将会在上一个任务结束后，注意：**再等待 2 秒，**才开始执行，那么他和上一个任务的开始执行时间的间隔是 7 秒。
+        ScheduledFuture<?> scheduledFuture = scheduledThreadPoolExecutor.scheduleWithFixedDelay(() -> {
+            for (int i = 0; i < 10; i++) {
+                if (Thread.interrupted()) {
+                    break;
+                }
+                String x = "";
+                for (int j = 0; j < 50000; j++) {
+                    x += "啊";
+                }
+                System.out.println(i);
+            }
+            log.info("id: {}, threadName: {}", id, Thread.currentThread().getName());
+        }, 0, 3, TimeUnit.SECONDS);
+//        TimeUnit.MILLISECONDS.sleep(7000);
+//        scheduledFuture.cancel(false);
+        map.put(id, scheduledFuture);
+        log.info("开启任务：{}", id);
+        // scheduleAtFixedRate 方法将会在上一个任务结束完毕立刻执行，他和上一个任务的开始执行时间的间隔是 5 秒（因为必须等待上一个任务执行完毕）。
+//        scheduledThreadPoolExecutor.scheduleAtFixedRate(() ->{
+//            list.add(1);
+//            log.info(Thread.currentThread().getName());
+//        }, 1,3, TimeUnit.SECONDS);
+
+        return RestResponse.success();
+    }
+
+    @GetMapping("/testInterruptTask")
+    public RestResponse testInterruptTask(String id) throws Exception {
+        if (map.get(id) != null && map.get(id) instanceof ScheduledFuture) {
+            ScheduledFuture<?> future = (ScheduledFuture<?>) map.get(id);
+            // 结束当前线程任务，false为当前正在运行的线程结束后再结束定时任务，true为直接中断当前的线程并结束任务，手动判断中断状态，并编写中断线程的代码
+            future.cancel(false);
+            log.info("中断任务：{}", id);
+        }
+
+        return RestResponse.success().put("listSize", list.size());
+    }
+
+    @GetMapping("/testThreadPoolTaskExecutor")
+    public RestResponse testThreadPoolTaskExecutor() throws Exception {
+        ThreadPoolExecutor threadPoolExecutor = threadPoolTaskExecutor.getThreadPoolExecutor();
+        for (int i = 0; i < 200; i++) {
+            threadPoolExecutor.submit(() ->{
+                for (int j = 0; j < 10; j++) {
+                    atomicInteger.getAndIncrement();
+                }
+                System.out.println("atomicInteger："+ atomicInteger.get());
+                log.info("threadName: {}", Thread.currentThread().getName());
+            });
+        }
+//        threadPoolExecutor.shutdown();
+        // 关闭线程池
+//        threadPoolExecutor.awaitTermination(3600, TimeUnit.SECONDS);
+
+        return RestResponse.success();
+    }
+
+    @GetMapping("/getListSize")
+    public RestResponse getListSize() throws Exception {
+        int andIncrement = atomicInteger.getAndIncrement();
+        System.out.println("atomicInteger"+andIncrement);
+        return RestResponse.success().put("listSize", list.size());
+    }
+
     @GetMapping("/testThreadLocalGet")
     public RestResponse testThreadLocalGet() throws Exception {
 
-        index = 2;
-        log.info(index + "");
-        threadLocal.set("bbb");
-        threadLocal.set(456);
-        Thread.sleep(5000);
+        TimeUnit.SECONDS.sleep(2);
         log.info("threadLocal" + threadLocal.get());
         return RestResponse.success().put("threadLocal", threadLocal.get());
-    }
-
-    @GetMapping("/testLogLevel")
-    public RestResponse testLogLevel() throws Exception {
-
-        System.out.println("开始");
-
-        new Thread(() -> {
-            while (true) {
-                System.out.println("i");
-            }
-        });
-        System.out.println("结束");
-
-        return RestResponse.success();
     }
 
     public static void main(String[] args) throws Exception{
