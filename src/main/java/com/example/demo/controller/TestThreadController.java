@@ -45,6 +45,7 @@ public class TestThreadController {
     private ScheduledThreadPoolExecutor scheduledThreadPoolExecutor;
 
     private static final List<Object> list = Collections.synchronizedList(new ArrayList<>());
+
     private static final Map<String, Object> map = new ConcurrentHashMap<>();
 
     private final AtomicInteger atomicInteger = new AtomicInteger(0);
@@ -53,6 +54,9 @@ public class TestThreadController {
 
     @GetMapping("/testThreadLocal")
     public RestResponse testThreadLocal() throws Exception {
+
+//        new Queue<>();
+        new LinkedHashMap<>();
 
         index = 1;
         log.info(index + "");

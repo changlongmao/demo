@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.util.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -14,6 +15,7 @@ import java.util.*;
 
 @Slf4j
 @Component
+@ConditionalOnExpression("true")
 public class JedisUtil {
 
     @Value("${spring.redis.expire-time}")

@@ -68,8 +68,9 @@ public class ThreadPoolTaskExecutorConfig {
 
     @Bean
     protected ScheduledThreadPoolExecutor scheduledThreadPoolExecutor() {
-        ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(DEFAULT_CORE_POOL_SIZE, r -> new Thread(r, "scheduled-thread-pool-exec-" + threadNumber.getAndIncrement()));
-//        ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(10, Executors.defaultThreadFactory(), new ThreadPoolExecutor.CallerRunsPolicy());
+        ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(DEFAULT_CORE_POOL_SIZE,
+                r -> new Thread(r, "scheduled-thread-pool-exec-" + threadNumber.getAndIncrement()),
+                new ThreadPoolExecutor.CallerRunsPolicy());
         executor.setKeepAliveTime(KEEP_ALIVE_TIME, TimeUnit.SECONDS);
         return executor;
     }
