@@ -7,6 +7,7 @@ import com.example.demo.util.ObjectEmptyUtil;
 import com.example.demo.util.TimeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.*;
 import java.lang.annotation.Annotation;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -33,6 +39,8 @@ public class TestTransactionalController {
 
     @Autowired
     private UserService userService;
+
+    public static final String templates = "templates";
 
     @GetMapping("/tranCon")
     @Transactional(rollbackFor = Exception.class)
@@ -76,10 +84,18 @@ public class TestTransactionalController {
     @GetMapping("/testMvcc2")
 //    @Transactional(rollbackFor = Exception.class)
     public void testMvcc2() throws Exception {
-        User user = userService.selectById("0000745742864e749b616bd0f7ac9b8a");
+        User user1 = new User("0000fa2c4410412295731e91dc163797");
+        user1.setUsername("456");
+        userService.updateUserById(user1);
 //        Thread.sleep(10000);
         assert false;
-        System.out.println(user);
+    }
+
+    @GetMapping("/testReadFile")
+    public void testReadFile() throws Exception {
+        String fileName = templates+ File.separator + "test.txt";
+        String readTextFile = readTextFile(fileName);
+        System.out.println(readTextFile);
     }
 
     @GetMapping("/optimizeTable")
@@ -103,7 +119,7 @@ public class TestTransactionalController {
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 //        List<Integer> integerList = new ArrayList<>();
 //        for (int i = 0; i < 1000000; i++) {
 //            integerList.add(i);
@@ -148,6 +164,41 @@ public class TestTransactionalController {
         });
         String now = TimeUtil.parseTime(TimeUtil.getCurrentTime(), TimeUtil.TimeFormat.CUSTOM_DATE_PATTERN_NONE);
 
-        System.out.println(now);
+        System.out.println(File.separator);
+        Path tempFile = Files.createTempFile(null, null);
+        System.out.println(tempFile.toFile());
+        System.out.println("user.home：" + System.getProperty("user.home"));
+
+        System.out.println(BigDecimal.valueOf(0));
+        System.out.println(new BigDecimal(0));
+        System.out.println(TimeUtil.getCurrentTime());
+        System.out.println(System.currentTimeMillis());
+
+//        String fileName = templates + File.separator + "test.txt";
+//        String readTextFile = readTextFile(fileName);
+//        System.out.println(readTextFile);
+        BigDecimal d1 = new BigDecimal("12300");
+        BigDecimal d2 = new BigDecimal("23.456789");
+        BigDecimal d3 = d1.divide(d2, 10, RoundingMode.HALF_UP); // 保留10位小数并四舍五入
+        BigDecimal d4 = d1.divide(BigDecimal.valueOf(10)); // 报错：ArithmeticException，因为除不尽
+        System.out.println(d3);
+        System.out.println(d4);
+    }
+
+    private static String readTextFile(String sFileName) {
+        StringBuilder sbStr = new StringBuilder();
+        ClassPathResource classPathResource = new ClassPathResource(sFileName);
+        try (InputStreamReader read = new InputStreamReader(classPathResource.getInputStream());
+             BufferedReader ins = new BufferedReader(read)){
+            String dataLine;
+            while (null != (dataLine = ins.readLine())) {
+                sbStr.append(dataLine).append("\n");
+            }
+        } catch (FileNotFoundException e) {
+            log.error("未发现要读取的文件", e);
+        } catch (Exception e) {
+            log.error("Read File Error", e);
+        }
+        return sbStr.toString();
     }
 }
