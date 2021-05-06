@@ -46,8 +46,8 @@ server:
 mybatis-plus:
   typeAliasesPackage: com.example.demo.entity
   mapper-locations: classpath*:mybatis/**/*.xml
-  #  configuration:
-  #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     banner: false
     db-config:

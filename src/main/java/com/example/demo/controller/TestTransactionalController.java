@@ -6,6 +6,8 @@ import com.example.demo.service.UserService;
 import com.example.demo.util.ObjectEmptyUtil;
 import com.example.demo.util.TimeUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.jasypt.encryption.StringEncryptor;
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
@@ -183,6 +185,16 @@ public class TestTransactionalController {
         BigDecimal d4 = d1.divide(BigDecimal.valueOf(10)); // 报错：ArithmeticException，因为除不尽
         System.out.println(d3);
         System.out.println(d4);
+        System.out.println( new BigDecimal("0.0000").stripTrailingZeros().toPlainString());
+
+        StandardPBEStringEncryptor standardPBEStringEncryptor = new StandardPBEStringEncryptor();
+        standardPBEStringEncryptor.setPassword("joyowo");
+        //加密
+        String password = standardPBEStringEncryptor.encrypt("d7#%f*a3A");
+        System.out.println("password:"+password);
+        //解密
+        String password2 = standardPBEStringEncryptor.decrypt("sjKn8knm9R4h9J15hUccw8dt3s25vbM1");
+        System.out.println("password2:"+password2);
     }
 
     private static String readTextFile(String sFileName) {

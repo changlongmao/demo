@@ -54,7 +54,7 @@ public class ThreadPoolTaskExecutorConfig {
     @Bean
     protected ThreadPoolTaskExecutor threadPoolTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setThreadNamePrefix("thread-pool-task-executor-");
+        executor.setThreadNamePrefix("my-thread-pool-");
         executor.setCorePoolSize(DEFAULT_CORE_POOL_SIZE);
         executor.setQueueCapacity(DEFAULT_QUEUE_CAPACITY);
         executor.setMaxPoolSize(DEFAULT_MAX_POOL_SIZE);

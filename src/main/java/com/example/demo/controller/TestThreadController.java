@@ -71,10 +71,10 @@ public class TestThreadController {
     @GetMapping("/testScheduledExecutor")
     public RestResponse testScheduledExecutor(String id) throws Exception {
         // 创建并执行在给定延迟后启用的一次性操作。
-//        scheduledThreadPoolExecutor.schedule(() ->{
-//            list.add(1);
-//            log.info(Thread.currentThread().getName());
-//        }, 3, TimeUnit.SECONDS);
+        scheduledThreadPoolExecutor.schedule(() ->{
+            list.add(1);
+            log.info(Thread.currentThread().getName());
+        }, 3, TimeUnit.SECONDS);
         // scheduleWithFixedDelay 方法将会在上一个任务结束后，注意：**再等待 2 秒，**才开始执行，那么他和上一个任务的开始执行时间的间隔是 7 秒。
         ScheduledFuture<?> scheduledFuture = scheduledThreadPoolExecutor.scheduleWithFixedDelay(() -> {
             for (int i = 0; i < 10; i++) {
@@ -94,10 +94,10 @@ public class TestThreadController {
         map.put(id, scheduledFuture);
         log.info("开启任务：{}", id);
         // scheduleAtFixedRate 方法将会在上一个任务结束完毕立刻执行，他和上一个任务的开始执行时间的间隔是 5 秒（因为必须等待上一个任务执行完毕）。
-//        scheduledThreadPoolExecutor.scheduleAtFixedRate(() ->{
-//            list.add(1);
-//            log.info(Thread.currentThread().getName());
-//        }, 1,3, TimeUnit.SECONDS);
+        scheduledThreadPoolExecutor.scheduleAtFixedRate(() ->{
+            list.add(1);
+            log.info(Thread.currentThread().getName());
+        }, 1,3, TimeUnit.SECONDS);
 
         return RestResponse.success();
     }
@@ -225,5 +225,7 @@ public class TestThreadController {
         SaleComputer saleComputer = new Lenovo();
         saleComputer.show();
         System.out.println(saleComputer);
+        Properties properties = System.getProperties();
+        System.out.println(properties.toString());
     }
 }

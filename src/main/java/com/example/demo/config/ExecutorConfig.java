@@ -13,14 +13,14 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @Date 2020/12/22 10:27
  * @Return
  **/
-//@Configuration
+@Configuration
 @EnableAsync
 public class ExecutorConfig {
     private static int CORE_POOL_SIZE = 10;
     private static int MAX_POOL_SIZE = 200;
 
     @Bean
-    public ThreadPoolTaskExecutor threadPoolTaskExecutor() {
+    public ThreadPoolTaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor poolTaskExecutor = new ThreadPoolTaskExecutor();
         // 线程池维护线程的最少数量
         poolTaskExecutor.setCorePoolSize(CORE_POOL_SIZE);
@@ -31,7 +31,7 @@ public class ExecutorConfig {
         // 线程池维护线程所允许的空闲时间
         poolTaskExecutor.setKeepAliveSeconds(30000);
         // 设置默认线程名称
-        poolTaskExecutor.setThreadNamePrefix("thread-pool-async-service-");
+        poolTaskExecutor.setThreadNamePrefix("async-service-");
         // 设置拒绝策略
         poolTaskExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         // 等待所有任务结束后再关闭线程池

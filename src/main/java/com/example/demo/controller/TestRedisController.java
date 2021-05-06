@@ -10,6 +10,7 @@ import com.example.demo.util.HttpClientUtil;
 import com.example.demo.util.JedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.NamedThreadLocal;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -34,13 +35,13 @@ import java.util.*;
 @RequestMapping("/testRedis")
 public class TestRedisController {
 
-    @Resource
+    @Autowired
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     @Autowired
     private JedisUtil jedisUtil;
 
-    @Autowired
+    @Resource
     private RedisTemplate redisTemplate;
 
     @GetMapping("testJedisObject")
@@ -98,8 +99,10 @@ public class TestRedisController {
                     Long abc = redisTemplate.opsForValue().increment("abc", 1);
                     System.out.println(abc);
                 }
+                log.info(Thread.currentThread().getName());
             });
         }
+        log.info(Thread.currentThread().getName());
 
         return RestResponse.success();
     }
