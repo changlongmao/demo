@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import cn.hutool.core.lang.Singleton;
 import com.example.demo.entity.*;
 import com.example.demo.util.DateUtil;
+import com.example.demo.util.HttpClientUtil;
 import com.sun.org.apache.bcel.internal.generic.ArithmeticInstruction;
 import jodd.exception.UncheckedException;
 import jodd.util.MathUtil;
@@ -48,7 +49,7 @@ public class TestThreadController {
 
     private static final Map<String, Object> map = new ConcurrentHashMap<>();
 
-    private final AtomicInteger atomicInteger = new AtomicInteger(0);
+    private final AtomicInteger atomicInteger = new AtomicInteger(1);
 
     private static volatile Integer index = 0;
 
@@ -71,33 +72,39 @@ public class TestThreadController {
     @GetMapping("/testScheduledExecutor")
     public RestResponse testScheduledExecutor(String id) throws Exception {
         // 创建并执行在给定延迟后启用的一次性操作。
-        scheduledThreadPoolExecutor.schedule(() ->{
-            list.add(1);
-            log.info(Thread.currentThread().getName());
-        }, 3, TimeUnit.SECONDS);
+//        scheduledThreadPoolExecutor.schedule(() ->{
+//            list.add(1);
+//            log.info(Thread.currentThread().getName());
+//        }, 3, TimeUnit.SECONDS);
+        List<String> urlList = Arrays.asList("https://juejin.cn/post/6958079172904222727", "https://juejin.cn/post/6958097237398257671");
         // scheduleWithFixedDelay 方法将会在上一个任务结束后，注意：**再等待 2 秒，**才开始执行，那么他和上一个任务的开始执行时间的间隔是 7 秒。
         ScheduledFuture<?> scheduledFuture = scheduledThreadPoolExecutor.scheduleWithFixedDelay(() -> {
-            for (int i = 0; i < 10; i++) {
-                if (Thread.interrupted()) {
-                    break;
+            for (String url : urlList) {
+                HttpClientUtil.doGet(url, null);
+                log.info("请求掘金页面{}，线程名为{}，共请求{}次", url, Thread.currentThread().getName(), atomicInteger.getAndIncrement());
+                try {
+                    TimeUnit.SECONDS.sleep(5);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-                String x = "";
-                for (int j = 0; j < 50000; j++) {
-                    x += "啊";
-                }
-                System.out.println(i);
             }
-            log.info("id: {}, threadName: {}", id, Thread.currentThread().getName());
-        }, 0, 3, TimeUnit.SECONDS);
+            if (atomicInteger.get() % 100 == 0 && urlList.size() < 60) {
+                try {
+                    TimeUnit.SECONDS.sleep(60 * 5 - urlList.size() * 5L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, 0, 5, TimeUnit.SECONDS);
 //        TimeUnit.MILLISECONDS.sleep(7000);
 //        scheduledFuture.cancel(false);
         map.put(id, scheduledFuture);
         log.info("开启任务：{}", id);
         // scheduleAtFixedRate 方法将会在上一个任务结束完毕立刻执行，他和上一个任务的开始执行时间的间隔是 5 秒（因为必须等待上一个任务执行完毕）。
-        scheduledThreadPoolExecutor.scheduleAtFixedRate(() ->{
-            list.add(1);
-            log.info(Thread.currentThread().getName());
-        }, 1,3, TimeUnit.SECONDS);
+//        scheduledThreadPoolExecutor.scheduleAtFixedRate(() ->{
+//            list.add(1);
+//            log.info(Thread.currentThread().getName());
+//        }, 1,3, TimeUnit.SECONDS);
 
         return RestResponse.success();
     }
@@ -218,14 +225,27 @@ public class TestThreadController {
         for (int i = 0; i < 100; i++) {
 //            executor.submit(() -> System.out.println(Singleton.getInstance()));
         }
-        executor.shutdown();
-        Adapter adpater = new Adapter();
-        adpater.charge_byBianKong();
-        adpater.charge_byYuanKong();
-        SaleComputer saleComputer = new Lenovo();
-        saleComputer.show();
-        System.out.println(saleComputer);
-        Properties properties = System.getProperties();
-        System.out.println(properties.toString());
+//        executor.shutdown();
+//        Adapter adpater = new Adapter();
+//        adpater.charge_byBianKong();
+//        adpater.charge_byYuanKong();
+//        SaleComputer saleComputer = new Lenovo();
+//        saleComputer.show();
+//        System.out.println(saleComputer);
+//        Properties properties = System.getProperties();
+//        System.out.println(properties.toString());
+        AtomicInteger atomicInteger = new AtomicInteger(0);
+        System.out.println(atomicInteger.getAndIncrement());
+        executor.execute(() -> {
+            while (true) {
+                HttpClientUtil.doGet("https://juejin.cn/post/6958079172904222727", new HashMap<>());
+                log.info("请求一次掘金页面，线程名为{}，共请求{}次", Thread.currentThread().getName(), atomicInteger.getAndIncrement());
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }
