@@ -1,6 +1,8 @@
 package com.example.demo.entity;
 
 
+import lombok.Data;
+
 import java.io.ObjectStreamException;
 
 /**
@@ -9,25 +11,29 @@ import java.io.ObjectStreamException;
  * @Author: Chang
  * @Date: 2021/02/20 14:19
  **/
+@Data
 public class Singleton {
 
-    private static volatile Singleton instance;
+    private String str;
+
+    public static volatile Singleton instance = new Singleton();
 
     private Singleton() {
+        System.out.println("初始化实例");
     }
 
-    public static Singleton getInstance() {
-        if (instance == null) {
-            synchronized (Singleton.class) {
-                if (instance == null) {
-                    instance = new Singleton();
-                }
-            }
-        }
-        return instance;
+    static {
+        instance.setStr("有值");
     }
 
-    public Object readResolve() throws ObjectStreamException {
-        return getInstance();
-    }
+//    public static Singleton getInstance() {
+//        if (instance == null) {
+//            synchronized (Singleton.class) {
+//                if (instance == null) {
+//                    instance = new Singleton();
+//                }
+//            }
+//        }
+//        return instance;
+//    }
 }

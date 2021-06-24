@@ -6,6 +6,7 @@ import com.example.demo.entity.Result;
 import com.example.demo.entity.UserTestTime;
 import com.example.demo.entity.UserTestTimeCondition;
 import com.example.demo.service.UserTestTimeService;
+import com.example.demo.util.TimeUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,5 +99,44 @@ public class UserTestTimeController {
         }
         boolean bool = userTestTimeService.deleteUserTestTimeByIds(idList);
         return Result.okOrFailed(bool);
+    }
+
+
+    public static void main(String[] args) {
+        System.out.println(handlerBelongDepartment("杭州今元标矩科技有限公司/招聘交付中心/北区/招聘一组"));
+        System.out.println(getTimeStart(0));
+        System.out.println(System.currentTimeMillis());
+        System.out.println("杭州今元标矩科技有限公司/招聘交付中心/北区/招聘一组".substring("杭州今元标矩科技有限公司/招聘交付中心/北区/招聘一组".indexOf("/")+1));
+    }
+    public static long getTimeStart(long time) {
+        String startDateStr = TimeUtil.parseTime(time, TimeUtil.TimeFormat.SHORT_DATE_PATTERN_LINE) + " 00:00:00";
+        return TimeUtil.parseTimeStrToLong(startDateStr);
+    }
+
+    public static String handlerBelongDepartment(String belongDepartment) {
+        if (StringUtils.isEmpty(belongDepartment)) {
+            return belongDepartment;
+        }
+        String[] departmentArr = belongDepartment.split("/");
+        if (departmentArr.length <= 1) {
+            return belongDepartment;
+        }
+        StringBuilder result = new StringBuilder();
+        if (belongDepartment.contains("分公司")) {
+            for (String s : departmentArr) {
+                if (s.contains("分公司")) {
+                    result = new StringBuilder(s);
+                    break;
+                }
+            }
+            if (result.toString().equals(departmentArr[departmentArr.length - 1])) {
+                return result.toString();
+            }
+            return result + "/" + departmentArr[departmentArr.length - 1];
+        }
+        for (int i = 1; i < departmentArr.length; i++) {
+            result.append("/").append(departmentArr[i]);
+        }
+        return result.substring(1, result.length());
     }
 }

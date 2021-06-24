@@ -34,14 +34,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Transactional(rollbackFor = Exception.class)
     public void updateUserById(User user) {
         baseMapper.updateUserById(user);
-//        int i = 1/0;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateUserByName(User user) {
-//        updateUserById(user);
         baseMapper.updateUserByName(user);
+//        updateUserById(user);
     }
 
     @Async("taskExecutor")

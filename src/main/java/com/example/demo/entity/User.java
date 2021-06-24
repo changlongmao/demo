@@ -25,13 +25,6 @@ public class User implements java.io.Serializable {
     /** rearName */
     private String rearName;
 
-    public User() {
-    }
-
-    public User(String id) {
-        this.id = id;
-    }
-
     /** password */
     private String password;
 
@@ -40,5 +33,13 @@ public class User implements java.io.Serializable {
 
     /** isDelete */
     private Integer isDelete;
+
+    public User() {
+        System.out.println(this);
+    }
+
+    public User(String id) {
+        this.id = id;
+    }
 
 }

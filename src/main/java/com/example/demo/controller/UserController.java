@@ -22,6 +22,7 @@ import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
 import org.apache.poi.ss.formula.functions.T;
 import org.apache.shiro.crypto.hash.Sha256Hash;
+import org.assertj.core.util.Lists;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,7 @@ import java.util.*;
 import java.lang.String;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 
@@ -414,8 +416,8 @@ public class UserController {
     @PostMapping(value = "/getToken")
     public RestResponse getToken(@RequestBody Map<String, Object> params) throws Exception {
         System.out.println(params.toString());
-        Thread.sleep(1000);
         String token = jwtTokenUtil.generateToken("1154218600098865154", 1);
+
 
         return RestResponse.success().put("token", token);
     }
@@ -562,7 +564,7 @@ public class UserController {
 //        List<String> strings = new ArrayList<>();
 //        strings.add("a");
 //        strings.add("b");
-//        String s = strings.stream().reduce((a, b) -> b + "," + a).get();
+//        String s = Lists.newArrayList().stream().reduce((a, b) -> b + "," + a).get();
 //        System.out.println(s);
 //        long timeMillis = System.currentTimeMillis();
 //

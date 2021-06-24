@@ -79,23 +79,20 @@ public class TestThreadController {
         List<String> urlList = Arrays.asList("https://juejin.cn/post/6958079172904222727", "https://juejin.cn/post/6958097237398257671");
         // scheduleWithFixedDelay 方法将会在上一个任务结束后，注意：**再等待 2 秒，**才开始执行，那么他和上一个任务的开始执行时间的间隔是 7 秒。
         ScheduledFuture<?> scheduledFuture = scheduledThreadPoolExecutor.scheduleWithFixedDelay(() -> {
-            for (String url : urlList) {
-                HttpClientUtil.doGet(url, null);
-                log.info("请求掘金页面{}，线程名为{}，共请求{}次", url, Thread.currentThread().getName(), atomicInteger.getAndIncrement());
-                try {
-                    TimeUnit.SECONDS.sleep(5);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            try {
+                for (String url : urlList) {
+                    HttpClientUtil.doGet(url, null);
+                    log.info("请求掘金页面{}，线程名为{}，共请求{}次", url, Thread.currentThread().getName(), atomicInteger.getAndIncrement());
+                    if ((atomicInteger.get() % 10) == 0) {
+                        TimeUnit.SECONDS.sleep(30);
+                    } else {
+                        TimeUnit.SECONDS.sleep(5);
+                    }
                 }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            if (atomicInteger.get() % 100 == 0 && urlList.size() < 60) {
-                try {
-                    TimeUnit.SECONDS.sleep(60 * 5 - urlList.size() * 5L);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, 0, 5, TimeUnit.SECONDS);
+        }, 0, 1, TimeUnit.SECONDS);
 //        TimeUnit.MILLISECONDS.sleep(7000);
 //        scheduledFuture.cancel(false);
         map.put(id, scheduledFuture);
@@ -236,16 +233,7 @@ public class TestThreadController {
 //        System.out.println(properties.toString());
         AtomicInteger atomicInteger = new AtomicInteger(0);
         System.out.println(atomicInteger.getAndIncrement());
-        executor.execute(() -> {
-            while (true) {
-                HttpClientUtil.doGet("https://juejin.cn/post/6958079172904222727", new HashMap<>());
-                log.info("请求一次掘金页面，线程名为{}，共请求{}次", Thread.currentThread().getName(), atomicInteger.getAndIncrement());
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+
+        System.out.println(101 % 10);
     }
 }

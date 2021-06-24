@@ -61,11 +61,11 @@ public class XueQiuNewsPageProcessor implements PageProcessor{
     }
 
     public static void main(String[] args) {
-        Spider spider = Spider.create(new XueQiuNewsPageProcessor());
-        spider.addUrl("https://xueqiu.com/today");
-        spider.thread(1);
-        spider.start();
-        spider.stop();
+//        Spider spider = Spider.create(new XueQiuNewsPageProcessor());
+//        spider.addUrl("https://xueqiu.com/today");
+//        spider.thread(1);
+//        spider.start();
+//        spider.stop();
     }
 
 }

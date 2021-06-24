@@ -2,18 +2,28 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.PushOrderEvent;
 import com.example.demo.entity.RestResponse;
+import com.example.demo.entity.Singleton;
+import com.example.demo.entity.User;
+import com.example.demo.jwt.JwtTokenUtil;
+import com.example.demo.util.StringUtils;
+import com.example.demo.util.TimeUtil;
 import org.apache.commons.codec.binary.Base64;
+import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.StringJoiner;
-import java.util.UUID;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.util.*;
 
 /**
  * @ClassName: TestHtmlController
@@ -53,15 +63,12 @@ public class TestHtmlController {
     }
 
     public static void main(String[] args) {
-        byte[] bytes = Base64.decodeBase64("eyJqdGkiOiI4MjIwODQ0NDM3NzM3MTAzMzYiLCJ1c2VySWQiOjgyMjA4NDQ0Mzc3MzcxMDMzNiwidXNlck5hbWUiOiLluLjpvpnpo54iLCJwaG9uZSI6IjEzMDY3ODQ2MjcwIiwicGxhdGZvcm0iOiJQQ19DTElFTlQiLCJpcCI6IjM5LjE3MC40Mi44MiIsImRldmljZUlkIjoicWwiLCJ2ZXJzaW9uIjoiMC4wLjEiLCJyb290T3JnSWQiOjEsIm9yZ0lkIjo4MTQ4MzY2ODkzMzkwMDI5MTYsInN0YWZmSWQiOjgyMjA4NDQ0MDE4MzM4NjExNSwic3RhZmZOYW1lIjoi5bi46b6Z6aOeIiwic3RhZmZDb2RlIjoiSlkwNjg4NSIsInBlcnNvbklkIjowLCJwb3N0SWQiOjgyMjA4NDQ0MDUzMTUxMzM0NCwicG9zdE5hbWUiOiJKYXZh5byA5Y-R5bel56iL5biIIiwicm9sZU1hcCI6eyIwIjo3MDQwMTc4OTkwOTgwNTg3NTIsIjYiOjcxNTMwMjAyMDkwMjQwMDAwMCwiNyI6NzE0Nzg0NTE0NjQzMTc3NDcyLCI4Ijo4MTcwMzg4NjM1NjEyNDA1NzZ9LCJzdXBlckFkbWluIjowLCJzdGFmZkVpZCI6NzQ5OSwiY29tcGFueVR5cGUiOjEsImlhdCI6MTYxNjExODcyNywiZXhwIjoxNjE2MjA1MTI3fQ.Ztbp4shbY__Nmhh_BzGuBS0lVsgTbdgROdn3uvEkr5A");
+        byte[] bytes = Base64.decodeBase64("eyJqdGkiOiI4MjIwODQ0NDM3NzM3MTAzMzYiLCJ1c2VySWQiOjgyMjA4NDQ0Mzc3MzcxMDMzNiwidXNlck5hbWUiOiLluLjpvpnpo54iLCJwaG9uZSI6IjEzMDY3ODQ2MjcwIiwicGxhdGZvcm0iOiJQQ19DTElFTlQiLCJpcCI6IjM5LjE3MC40Mi44MiIsImRldmljZUlkIjoicWwiLCJ2ZXJzaW9uIjoiMC4wLjEiLCJyb290T3JnSWQiOjEsIm9yZ0lkIjo4MTQ4MzY2ODkzMzkwMDI5MTYsInN0YWZmSWQiOjgyMjA4NDQ0MDE4MzM4NjExNSwic3RhZmZOYW1lIjoi5bi46b6Z6aOeIiwic3RhZmZDb2RlIjoiSlkwNjg4NSIsInBlcnNvbklkIjowLCJwb3N0SWQiOjgyMjA4NDQ0MDUzMTUxMzM0NCwicG9zdE5hbWUiOiJKYXZh5byA5Y-R5bel56iL5biIIiwicm9sZU1hcCI6eyIwIjo4MzM2NDExODE4MDcyMjY4ODAsIjYiOjgzMzY0MTE4MjM3NzY1MjIyNH0sInN1cGVyQWRtaW4iOjAsInN0YWZmRWlkIjo3NDk5LCJjb21wYW55VHlwZSI6MSwiaWF0IjoxNjIxODM0NzQ3LCJlbnRVc2VySWQiOjAsImVudEN1c3RJZCI6MCwiZW50Q29tcGFueUlkIjowLCJleHAiOjE2MjIwMDc1NDd9");
         String s = new String(bytes);
         System.out.println(s);
 
-        StringJoiner stringJoiner = new StringJoiner(",", "aaa", "bbb");
-        stringJoiner.add("111");
-        stringJoiner.add("222");
-
-
-        System.out.println(stringJoiner);
+        ArrayList<String> strings = Lists.newArrayList("aa", "bb", "cc", "saa");
+        System.out.println(strings.toString());
+        System.out.println(0L == 0);z
     }
 }

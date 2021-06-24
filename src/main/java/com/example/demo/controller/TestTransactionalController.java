@@ -50,14 +50,15 @@ public class TestTransactionalController {
 //        User byId = userService.selectById("00004b843b164a2aa1f8ed12ec6cc7a8");
 //        log.info(byId.toString());
 
-        User user = new User("00004b843b164a2aa1f8ed12ec6cc7a8");
-        user.setUsername("123");
-        userService.updateUserById(user);
-        Thread.sleep(10000);
+//        User user = new User("000149c7e6cd40028e399991b0a82e6f");
+//        user.setUsername("123");
+//        userService.updateUserById(user);
 
-        User user1 = new User("0000509b04e045e885f8f8d84f106b52");
+        User user1 = new User("0000745742864e749b616bd0f7ac9b8a");
         user1.setUsername("123");
-        userService.updateUserById(user1);
+        user1.setRearName("test");
+        userService.updateUserByName(user1);
+        Thread.sleep(10000);
 //        try {
 //            int i = 1/0;
 //        } catch (Exception e) {
@@ -84,11 +85,12 @@ public class TestTransactionalController {
     }
 
     @GetMapping("/testMvcc2")
-//    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public void testMvcc2() throws Exception {
-        User user1 = new User("0000fa2c4410412295731e91dc163797");
+        User user1 = new User();
         user1.setUsername("456");
-        userService.updateUserById(user1);
+        user1.setRearName("asdfasdhjksdf987safuhjioa");
+        userService.batchInsert(Collections.singletonList(user1));
 //        Thread.sleep(10000);
         assert false;
     }
@@ -190,10 +192,10 @@ public class TestTransactionalController {
         StandardPBEStringEncryptor standardPBEStringEncryptor = new StandardPBEStringEncryptor();
         standardPBEStringEncryptor.setPassword("joyowo");
         //加密
-        String password = standardPBEStringEncryptor.encrypt("d7#%f*a3A");
+        String password = standardPBEStringEncryptor.encrypt("ps2LL9!Y!5NKsOj2GDD!");
         System.out.println("password:"+password);
         //解密
-        String password2 = standardPBEStringEncryptor.decrypt("sjKn8knm9R4h9J15hUccw8dt3s25vbM1");
+        String password2 = standardPBEStringEncryptor.decrypt("+IKb71KGgF80Za0/JaWqvxp2v+k84HkEVFUwIoiN9+w=");
         System.out.println("password2:"+password2);
     }
 
