@@ -189,6 +189,7 @@ public class TestTransactionalController {
         System.out.println(d4);
         System.out.println( new BigDecimal("0.0000").stripTrailingZeros().toPlainString());
 
+        System.out.println(2);
         StandardPBEStringEncryptor standardPBEStringEncryptor = new StandardPBEStringEncryptor();
         standardPBEStringEncryptor.setPassword("joyowo");
         //加密
