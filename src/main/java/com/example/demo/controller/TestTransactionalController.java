@@ -200,6 +200,7 @@ public class TestTransactionalController {
     }
 
     private static String readTextFile(String sFileName) {
+        System.out.println(1);
         StringBuilder sbStr = new StringBuilder();
         ClassPathResource classPathResource = new ClassPathResource(sFileName);
         try (InputStreamReader read = new InputStreamReader(classPathResource.getInputStream());
