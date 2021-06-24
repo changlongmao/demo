@@ -197,6 +197,10 @@ public class TestTransactionalController {
         //解密
         String password2 = standardPBEStringEncryptor.decrypt("+IKb71KGgF80Za0/JaWqvxp2v+k84HkEVFUwIoiN9+w=");
         System.out.println("password2:"+password2);
+
+        System.out.println(1);
+        System.out.println(2);
+        System.out.println(3);
     }
 
     private static String readTextFile(String sFileName) {
