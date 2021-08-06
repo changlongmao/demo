@@ -75,7 +75,7 @@ public class TestTransactionalController {
 //        User byId = userService.getById("00004b843b164a2aa1f8ed12ec6cc7a8");
 //        User byId = userService.selectById("00004b843b164a2aa1f8ed12ec6cc7a8");
 //        log.info(byId.toString());
-        Thread.sleep(10000);
+//        Thread.sleep(10000);
 
         User user1 = new User("00004b843b164a2aa1f8ed12ec6cc7a8");
         user1.setUsername("456");

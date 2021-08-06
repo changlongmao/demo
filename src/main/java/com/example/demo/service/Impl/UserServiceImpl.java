@@ -43,7 +43,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 //        updateUserById(user);
     }
 
-    @Async("taskExecutor")
+    @Async
     @Override
     public void executeAsync() {
         System.out.println(this);

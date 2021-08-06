@@ -3,6 +3,7 @@ package com.example.demo.util;
 import com.example.demo.exception.BusinessException;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.SheetUtil;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -41,7 +43,7 @@ public class PoiExcelUtil {
      * @Date 2020/6/8 14:49
      * @Return void
      **/
-    public static void exportExcel(HttpServletResponse response, Map<String, Object> params) {
+    public static <T> void exportExcel(HttpServletResponse response, Map<String, Object> params, Class<T> tClass) {
         if (!(response instanceof HttpServletResponse) || params == null || params.size() == 0) {
             return;
         }
@@ -74,24 +76,36 @@ public class PoiExcelUtil {
             cell1.setCellStyle(columnTopStyle);
         }
 
-        List<Map<String, Object>> data = (List<Map<String, Object>>) params.get("data");
+        List<T> data = (List<T>) params.get("data");
+        // 获得对象所有属性
+        Field[] fields = tClass.getDeclaredFields();
         if (CollectionUtils.isNotEmpty(data) && CollectionUtils.isNotEmpty(columnName)) {
             // 遍历数据塞入单元格中
             for (int i = 0; i < data.size(); i++) {
                 HSSFRow rown = sheet.createRow(i + 1);
                 rown.setHeightInPoints(25);
                 for (int j = 0; j < columnName.size(); j++) {
-                    HSSFCell cell = rown.createCell(j);
-                    Object value = data.get(i).get(columnName.get(j));
-                    if (value == null) {
-                        cell.setCellValue("");
-                        cell.setCellStyle(style);
-                    }else if (value instanceof Date) {
-                        cell.setCellValue((Date) value);
-                        cell.setCellStyle(dateFormatStyle);
-                    }else {
-                        cell.setCellValue(value.toString());
-                        cell.setCellStyle(style);
+                    for (Field field : fields) {
+                        field.setAccessible(true);
+                        if (field.getName().equals(columnName.get(j))) {
+                            HSSFCell cell = rown.createCell(j);
+                            Object value = null;
+                            try {
+                                value = field.get(data.get(i));
+                            } catch (IllegalAccessException e) {
+                                e.printStackTrace();
+                            }
+                            if (value == null) {
+                                cell.setCellValue("");
+                                cell.setCellStyle(style);
+                            }else if (value instanceof Date) {
+                                cell.setCellValue((Date) value);
+                                cell.setCellStyle(dateFormatStyle);
+                            }else {
+                                cell.setCellValue(value.toString());
+                                cell.setCellStyle(style);
+                            }
+                        }
                     }
                 }
             }
@@ -247,33 +261,33 @@ public class PoiExcelUtil {
 
         DataFormatter dataFormatter = new DataFormatter();
 
-        switch (cell.getCellTypeEnum()) {
-            case NUMERIC:
-                if (HSSFDateUtil.isCellDateFormatted(cell)) {
-                    // 对日期类型数据处理
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    Date date = HSSFDateUtil.getJavaDate(cell.getNumericCellValue());
-                    cellValue = sdf.format(date);
-                } else {
-                    cellValue = dataFormatter.formatCellValue(cell);
-                }
-                break;
-            case STRING:
-                cellValue = dataFormatter.formatCellValue(cell);
-                break;
-            case FORMULA:
-                cellValue = String.valueOf(cell.getNumericCellValue());
-                break;
-            case BLANK:
-                cellValue = "";
-                break;
-            case ERROR:
-                cellValue = "非法字符";
-                break;
-            default:
-                cellValue = "未知类型";
-                break;
-        }
+//        switch (cell.getCellTypeEnum()) {
+//            case NUMERIC:
+//                if (HSSFDateUtil.isCellDateFormatted(cell)) {
+//                    // 对日期类型数据处理
+//                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//                    Date date = HSSFDateUtil.getJavaDate(cell.getNumericCellValue());
+//                    cellValue = sdf.format(date);
+//                } else {
+//                    cellValue = dataFormatter.formatCellValue(cell);
+//                }
+//                break;
+//            case STRING:
+//                cellValue = dataFormatter.formatCellValue(cell);
+//                break;
+//            case FORMULA:
+//                cellValue = String.valueOf(cell.getNumericCellValue());
+//                break;
+//            case BLANK:
+//                cellValue = "";
+//                break;
+//            case ERROR:
+//                cellValue = "非法字符";
+//                break;
+//            default:
+//                cellValue = "未知类型";
+//                break;
+//        }
         return cellValue;
     }
 

@@ -121,8 +121,8 @@ public class WordUtils {
         CTTbl ttbl = table.getCTTbl();
         CTTblPr tblPr = ttbl.getTblPr() == null ? ttbl.addNewTblPr() : ttbl.getTblPr();
         CTTblWidth tblWidth = tblPr.isSetTblW() ? tblPr.getTblW() : tblPr.addNewTblW();
-        CTJc cTJc = tblPr.addNewJc();
-        cTJc.setVal(STJc.Enum.forString("center"));
+//        CTJc cTJc = tblPr.addNewJc();
+//        cTJc.setVal(STJc.Enum.forString("center"));
         tblWidth.setW(new BigInteger(String.valueOf(w == 0 ? 8000 : w)));
         tblWidth.setType(STTblWidth.DXA);
 

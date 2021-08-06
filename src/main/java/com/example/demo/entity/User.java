@@ -1,16 +1,40 @@
 package com.example.demo.entity;
 
+import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.format.DateTimeFormat;
+import com.alibaba.excel.annotation.format.NumberFormat;
+import com.alibaba.excel.annotation.write.style.ColumnWidth;
+import com.alibaba.excel.annotation.write.style.ContentRowHeight;
+import com.alibaba.excel.annotation.write.style.HeadRowHeight;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 /**
  * user
- * 
+ *
+ * @HeadRowHeight() 标注在类上，指定列头行高
+ *
+ * @ContentRowHeight() 标注在类上，指定内容行高
+ *
+ * @ColumnWidth() 标注在类上或属性上，指定列宽
+ *
+ * @ExcelIgnoreUnannotated 默认不加 ExcelProperty 的注解的都会参与读写，加了不会参与
+ *
  * @author bianj
  * @version 1.0.0 2021-04-28
  */
 @Data
+@HeadRowHeight(20)
+@ContentRowHeight(15)
+@ColumnWidth(27)
+@ExcelIgnoreUnannotated
 public class User implements java.io.Serializable {
+
     /** 版本号 */
     private static final long serialVersionUID = -921063982228618853L;
 
@@ -19,25 +43,44 @@ public class User implements java.io.Serializable {
     /** id */
     private String id;
 
-    /** username */
+    /**
+     *  @ExcelProperty value	对应Excel表中的列头 index	对应Excel表中的列数	默认-1，指定时建议从0开始
+     */
+    @ExcelProperty(value = "用户名", index = 0)
     private String username;
 
     /** rearName */
+    @ExcelProperty(value = "真实姓名", index = 1)
     private String rearName;
 
-    /** password */
+    /**
+     * @ColumnWidth(50)可指定到字段，优先级高于类上注解
+     */
+    @ExcelProperty(value = "密码", index = 4)
+    @ColumnWidth(50)
     private String password;
 
-    /** createTime */
+    /**
+     * @DateTimeFormat 日期转换，将Date写到excel会调用这个注解。
+     */
+    @ExcelProperty(value = "创建时间", index = 3)
+    @DateTimeFormat("yyyy-MM-dd HH:mm")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     /** isDelete */
     private Integer isDelete;
 
+    /**
+     * @NumberFormat 对数字类型格式化，#.##即保留两位小数，roundingMode可设置规则，#.##%会自动转化为百分数
+     */
+    @ExcelProperty(value = "分数", index = 2)
+//    @NumberFormat(value = "#.##",roundingMode = RoundingMode.HALF_DOWN)
+    @NumberFormat(value = "#.##%",roundingMode = RoundingMode.HALF_DOWN)
+    private BigDecimal score;
     public User() {
         System.out.println(this);
     }
-
     public User(String id) {
         this.id = id;
     }

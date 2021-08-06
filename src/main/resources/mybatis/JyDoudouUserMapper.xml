@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.JyDoudouUserMapper">
+    <!-- <eb7ebc> 从本行到锚点<6479b1>之间的内容，由Allison 1875生成，请勿人为修改 -->
+
+    <resultMap id="all" type="com.example.demo.entity.JyDoudouUserEntity">
+        <id column="id" property="id"/>
+        <result column="client_name" property="clientName"/>
+        <result column="mobile" property="mobile"/>
+        <result column="belong_department" property="belongDepartment"/>
+        <result column="belong_department_id" property="belongDepartmentId"/>
+        <result column="create_staff_id" property="createStaffId"/>
+        <result column="create_staff_name" property="createStaffName"/>
+        <result column="create_staff_no" property="createStaffNo"/>
+        <result column="doudou_create_time" property="doudouCreateTime"/>
+        <result column="doudou_unionid" property="doudouUnionid"/>
+        <result column="commission_amount" property="commissionAmount"/>
+        <result column="check_result" property="checkResult"/>
+        <result column="settlement_month" property="settlementMonth"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <sql id="all">
+        id, client_name, mobile, belong_department, belong_department_id, create_staff_id, create_staff_name, create_staff_no, doudou_create_time, doudou_unionid, commission_amount, check_result, settlement_month, create_time, update_time
+    </sql>
+
+    <insert id="insert" parameterType="com.example.demo.entity.JyDoudouUserEntity">
+        <!-- @formatter:off -->
+        INSERT INTO jy_doudou_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null"> id, </if>
+            <if test="clientName!=null"> client_name, </if>
+            <if test="mobile!=null"> mobile, </if>
+            <if test="belongDepartment!=null"> belong_department, </if>
+            <if test="belongDepartmentId!=null"> belong_department_id, </if>
+            <if test="createStaffId!=null"> create_staff_id, </if>
+            <if test="createStaffName!=null"> create_staff_name, </if>
+            <if test="createStaffNo!=null"> create_staff_no, </if>
+            <if test="doudouCreateTime!=null"> doudou_create_time, </if>
+            <if test="doudouUnionid!=null"> doudou_unionid, </if>
+            <if test="commissionAmount!=null"> commission_amount, </if>
+            <if test="checkResult!=null"> check_result, </if>
+            <if test="settlementMonth!=null"> settlement_month, </if>
+            <if test="createTime!=null"> create_time, </if>
+            <if test="updateTime!=null"> update_time, </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="id!=null"> #{id}, </if>
+            <if test="clientName!=null"> #{clientName}, </if>
+            <if test="mobile!=null"> #{mobile}, </if>
+            <if test="belongDepartment!=null"> #{belongDepartment}, </if>
+            <if test="belongDepartmentId!=null"> #{belongDepartmentId}, </if>
+            <if test="createStaffId!=null"> #{createStaffId}, </if>
+            <if test="createStaffName!=null"> #{createStaffName}, </if>
+            <if test="createStaffNo!=null"> #{createStaffNo}, </if>
+            <if test="doudouCreateTime!=null"> #{doudouCreateTime}, </if>
+            <if test="doudouUnionid!=null"> #{doudouUnionid}, </if>
+            <if test="commissionAmount!=null"> #{commissionAmount}, </if>
+            <if test="checkResult!=null"> #{checkResult}, </if>
+            <if test="settlementMonth!=null"> #{settlementMonth}, </if>
+            <if test="createTime!=null"> #{createTime}, </if>
+            <if test="updateTime!=null"> #{updateTime}, </if>
+        </trim>
+        <!-- @formatter:on -->
+    </insert>
+
+    <insert id="batchInsert">
+        <!-- @formatter:off -->
+        <foreach collection="entities" item="one" separator=";">
+            INSERT INTO jy_doudou_user
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="one.id!=null"> id, </if>
+                <if test="one.clientName!=null"> client_name, </if>
+                <if test="one.mobile!=null"> mobile, </if>
+                <if test="one.belongDepartment!=null"> belong_department, </if>
+                <if test="one.belongDepartmentId!=null"> belong_department_id, </if>
+                <if test="one.createStaffId!=null"> create_staff_id, </if>
+                <if test="one.createStaffName!=null"> create_staff_name, </if>
+                <if test="one.createStaffNo!=null"> create_staff_no, </if>
+                <if test="one.doudouCreateTime!=null"> doudou_create_time, </if>
+                <if test="one.doudouUnionid!=null"> doudou_unionid, </if>
+                <if test="one.commissionAmount!=null"> commission_amount, </if>
+                <if test="one.checkResult!=null"> check_result, </if>
+                <if test="one.settlementMonth!=null"> settlement_month, </if>
+                <if test="one.createTime!=null"> create_time, </if>
+                <if test="one.updateTime!=null"> update_time, </if>
+            </trim>
+            <trim prefix="VALUE (" suffix=")" suffixOverrides=",">
+                <if test="one.id!=null"> #{one.id}, </if>
+                <if test="one.clientName!=null"> #{one.clientName}, </if>
+                <if test="one.mobile!=null"> #{one.mobile}, </if>
+                <if test="one.belongDepartment!=null"> #{one.belongDepartment}, </if>
+                <if test="one.belongDepartmentId!=null"> #{one.belongDepartmentId}, </if>
+                <if test="one.createStaffId!=null"> #{one.createStaffId}, </if>
+                <if test="one.createStaffName!=null"> #{one.createStaffName}, </if>
+                <if test="one.createStaffNo!=null"> #{one.createStaffNo}, </if>
+                <if test="one.doudouCreateTime!=null"> #{one.doudouCreateTime}, </if>
+                <if test="one.doudouUnionid!=null"> #{one.doudouUnionid}, </if>
+                <if test="one.commissionAmount!=null"> #{one.commissionAmount}, </if>
+                <if test="one.checkResult!=null"> #{one.checkResult}, </if>
+                <if test="one.settlementMonth!=null"> #{one.settlementMonth}, </if>
+                <if test="one.createTime!=null"> #{one.createTime}, </if>
+                <if test="one.updateTime!=null"> #{one.updateTime}, </if>
+            </trim>
+        </foreach>;
+        <!-- @formatter:on -->
+    </insert>
+
+    <insert id="batchInsertEvenNull">
+        <!-- @formatter:off -->
+        INSERT INTO jy_doudou_user
+            ( <include refid="all"/> )
+        VALUES
+            <foreach collection="entities" item="one" separator=",">
+        <!-- @formatter:on -->
+                ( #{one.id}, #{one.clientName}, #{one.mobile}, #{one.belongDepartment}, #{one.belongDepartmentId}, #{one.createStaffId}, #{one.createStaffName}, #{one.createStaffNo}, #{one.doudouCreateTime}, #{one.doudouUnionid}, #{one.commissionAmount}, #{one.checkResult}, #{one.settlementMonth}, #{one.createTime}, #{one.updateTime} )
+            </foreach>
+    </insert>
+
+    <update id="batchUpdateEvenNull">
+        <foreach collection="entities" item="one" separator=";">
+            <!-- @formatter:off -->
+            UPDATE jy_doudou_user
+            SET
+                client_name = #{one.clientName},
+                mobile = #{one.mobile},
+                belong_department = #{one.belongDepartment},
+                belong_department_id = #{one.belongDepartmentId},
+                create_staff_id = #{one.createStaffId},
+                create_staff_name = #{one.createStaffName},
+                create_staff_no = #{one.createStaffNo},
+                doudou_create_time = #{one.doudouCreateTime},
+                doudou_unionid = #{one.doudouUnionid},
+                commission_amount = #{one.commissionAmount},
+                check_result = #{one.checkResult},
+                settlement_month = #{one.settlementMonth},
+                create_time = #{one.createTime},
+                update_time = #{one.updateTime}
+            WHERE TRUE
+              AND id = #{one.id}
+            <!-- @formatter:on -->
+        </foreach>
+    </update>
+
+    <select id="queryById" parameterType="Long" resultMap="all">
+        <!-- @formatter:off -->
+        SELECT
+            <include refid="all"/>
+        FROM jy_doudou_user
+        WHERE TRUE
+          AND id = #{id}
+        <!-- @formatter:on -->
+    </select>
+
+    <update id="updateById" parameterType="com.example.demo.entity.JyDoudouUserEntity">
+        <!-- @formatter:off -->
+        UPDATE jy_doudou_user
+        <set>
+            <if test="clientName!=null"> client_name = #{clientName}, </if>
+            <if test="mobile!=null"> mobile = #{mobile}, </if>
+            <if test="belongDepartment!=null"> belong_department = #{belongDepartment}, </if>
+            <if test="belongDepartmentId!=null"> belong_department_id = #{belongDepartmentId}, </if>
+            <if test="createStaffId!=null"> create_staff_id = #{createStaffId}, </if>
+            <if test="createStaffName!=null"> create_staff_name = #{createStaffName}, </if>
+            <if test="createStaffNo!=null"> create_staff_no = #{createStaffNo}, </if>
+            <if test="doudouCreateTime!=null"> doudou_create_time = #{doudouCreateTime}, </if>
+            <if test="doudouUnionid!=null"> doudou_unionid = #{doudouUnionid}, </if>
+            <if test="commissionAmount!=null"> commission_amount = #{commissionAmount}, </if>
+            <if test="checkResult!=null"> check_result = #{checkResult}, </if>
+            <if test="settlementMonth!=null"> settlement_month = #{settlementMonth}, </if>
+            <if test="createTime!=null"> create_time = #{createTime}, </if>
+            <if test="updateTime!=null"> update_time = #{updateTime}, </if>
+        </set>
+        WHERE TRUE
+          AND id = #{id}
+        <!-- @formatter:on -->
+        </update>
+
+    <update id="updateByIdEvenNull" parameterType="com.example.demo.entity.JyDoudouUserEntity">
+        <!-- @formatter:off -->
+        UPDATE jy_doudou_user
+        SET
+            client_name = #{clientName},
+            mobile = #{mobile},
+            belong_department = #{belongDepartment},
+            belong_department_id = #{belongDepartmentId},
+            create_staff_id = #{createStaffId},
+            create_staff_name = #{createStaffName},
+            create_staff_no = #{createStaffNo},
+            doudou_create_time = #{doudouCreateTime},
+            doudou_unionid = #{doudouUnionid},
+            commission_amount = #{commissionAmount},
+            check_result = #{checkResult},
+            settlement_month = #{settlementMonth},
+            create_time = #{createTime},
+            update_time = #{updateTime}
+        WHERE TRUE
+          AND id = #{id}
+        <!-- @formatter:on -->
+    </update>
+
+    <select id="queryByIds" parameterType="Long" resultMap="all">
+        <!-- @formatter:off -->
+        SELECT
+            <include refid="all"/>
+        FROM jy_doudou_user
+        WHERE TRUE
+          AND id IN (<foreach collection="ids" item="one" separator=",">#{one}</foreach>)
+        <!-- @formatter:on -->
+    </select>
+
+    <select id="null" parameterType="Long" resultMap="all">
+        <!-- @formatter:off -->
+        SELECT
+            <include refid="all"/>
+        FROM jy_doudou_user
+        WHERE TRUE
+          AND id IN (<foreach collection="ids" item="one" separator=",">#{one}</foreach>)
+        <!-- @formatter:on -->
+    </select>
+
+    <select id="queryByEntity" parameterType="com.example.demo.entity.JyDoudouUserEntity" resultMap="all">
+        <!-- @formatter:off -->
+        SELECT
+            <include refid="all"/>
+        FROM jy_doudou_user
+        WHERE TRUE
+          <if test="id!=null"> AND id = #{id} </if>
+          <if test="clientName!=null"> AND client_name = #{clientName} </if>
+          <if test="mobile!=null"> AND mobile = #{mobile} </if>
+          <if test="belongDepartment!=null"> AND belong_department = #{belongDepartment} </if>
+          <if test="belongDepartmentId!=null"> AND belong_department_id = #{belongDepartmentId} </if>
+          <if test="createStaffId!=null"> AND create_staff_id = #{createStaffId} </if>
+          <if test="createStaffName!=null"> AND create_staff_name = #{createStaffName} </if>
+          <if test="createStaffNo!=null"> AND create_staff_no = #{createStaffNo} </if>
+          <if test="doudouCreateTime!=null"> AND doudou_create_time = #{doudouCreateTime} </if>
+          <if test="doudouUnionid!=null"> AND doudou_unionid = #{doudouUnionid} </if>
+          <if test="commissionAmount!=null"> AND commission_amount = #{commissionAmount} </if>
+          <if test="checkResult!=null"> AND check_result = #{checkResult} </if>
+          <if test="settlementMonth!=null"> AND settlement_month = #{settlementMonth} </if>
+          <if test="createTime!=null"> AND create_time = #{createTime} </if>
+          <if test="updateTime!=null"> AND update_time = #{updateTime} </if>
+        <!-- @formatter:on -->
+    </select>
+
+    <select id="listAll" resultMap="all">
+        <!-- @formatter:off -->
+        SELECT
+            <include refid="all"/>
+        FROM jy_doudou_user
+        WHERE TRUE
+        LIMIT 500
+        <!-- @formatter:on -->
+    </select>
+
+    <!-- 从锚点<eb7ebc>到本行之间的内容，由Allison 1875生成，请勿人为修改 <6479b1> -->
+</mapper>

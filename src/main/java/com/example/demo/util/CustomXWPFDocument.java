@@ -34,7 +34,8 @@ public class CustomXWPFDocument extends XWPFDocument {
         final int EMU = 9525;
         width *= EMU;
         height *= EMU;
-        String blipId = getAllPictures().get(id).getPackageRelationship().getId();
+        String blipId ="";
+//        String blipId = getAllPictures().get(id).getPackageRelationship().getId();
 
         CTInline inline = paragraph.createRun().getCTR()
                 .addNewDrawing().addNewInline();

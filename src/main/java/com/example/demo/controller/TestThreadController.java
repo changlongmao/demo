@@ -1,16 +1,24 @@
 package com.example.demo.controller;
 
 import cn.hutool.core.lang.Singleton;
+import cn.hutool.core.math.MathUtil;
 import com.example.demo.entity.*;
 import com.example.demo.util.DateUtil;
 import com.example.demo.util.HttpClientUtil;
 import com.sun.org.apache.bcel.internal.generic.ArithmeticInstruction;
 import jodd.exception.UncheckedException;
-import jodd.util.MathUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.el.parser.ArithmeticNode;
+import org.assertj.core.util.Lists;
+import org.redisson.Redisson;
+import org.redisson.api.RFuture;
+import org.redisson.api.RSemaphore;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,16 +42,20 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @Date: 2021/01/07 09:20
  **/
 @Slf4j
+@Scope
 @RestController
 @RequestMapping("/testThread")
 public class TestThreadController {
 
     public static final ThreadLocal<Object> threadLocal = new ThreadLocal<>();
 
+
     @Resource
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
-    @Resource
+//    @Resource
     private ScheduledThreadPoolExecutor scheduledThreadPoolExecutor;
+    @Resource
+    private RedissonClient redissonClient;
 
     private static final List<Object> list = Collections.synchronizedList(new ArrayList<>());
 
@@ -52,6 +64,38 @@ public class TestThreadController {
     private final AtomicInteger atomicInteger = new AtomicInteger(1);
 
     private static volatile Integer index = 0;
+
+    private static final List<String> token = Lists.newArrayList("a","b");
+
+    @GetMapping("/testLock1")
+    public RestResponse testLock1() throws Exception {
+        testLock();
+//        log.info("请求进来了");
+//        Thread.sleep(100000);
+//        log.info("请求结束了");
+
+        return RestResponse.success();
+    }
+
+    public void testLock() throws InterruptedException {
+        log.info(Thread.currentThread().getName());
+        log.info("请求进来了");
+        while (CollectionUtils.isEmpty(token)) {
+            log.info("我没拿到锁，我在自旋");
+            Thread.sleep(500);
+        }
+        String integer = null;
+        try {
+            integer = token.get(0);
+            log.info("我拿到了锁：{}", integer);
+            token.remove(integer);
+
+            Thread.sleep(10000);
+        }finally {
+            log.info("我释放了锁：{}", integer);
+            token.add(integer);
+        }
+    }
 
     @GetMapping("/testThreadLocal")
     public RestResponse testThreadLocal() throws Exception {
@@ -130,9 +174,9 @@ public class TestThreadController {
                 log.info("threadName: {}", Thread.currentThread().getName());
             });
         }
-//        threadPoolExecutor.shutdown();
+        threadPoolExecutor.shutdown();
         // 关闭线程池
-//        threadPoolExecutor.awaitTermination(3600, TimeUnit.SECONDS);
+        threadPoolExecutor.awaitTermination(3600, TimeUnit.SECONDS);
 
         return RestResponse.success();
     }
@@ -174,66 +218,110 @@ public class TestThreadController {
 //        System.out.println(hashCode >>> 16);
 //        System.out.println(hashCode ^ (hashCode >>> 16));
 //        System.out.println(11 & hashCode);
-        ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 10, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
+//        ThreadPoolExecutor executor = new ThreadPoolExecutor(100, 100, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
 //        StringBuffer sb = new StringBuffer();
-//        for (int i = 0; i < 10; i++) {
-//            executor.submit(() -> {
-//                for (int j = 0; j < 10000000; j++) {
-//                    sb.append("啊");
+//        List<Future> list = new ArrayList<>();
+//        for (int i = 0; i < 100; i++) {
+//            try {
+//                Thread.sleep(10);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            Future<?> submit = executor.submit((Callable<Object>) () -> {
+//                for (int j = 0; j < 5; j++) {
+//                    log.info(Thread.currentThread().getName() + "      " + j);
+//                    try {
+//                        Thread.sleep(1000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                    log.info(Thread.currentThread().getName() + "      " + j + 1);
+////                    list.add(new Object());
 //                }
+//                return Thread.currentThread().getName();
 //            });
+////            submit.get();
+//            list.add(submit);
 //        }
-//
+//        for (Future future : list) {
+//            Object o = future.get();
+//            System.out.println(o);
+//        }
 //        executor.shutdown();
 //
 //        log.info("调用awaitTermination之前：" + executor.isTerminated());
 //        executor.awaitTermination(5, TimeUnit.MINUTES);
 //        log.info("调用awaitTermination之后：" + executor.isTerminated());
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < 1; i++) {
-            sb.append("啊");
-        }
-//        StringBuffer sb = new StringBuffer();
-//        for (int i = 0; i < 100000000; i++) {
-//            sb.append("啊");
-//        }
-//        String sb = "";
-//        for (int i = 0; i < 100000; i++) {
-//            sb += "啊";
-//        }
-
-        long end = System.currentTimeMillis();
-        System.out.println((end - start) + "ms");
-        System.out.println(sb.length());
-//        System.out.println(sb);
-//        String s = "";
-//        System.out.println(11 & 160343085);
-//        System.out.println(15 & 160343085);
-//        Map<String, Object> map = new HashMap<>();
-//        for (int i = 0; i < 10; i++) {
-//            map.put(i + "a", i+1);
-//            Object put = map.put(i + "a", i);
-//            map.get("1a");
-//            if (put != null) {
-//                log.info("oldValue: {}, newValue: {}", put, i);
+//
+//        long end = System.currentTimeMillis();
+//        System.out.println("总耗时" + (end - start) + "ms");
+//        System.out.println(sb.length());
+//        LinkedList<String> smsMsg = new LinkedList<>();
+//
+//        smsMsg.add("bbbb");
+//        smsMsg.addFirst("aaa");
+//        smsMsg.addLast("ccc");
+//        smsMsg.add("ddd");
+//        System.out.println(smsMsg.toString());
+//
+//        Thread thread1 = new Thread(() -> {
+//            for (int i = 0; i < 10; i++) {
+//                System.out.println(222);
+//                try {
+//                    Thread.sleep(100);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
 //            }
-//        }
-//        System.out.println(Singleton.getInstance());
-        for (int i = 0; i < 100; i++) {
-//            executor.submit(() -> System.out.println(Singleton.getInstance()));
-        }
-//        executor.shutdown();
-//        Adapter adpater = new Adapter();
-//        adpater.charge_byBianKong();
-//        adpater.charge_byYuanKong();
-//        SaleComputer saleComputer = new Lenovo();
-//        saleComputer.show();
-//        System.out.println(saleComputer);
-//        Properties properties = System.getProperties();
-//        System.out.println(properties.toString());
-        AtomicInteger atomicInteger = new AtomicInteger(0);
-        System.out.println(atomicInteger.getAndIncrement());
+//        });
+//        thread1.start();
+//        Thread thread = new Thread(() -> {
+//            for (int i = 0; i < 10; i++) {
+//                System.out.println(111);
+//                try {
+//                    Thread.sleep(100);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            try {
+//                thread1.join();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            for (int i = 0; i < 10; i++) {
+//                System.out.println(333);
+//                try {
+//                    Thread.sleep(100);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//        thread.setDaemon(true);
+//        thread.start();
 
-        System.out.println(101 % 10);
+
+        Random random = new Random();
+        System.out.println(random.nextInt(3));
+        System.out.println(random.nextInt(3));
+        System.out.println(random.nextInt(3));
+        System.out.println(random.nextInt(3));
+        System.out.println(random.nextInt(3));
+        System.out.println(random.nextInt(3));
+        System.out.println(random.nextInt(3));
+        System.out.println(random.nextInt(3));
+        System.out.println(random.nextInt(3));
+
+        System.out.println(Arrays.toString(new Byte[]{1, 2, 4}));
     }
+//
+//    static {
+//        System.out.println("静态代码块初始化");
+//    }
+//
+//    {
+//        System.out.println("实例代码块初始化");
+//    }
 }

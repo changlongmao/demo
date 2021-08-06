@@ -12,6 +12,7 @@ import com.example.demo.util.*;
 import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.encoder.org.apache.commons.lang.text.StrBuilder;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.time.StopWatch;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -35,9 +36,11 @@ import sun.misc.BASE64Encoder;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.lang.reflect.Array;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.ParseException;
@@ -73,7 +76,7 @@ public class UserController {
     @Autowired
     private JedisUtil jedisUtil;
 
-    @Resource
+    @Autowired
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     private static final ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 10,
@@ -81,6 +84,47 @@ public class UserController {
 
     public static final List<User> userList = Collections.synchronizedList(new ArrayList<>());
 
+
+    @PostMapping("/testPoi")
+    public void testPoi(HttpServletResponse response) throws Exception{
+
+        List<User> users = new ArrayList<>();
+        for (int i = 0; i < 1000; i++) {
+            User user = new User();
+            user.setId(UUID.randomUUID().toString());
+            user.setUsername(UUID.randomUUID().toString());
+            user.setRearName(UUID.randomUUID().toString());
+            user.setPassword(UUID.randomUUID().toString());
+            user.setCreateTime(new Date());
+            user.setIsDelete(1);
+            user.setScore(BigDecimal.valueOf(22.22222));
+            users.add(user);
+        }
+
+        StopWatch sw = new StopWatch();
+        sw.start();
+        // 标题名称
+        List<String> titleName = Arrays.asList("用户名", "真实姓名", "密码", "创建时间");
+        // 标题对应的字段名，顺序必须与标题一致
+        List<String> columnName = Arrays.asList("username", "rearName", "password", "createTime");
+        Map<String, Object> objectMap = new HashMap<>();
+        // 相关数据存入
+        objectMap.put("data", users);
+        objectMap.put("excelFilename", "日常监管详情列表-" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        objectMap.put("columnName", columnName);
+        objectMap.put("titleName", titleName);
+        EasyExcelUtils.exportToHttp( users, User.class, "导出用户列表");
+//        PoiExcelUtil.exportExcel(response, objectMap, User.class);
+//        EasyExcel.write("C:\\Users\\LongFei\\Desktop\\joyowo.xlsx", User.class).sheet("用户信息").doWrite(users);
+//        Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams("用户","用户信息"),
+//                User.class, users);
+//        FileOutputStream fos = new FileOutputStream("C:\\Users\\LongFei\\Desktop\\joyowo-easyPoi.xls");
+//        workbook.write(fos);
+//        fos.close();
+        sw.stop();
+        log.info("执行时间：{} ms", sw.getTime(TimeUnit.MILLISECONDS));
+//        return RestResponse.success();
+    }
 
     @GetMapping(value = "/testHeapMemoryError")
     public void testHeapMemoryError() {
@@ -99,11 +143,13 @@ public class UserController {
     public RestResponse save(@RequestParam Map<String, Object> params) {
         params.put("code", "1234");
 //        log.info("code:{}", params.get("code"));
-        RLock lock = redisson.getLock("save" + params.get("code"));
-//        if (lock.isLocked()) {
-//            log.info("未获取到锁，请求失败");
-//            return RestResponse.error("点击过快，请勿重复请求");
-//        }
+        RLock lock = redisson.getLock("user/save" + params.get("userId"));
+        if (lock.isLocked()) {
+            log.info("未获取到锁，请求失败");
+            return RestResponse.error("点击过快，请勿重复请求");
+        }
+        Collections.synchronizedList(new ArrayList<>());
+        lock.lock(30, TimeUnit.SECONDS);
         boolean tryLock = false;
         long startTime = System.currentTimeMillis();
         try {
