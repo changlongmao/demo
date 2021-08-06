@@ -88,6 +88,7 @@ public class UserController {
     @GetMapping(value = "/testHeapMemoryError")
     public void testHeapMemoryError() {
 
+        System.out.println();
         try {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < 100000000; i++) {
