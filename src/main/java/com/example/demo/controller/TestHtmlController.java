@@ -4,13 +4,13 @@ import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.example.demo.entity.*;
 import com.example.demo.jwt.JwtTokenUtil;
 import com.example.demo.mapper.JyDoudouUserMapper;
-import com.example.demo.util.EasyExcelUtils;
-import com.example.demo.util.PoiExcelUtil;
-import com.example.demo.util.StringUtils;
-import com.example.demo.util.TimeUtil;
+import com.example.demo.util.*;
+import com.fasterxml.jackson.databind.JsonNode;
+import jdk.nashorn.internal.objects.NativeString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
@@ -188,7 +189,13 @@ public class TestHtmlController {
 
         System.out.println(users.stream().map(a -> a.getUsername() + "已分配" + a.getPassword() + "元").collect(Collectors.joining(",")));
 
-        System.out.println(JSON.toJSONString(new User()));
+        System.out.println(String.join(",",new ArrayList<>()));
+        System.out.println(new BCryptPasswordEncoder().encode("nacos"));
+        String fileUrl = "https://kylin-test-1256919685.cos.ap-shanghai.myqcloud.com/jy-turing-management/resumeFile/94dfcf58a27c47b98586017917ee3ceb/m117127.docx";
+        System.out.println(fileUrl.substring(fileUrl.lastIndexOf("/")+1));
+        System.out.println(JSONObject.parseObject("{\"id\":null,\"user_name\":\"aaa\",\"rearName\":null,\"password\":null,\"createTime\":null,\"isDelete\":null,\"score\":null}", User.class));
+        JsonNode x = JsonUtils.toTree("{\"id\":null,\"user_name\":\"aaa\",\"rearName\":null,\"password\":null,\"createTime\":null,\"isDelete\":null,\"score\":null}");
+        System.out.println(x);
     }
 
 }

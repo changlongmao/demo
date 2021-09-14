@@ -108,14 +108,13 @@ public class UserController {
             log.info("未获取到锁，请求失败");
             return RestResponse.error("点击过快，请勿重复请求");
         }
-        Collections.synchronizedList(new ArrayList<>());
         lock.lock(30, TimeUnit.SECONDS);
         boolean tryLock = false;
         long startTime = System.currentTimeMillis();
         try {
 //            lock.lock(60L, TimeUnit.SECONDS);
             // waitTime为若没获取到锁的等待时间，超时则放弃获取锁返回false,leaseTime若获取锁超过指定的时间还没释放则自动释放
-            if (tryLock = lock.tryLock(1, 60, TimeUnit.SECONDS)) {
+            if (tryLock = lock.tryLock(10, 60, TimeUnit.SECONDS)) {
                 long waitLockTime = System.currentTimeMillis();
                 requestNum++;
                 log.info("请求{}获取到锁，请求成功", requestNum);
@@ -148,6 +147,38 @@ public class UserController {
             }
         }
 
+    }
+
+    @GetMapping(value = "/testLock")
+    public RestResponse testLock(@RequestParam Map<String, Object> params) {
+        params.put("code", "1234");
+//        log.info("code:{}", params.get("code"));
+        RLock lock = redisson.getLock("user/save" + params.get("userId"));
+        if (lock.isLocked()) {
+            log.info("未获取到锁，请求失败");
+            return RestResponse.error("点击过快，请勿重复请求");
+        }
+        lock.lock();
+        log.info("获取到锁");
+        try {
+            Thread.sleep(60000);
+        } catch (Exception e) {
+            log.warn(e.getMessage(), e);
+            return RestResponse.error("操作异常");
+        } finally {
+            log.info("释放锁");
+            lock.unlock();
+        }
+
+        return RestResponse.success();
+    }
+
+    @PostMapping(value = "/testGlobalAdvice")
+    public RestResponse testGlobalAdvice(@RequestBody User user) {
+
+        System.out.println(user.toString());
+
+        return RestResponse.success();
     }
 
     @GetMapping(value = "/testThreadLocal")

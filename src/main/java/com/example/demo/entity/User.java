@@ -7,6 +7,7 @@ import com.alibaba.excel.annotation.format.NumberFormat;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import com.alibaba.excel.annotation.write.style.ContentRowHeight;
 import com.alibaba.excel.annotation.write.style.HeadRowHeight;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
@@ -47,6 +48,7 @@ public class User implements java.io.Serializable {
      *  @ExcelProperty value	对应Excel表中的列头 index	对应Excel表中的列数	默认-1，指定时建议从0开始
      */
     @ExcelProperty(value = "用户名", index = 0)
+    @JSONField(name = "user_name")
     private String username;
 
     /** rearName */
@@ -79,7 +81,7 @@ public class User implements java.io.Serializable {
     @NumberFormat(value = "#.##%",roundingMode = RoundingMode.HALF_DOWN)
     private BigDecimal score;
     public User() {
-        System.out.println(this);
+//        System.out.println(this);
     }
     public User(String id) {
         this.id = id;

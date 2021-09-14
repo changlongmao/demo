@@ -5,6 +5,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.SheetUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -261,33 +262,33 @@ public class PoiExcelUtil {
 
         DataFormatter dataFormatter = new DataFormatter();
 
-//        switch (cell.getCellTypeEnum()) {
-//            case NUMERIC:
-//                if (HSSFDateUtil.isCellDateFormatted(cell)) {
-//                    // 对日期类型数据处理
-//                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//                    Date date = HSSFDateUtil.getJavaDate(cell.getNumericCellValue());
-//                    cellValue = sdf.format(date);
-//                } else {
-//                    cellValue = dataFormatter.formatCellValue(cell);
-//                }
-//                break;
-//            case STRING:
-//                cellValue = dataFormatter.formatCellValue(cell);
-//                break;
-//            case FORMULA:
-//                cellValue = String.valueOf(cell.getNumericCellValue());
-//                break;
-//            case BLANK:
-//                cellValue = "";
-//                break;
-//            case ERROR:
-//                cellValue = "非法字符";
-//                break;
-//            default:
-//                cellValue = "未知类型";
-//                break;
-//        }
+        switch (cell.getCellType()) {
+            case NUMERIC:
+                if (DateUtil.isCellDateFormatted(cell)) {
+                    // 对日期类型数据处理
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date date = DateUtil.getJavaDate(cell.getNumericCellValue());
+                    cellValue = sdf.format(date);
+                } else {
+                    cellValue = dataFormatter.formatCellValue(cell);
+                }
+                break;
+            case STRING:
+                cellValue = dataFormatter.formatCellValue(cell);
+                break;
+            case FORMULA:
+                cellValue = String.valueOf(cell.getNumericCellValue());
+                break;
+            case BLANK:
+                cellValue = "";
+                break;
+            case ERROR:
+                cellValue = "非法字符";
+                break;
+            default:
+                cellValue = "未知类型";
+                break;
+        }
         return cellValue;
     }
 
