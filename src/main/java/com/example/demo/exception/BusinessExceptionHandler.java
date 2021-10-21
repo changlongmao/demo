@@ -4,9 +4,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @Author Chang
@@ -46,5 +51,16 @@ public class BusinessExceptionHandler {
     public BaseResponse handleException(Exception e) {
         log.error(e.getMessage(), e);
         return ResponseUtil.error("未知异常，请联系管理员", HttpStatus.INTERNAL_SERVER_ERROR.value());
+    }
+
+    /**
+     * 请求Body内字段没有通过注解校验（通过参数级@Valid 启用的参数校验）
+     */
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    public BaseResponse methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
+        log.error(e.getMessage(), e);
+        String msg = e.getBindingResult().getFieldErrors().stream()
+                .map(fieldError -> fieldError.getField() + fieldError.getDefaultMessage()).collect(Collectors.joining(","));
+        return ResponseUtil.error("请求参数校验失败：" + msg, HttpStatus.BAD_REQUEST.value());
     }
 }

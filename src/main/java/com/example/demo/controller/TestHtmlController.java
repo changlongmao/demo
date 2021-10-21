@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
@@ -190,7 +189,6 @@ public class TestHtmlController {
         System.out.println(users.stream().map(a -> a.getUsername() + "已分配" + a.getPassword() + "元").collect(Collectors.joining(",")));
 
         System.out.println(String.join(",",new ArrayList<>()));
-        System.out.println(new BCryptPasswordEncoder().encode("nacos"));
         String fileUrl = "https://kylin-test-1256919685.cos.ap-shanghai.myqcloud.com/jy-turing-management/resumeFile/94dfcf58a27c47b98586017917ee3ceb/m117127.docx";
         System.out.println(fileUrl.substring(fileUrl.lastIndexOf("/")+1));
         System.out.println(JSONObject.parseObject("{\"id\":null,\"user_name\":\"aaa\",\"rearName\":null,\"password\":null,\"createTime\":null,\"isDelete\":null,\"score\":null}", User.class));

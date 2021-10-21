@@ -1,8 +1,15 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.RestResponse;
+import com.example.demo.entity.TaskSettlementPriceReqDto;
 import com.example.demo.entity.User;
+import com.example.demo.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RAtomicLong;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -16,6 +23,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @Date: 2021/03/04 15:58
  **/
 @Slf4j
+@RestController
+@RequestMapping("/testVolatile")
 public class TestVolatile {
 
     public AtomicInteger inc = new AtomicInteger();
@@ -24,6 +33,13 @@ public class TestVolatile {
 //        int x = inc + 1;
 //        inc = x;
 //        inc++;
+    }
+
+
+    @PostMapping("/testValid")
+    public RestResponse testValid(@Valid @RequestBody TaskSettlementPriceReqDto taskSettlementPriceReqDto) {
+
+        return RestResponse.success();
     }
 
     public static void main(String[] args) throws InterruptedException {
