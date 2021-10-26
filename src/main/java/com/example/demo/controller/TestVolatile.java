@@ -58,6 +58,11 @@ public class TestVolatile {
     public void test1111() {
         String test1 = "test1第五次提交";
     }
+
+    public void test11111() {
+        String test1 = "test1第六次提交";
+    }
+
     public static void main(String[] args) throws InterruptedException {
         final TestVolatile test = new TestVolatile();
         ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 10, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
