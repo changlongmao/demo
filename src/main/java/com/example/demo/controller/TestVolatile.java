@@ -35,9 +35,13 @@ public class TestVolatile {
 //        inc++;
     }
 
+    public void test1() {
+
+    }
 
     @PostMapping("/testValid")
     public RestResponse testValid(@Valid @RequestBody TaskSettlementPriceReqDto taskSettlementPriceReqDto) {
+        String a = "test1";
 
         return RestResponse.success();
     }
