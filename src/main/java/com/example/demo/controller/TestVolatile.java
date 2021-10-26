@@ -36,7 +36,7 @@ public class TestVolatile {
     }
 
     public void test1() {
-
+        String test1 = "test1第二次提交";
     }
 
     @PostMapping("/testValid")
