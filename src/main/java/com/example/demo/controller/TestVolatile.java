@@ -40,6 +40,10 @@ public class TestVolatile {
         String test1 = "test1第三次提交";
     }
 
+    public void test111() {
+        String test1 = "test1第四次提交";
+    }
+
     @PostMapping("/testValid")
     public RestResponse testValid(@Valid @RequestBody TaskSettlementPriceReqDto taskSettlementPriceReqDto) {
 
