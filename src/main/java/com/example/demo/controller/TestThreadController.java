@@ -52,7 +52,7 @@ public class TestThreadController {
 
     @Resource
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
-//    @Resource
+    @Resource
     private ScheduledThreadPoolExecutor scheduledThreadPoolExecutor;
     @Resource
     private RedissonClient redissonClient;
@@ -122,12 +122,18 @@ public class TestThreadController {
 //            list.add(1);
 //            log.info(Thread.currentThread().getName());
 //        }, 3, TimeUnit.SECONDS);
-        List<String> urlList = Arrays.asList("https://juejin.cn/post/6958079172904222727", "https://juejin.cn/post/6958097237398257671");
+        List<String> urlList = Collections.singletonList("https://api.juejin.cn/content_api/v1/article/detail?aid" +
+                "=2608&uuid=7000172347245364751");
         // scheduleWithFixedDelay 方法将会在上一个任务结束后，注意：**再等待 2 秒，**才开始执行，那么他和上一个任务的开始执行时间的间隔是 7 秒。
         ScheduledFuture<?> scheduledFuture = scheduledThreadPoolExecutor.scheduleWithFixedDelay(() -> {
             try {
                 for (String url : urlList) {
-                    HttpClientUtil.doGet(url, null);
+                    HttpClientUtil.doPost(url, new HashMap<String, Object>(){{
+                        put("article_id", "6958079172904222727");
+                    }});
+                    HttpClientUtil.doPost(url, new HashMap<String, Object>(){{
+                        put("article_id", "6958097237398257671");
+                    }});
                     log.info("请求掘金页面{}，线程名为{}，共请求{}次", url, Thread.currentThread().getName(), atomicInteger.getAndIncrement());
                     if ((atomicInteger.get() % 10) == 0) {
                         TimeUnit.SECONDS.sleep(30);
@@ -141,7 +147,7 @@ public class TestThreadController {
         }, 0, 1, TimeUnit.SECONDS);
 //        TimeUnit.MILLISECONDS.sleep(7000);
 //        scheduledFuture.cancel(false);
-        map.put(id, scheduledFuture);
+//        map.put(id, scheduledFuture);
         log.info("开启任务：{}", id);
         // scheduleAtFixedRate 方法将会在上一个任务结束完毕立刻执行，他和上一个任务的开始执行时间的间隔是 5 秒（因为必须等待上一个任务执行完毕）。
 //        scheduledThreadPoolExecutor.scheduleAtFixedRate(() ->{
