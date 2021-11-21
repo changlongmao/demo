@@ -3,7 +3,7 @@ spring:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/changlf?characterEncoding=utf-8&serverTimezone=Asia/Shanghai
     username: root
-    password: root
+    password: chang123
   servlet:
     multipart:
       max-file-size: 100MB
@@ -13,7 +13,7 @@ spring:
     database: 0
     host: 127.0.0.1
     port: 6379
-    password: redis1244656FYKJ508HzBJYfdxFyZn # 密码（默认为空）
+    password: # 密码（默认为空）
     timeout: 6000  # 连接超时时长（毫秒）
     expire-time: 1800 # redis过期时间是30分钟30*60
     jedis:
