@@ -69,6 +69,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    public User getByUsername(String username) {
+        return baseMapper.getByUsername(username);
+    }
+
+    @Override
     public List<Map<String, Object>> getTableName(Map<String, Object> params) {
         return baseMapper.getTableName(params);
     }

@@ -14,7 +14,10 @@
         select id from user
     </select>
     <select id="getById" resultType="com.example.demo.entity.User">
-        select id, username,rear_name, password from user where id = #{id} and is_delete = 0
+        select id, username,rear_name, password from user where id = #{id} lock in share mode
+    </select>
+    <select id="getByUsername" resultType="com.example.demo.entity.User">
+        select id, username,rear_name, password from user where username = #{username} for update
     </select>
     <select id="getTableName" resultType="java.util.Map">
         SELECT TABLE_NAME tableName FROM `information_schema`.`TABLES` WHERE table_schema=#{database}

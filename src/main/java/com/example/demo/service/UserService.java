@@ -22,6 +22,8 @@ public interface UserService extends IService<User> {
 
     User selectById(String id);
 
+    User getByUsername(String username);
+
     List<Map<String, Object>> getTableName(Map<String, Object> params);
 
     List<Map<String, Object>> optimizeTable(String tableName);

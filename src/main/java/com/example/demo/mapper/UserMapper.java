@@ -24,7 +24,9 @@ public interface UserMapper extends BaseMapper<User> {
 
     void updateUserByName(User user);
 
-    User getById(String id);
+    User getById(@Param("id") String id);
+
+    User getByUsername(@Param("username") String username);
 
     List<Map<String, Object>> getTableName(Map<String, Object> params);
 

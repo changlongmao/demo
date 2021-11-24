@@ -47,18 +47,19 @@ public class TestTransactionalController {
     @GetMapping("/tranCon")
     @Transactional(rollbackFor = Exception.class)
     public void tranCon() throws Exception {
-//        User byId = userService.selectById("00004b843b164a2aa1f8ed12ec6cc7a8");
-//        log.info(byId.toString());
+//        User byId = userService.selectById("6");
+        User byId = userService.getByUsername("6");
 
-//        User user = new User("000149c7e6cd40028e399991b0a82e6f");
+        Thread.sleep(20000);
+
+//        User user = new User("0000c5fec2f94479952032b5da04be1f");
 //        user.setUsername("123");
 //        userService.updateUserById(user);
-
-        User user1 = new User("0000745742864e749b616bd0f7ac9b8a");
-        user1.setUsername("123");
-        user1.setRearName("test");
-        userService.updateUserByName(user1);
-        Thread.sleep(10000);
+//
+//        User user1 = new User("0000745742864e749b616bd0f7ac9b8a");
+//        user1.setUsername("123");
+//        user1.setRearName("test");
+//        userService.updateUserByName(user1);
 //        try {
 //            int i = 1/0;
 //        } catch (Exception e) {
@@ -69,21 +70,30 @@ public class TestTransactionalController {
     @GetMapping("/testMvcc1")
     @Transactional(rollbackFor = Exception.class)
     public void testMvcc1() throws Exception {
-        User user = new User("0000509b04e045e885f8f8d84f106b52");
-        user.setUsername("456");
-        userService.updateUserById(user);
-//        User byId = userService.getById("00004b843b164a2aa1f8ed12ec6cc7a8");
-//        User byId = userService.selectById("00004b843b164a2aa1f8ed12ec6cc7a8");
+//        User byId = userService.getByUsername("1");
+
+        User user = new User("7946534809856");
+        user.setUsername("7");
+//        userService.updateUserById(user);
+        userService.save(user);
+//        User byId = userService.selectById("0000bf13fe624e97b3768dcf3c403b68");
 //        log.info(byId.toString());
 //        Thread.sleep(10000);
 
-        User user1 = new User("00004b843b164a2aa1f8ed12ec6cc7a8");
-        user1.setUsername("456");
-        userService.updateUserById(user1);
+//        User user1 = new User("00004b843b164a2aa1f8ed12ec6cc7a8");
+//        user1.setUsername("456");
+//        userService.updateUserById(user1);
 //        User byId1 = userService.getById("00004b843b164a2aa1f8ed12ec6cc7a8");
 //        log.info(byId1.toString());
     }
 
+    /**
+     * 
+     * @param  
+     * @author Chang
+     * @Date 2021/11/23 18:24
+     * @return void
+     **/
     @GetMapping("/testMvcc2")
     @Transactional(rollbackFor = Exception.class)
     public void testMvcc2() throws Exception {
