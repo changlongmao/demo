@@ -88,12 +88,13 @@ public class UserController {
     @GetMapping(value = "/testHeapMemoryError")
     public void testHeapMemoryError() {
 
-        System.out.println();
+        log.info("测试开始");
         try {
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < 100000000; i++) {
-                sb.append("啊");
+            for (int i = 0; i < 200000000; i++) {
+                sb.append("啊啊啊啊啊啊啊");
             }
+            log.info("测试结束，字符串长度为：{}", sb.length());
         } catch (Exception e) {
             log.info("----- java HeapDump OnOutOf Memory Error ------");
         }
@@ -301,39 +302,21 @@ public class UserController {
 
         List<User> users = new ArrayList<>();
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 10; i++) {
             User user = new User();
-            user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
-            user.setPassword("setPassword" + i * 1000);
-            user.setUsername("setUsername" + i * 1000);
-            user.setRearName("setRearName" + i * 1000);
+            user.setId(i+1+"");
+            user.setPassword(i+1+"");
+            user.setUsername(i+1+"");
+            user.setRearName(i+1+"");
             users.add(user);
         }
 
-//        int batchSize = 500;
-//        int i = 1;
-//        List<User> nextList = new ArrayList<>();
-//        for (User user : users) {
-//            nextList.add(user);
-//            if (i == users.size() || i % batchSize == 0) {
-//                userService.batchInsert(nextList);
-//                nextList.clear();
-//            }
-//            i++;
-//        }
-        User user = new User();
-        user.setId("00001778060a40daa35073621c175f14");
-        user.setUsername("setUsername955698000");
-        user.setRearName("batchInsert456");
-//        userService.updateUserById(user);
-        User userById1 = userService.getById("00002b33bbd14cf187e7c769238e452b");
-//        userService.updateUserByName(user);
-        Thread.sleep(30000);
+        userService.batchInsert(users);
+
         Long endTime = System.currentTimeMillis();
-        User userById2 = userService.getById("00002b33bbd14cf187e7c769238e452b");
 
         System.out.println("batchInsert批量插入数据共用时" + (endTime - startTime) + "ms");
-        return RestResponse.success().put("userById1", userById1).put("userById2", userById2);
+        return RestResponse.success();
     }
 
     @GetMapping(value = "/testList")
