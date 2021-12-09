@@ -36,7 +36,7 @@ public class ExecutorConfig {
         poolTaskExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         // 等待所有任务结束后再关闭线程池
         poolTaskExecutor.setWaitForTasksToCompleteOnShutdown(true);
-        // 龙猫王帝第十七代test1
+        // 龙猫王帝第十八代test1
         return poolTaskExecutor;
     }
 }
