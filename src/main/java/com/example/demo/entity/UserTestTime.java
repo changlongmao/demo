@@ -1,6 +1,8 @@
 package com.example.demo.entity;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
+import lombok.Value;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -22,15 +24,19 @@ public class UserTestTime implements java.io.Serializable {
     private Long id;
 
     /** username */
+    @ExcelProperty(value = "用户名")
     private String username;
 
     /** rearName */
+    @ExcelProperty(value = "真实姓名")
     private String rearName;
 
     /** password */
+    @ExcelProperty(value = "密码")
     private String password;
 
     /** createTime */
+    @ExcelProperty(value = "创建时间")
     private Date createTime;
 
     /** createTimeStamp */

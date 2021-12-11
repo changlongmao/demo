@@ -78,7 +78,7 @@ public class User implements java.io.Serializable {
      */
     @ExcelProperty(value = "分数", index = 2)
 //    @NumberFormat(value = "#.##",roundingMode = RoundingMode.HALF_DOWN)
-    @NumberFormat(value = "#.##%",roundingMode = RoundingMode.HALF_DOWN)
+    @NumberFormat(value = "#.##",roundingMode = RoundingMode.HALF_DOWN)
     private BigDecimal score;
     public User() {
 //        System.out.println(this);
