@@ -38,6 +38,7 @@ public class TestEasyExcelController {
         EasyExcel.read(file.getInputStream(), UserTestTime.class, easyExcelListener).sheet().doRead();
         List<UserTestTime> dataList = easyExcelListener.getDataList();
 
-        return RestResponse.success().put("dataList", dataList);
+        log.info("数据条数为{}", dataList.size());
+        return RestResponse.success().put("size", dataList.size());
     }
 }
