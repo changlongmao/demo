@@ -1,5 +1,7 @@
-package com.example.demo.util;
+package com.example.demo.aspect;
 
+import com.example.demo.util.HttpContextUtils;
+import com.example.demo.util.IpUtils;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -49,9 +51,11 @@ public class TestAspect {
         //AOP代理类的名字  
         log.info("AOP代理类的名字：" + signature.getDeclaringTypeName());
         //AOP代理类的类（class）信息  
-        signature.getDeclaringType();
+        Class declaringType = signature.getDeclaringType();
+        log.info("AOP代理类的类（class）信息  ：" + declaringType);
         MethodSignature sign = (MethodSignature) joinPoint.getSignature();
         Method method = sign.getMethod();
+        log.info("AOP代理类的名字：" + method);
         //获取RequestAttributes
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         //从获取RequestAttributes中获取HttpServletRequest的信息  
@@ -65,18 +69,18 @@ public class TestAspect {
         String params = new Gson().toJson(obj);
         log.info("Gson获取的参数：" + params);
         //获取请求参数
-//        Enumeration<String> enumeration = request.getParameterNames();
-//        Map<String, Object> parameterMap = new HashMap<>();
-//        while (enumeration.hasMoreElements()) {
-//            String parameter = enumeration.nextElement();
-//            parameterMap.put(parameter, request.getParameter(parameter));
-//        }
-//        log.info("请求的参数信息为：" + parameterMap.toString());
+        Enumeration<String> enumeration = request.getParameterNames();
+        Map<String, Object> parameterMap = new HashMap<>();
+        while (enumeration.hasMoreElements()) {
+            String parameter = enumeration.nextElement();
+            parameterMap.put(parameter, request.getParameter(parameter));
+        }
+        log.info("请求的参数信息为：" + parameterMap);
     }
 
     @AfterReturning(value = "pointCut()",returning = "keys")
     public void doAfterReturn(JoinPoint joinPoint,Object keys) {
-        log.info("TestAspect后置返回通知" + keys.toString());
+        log.info("TestAspect后置返回通知" + keys);
     }
 
     @After("pointCut()")
@@ -86,8 +90,8 @@ public class TestAspect {
 
     @AfterThrowing(value = "pointCut()", throwing = "throwable")
     public void doAfterThrowing(JoinPoint joinPoint, Throwable throwable) {
-//        log.error("后置异常通知：", throwable);
-        log.error("TestAspect后置异常通知：" + throwable.getMessage());
+        log.error("后置异常通知：", throwable);
+//        log.error("TestAspect后置异常通知：" + throwable.getMessage());
     }
 
     @Around("pointCut()")
@@ -95,10 +99,16 @@ public class TestAspect {
         log.info("TestAspect环绕通知的目标方法名：" + point.getSignature().getName());
         long beginTime = System.currentTimeMillis();
 
-        Object result = point.proceed();
+        Object result = null;
+        try {
+            result = point.proceed();
+        } finally {
+            log.info("测试环绕通知一定执行");
+        }
 
         long time = System.currentTimeMillis() - beginTime;
         log.info("TestAspect方法执行时间：" + time + "ms");
+        log.info("环绕通知结束");
         return result;
     }
 }

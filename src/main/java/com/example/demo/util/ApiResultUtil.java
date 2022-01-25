@@ -1,7 +1,6 @@
 package com.example.demo.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,25 +12,30 @@ import java.util.Properties;
  * @author zhangsheng
  * @version 1.0
  */
+@Slf4j
 public final class ApiResultUtil {
     private final Properties p = new Properties();
-    private static ApiResultUtil instance;
-    private static final Logger logger = LoggerFactory.getLogger(ApiResultUtil.class);
+
+    private static volatile ApiResultUtil singleInstance;
 
     private ApiResultUtil() {
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("api-error.properties");
         try {
             p.load(inputStream);
-        } catch (IOException e1) {
-            logger.error("读取文件出错" + e1.getMessage());
+        } catch (IOException e) {
+            log.error("读取文件出错", e);
         }
     }
 
     public static ApiResultUtil getInstance() {
-        if (instance == null) {
-            instance = new ApiResultUtil();
+        if (singleInstance == null) {
+            synchronized(ApiResultUtil.class){
+                if(singleInstance == null){
+                    singleInstance = new ApiResultUtil();
+                }
+            }
         }
-        return instance;
+        return singleInstance;
     }
 
     public String getErrorInfo(String key) {

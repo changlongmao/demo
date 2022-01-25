@@ -47,8 +47,8 @@ public class TestTransactionalController {
     @GetMapping("/tranCon")
     @Transactional(rollbackFor = Exception.class)
     public void tranCon() throws Exception {
-//        User byId = userService.selectById("6");
-        User byId = userService.getByUsername("6");
+        User byId = userService.selectById("6");
+//        User byId = userService.getByUsername("6");
 
 
         User user = new User("6");

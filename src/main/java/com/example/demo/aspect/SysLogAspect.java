@@ -1,9 +1,11 @@
-package com.example.demo.util;
+package com.example.demo.aspect;
 
 import com.example.demo.entity.SysLog;
 import com.example.demo.entity.SysLogEntity;
 import com.example.demo.entity.SysUserEntity;
 import com.example.demo.service.SysLogService;
+import com.example.demo.util.HttpContextUtils;
+import com.example.demo.util.IpUtils;
 import com.google.gson.Gson;
 import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.ProceedingJoinPoint;

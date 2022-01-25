@@ -1,26 +1,30 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.Lenovo;
-import com.example.demo.entity.RestResponse;
-import com.example.demo.entity.SaleComputer;
-import com.example.demo.entity.User;
+import com.example.demo.annotation.RepeatLock;
+import com.example.demo.entity.*;
 import com.example.demo.util.AESUtil;
 import com.example.demo.util.DateUtil;
 import com.example.demo.util.HttpClientUtil;
 import com.example.demo.util.JedisUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.NamedThreadLocal;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServlet;
+import javax.validation.Valid;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.net.Socket;
+import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -43,6 +47,33 @@ public class TestRedisController {
 
     @Resource
     private RedisTemplate redisTemplate;
+
+    @Resource
+    private RedissonClient redissonClient;
+
+    @RepeatLock
+    @PostMapping("testRedissonClient")
+    public RestResponse testRedissonClient(@Valid @RequestBody SysLogEntity sysLogEntity,
+                                   @RequestParam("userId") Long userId,
+                                   @RequestHeader("appCode") String appCode) throws Exception {
+        System.out.println(sysLogEntity.getRedisKeyName());
+        SysLogEntity o = new SysLogEntity();
+        o.setId("aaa");
+        o.setUserName("bbb");
+        Thread.sleep(10000);
+        return RestResponse.success(sysLogEntity.toString());
+//        RLock aa = redissonClient.getLock("aa");
+//        boolean tryLock = aa.tryLock(1L, 15L, TimeUnit.SECONDS);
+//        if (tryLock) {
+//            log.info("获取锁成功");
+//        } else {
+//            log.info("获取锁失败");
+//            return;
+//        }
+//
+//        Thread.sleep(5000);
+
+    }
 
     @GetMapping("testJedisObject")
     public RestResponse testJedisObject() throws Exception {
@@ -108,7 +139,7 @@ public class TestRedisController {
     }
 
     public static void main(String[] args) {
-        System.gc();
+//        System.gc();
 
 //        User user = new User(){{
 //            testSynchronized();
@@ -125,24 +156,35 @@ public class TestRedisController {
 //        System.out.println("解密："+AESUtil.decrypt("FYLAENVYZKDYANVO", "AF785C6124F3BE498367881B952E5ABE"));
 
 
-        String pw16 = "Lwsjj!365";
+//        String pw16 = "Lwsjj!365";
+//
+//        String s = "/aaa/bbb/ccc/";
+//        String[] strings = s.split("/");
+//        System.out.println(strings.length);
+//        System.out.println(Arrays.toString(strings));
 
-        String s = "/aaa/bbb/ccc/";
-        String[] strings = s.split("/");
-        System.out.println(strings.length);
-        System.out.println(Arrays.toString(strings));
+//        new Thread(() -> {
+//            while (true) {
+//                System.out.println("i");
+//                try {
+//                    Thread.sleep(1000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
+//        System.out.println("结束");
+//        Socket socket = new Socket();
+//        HttpServlet httpServlet = new HttpServlet() {
+//        };
 
-        new Thread(() -> {
-            while (true) {
-                System.out.println("i");
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-        System.out.println("结束");
+        Object[] arr = new Object[]{1,2};
+        int[] arr1 = new int[]{1,2,2};
+        int[] arr2 = new int[]{1,2,3};
+
+        System.out.println(Arrays.deepHashCode(arr));
+        System.out.println(Arrays.hashCode(arr));
+        System.out.println(Arrays.hashCode(arr1));
     }
 
 }

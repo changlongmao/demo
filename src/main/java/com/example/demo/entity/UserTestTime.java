@@ -57,4 +57,7 @@ public class UserTestTime implements java.io.Serializable {
     /** isDelete */
     private Integer isDelete;
 
+    /** isDelete */
+    private SupplierOrderScopeTypeEnum status;
+
 }
