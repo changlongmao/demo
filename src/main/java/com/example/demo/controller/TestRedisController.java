@@ -56,20 +56,28 @@ public class TestRedisController {
     public RestResponse testRedissonClient(@Valid @RequestBody SysLogEntity sysLogEntity,
                                    @RequestParam("userId") Long userId,
                                    @RequestHeader("appCode") String appCode) throws Exception {
-        System.out.println(sysLogEntity.getRedisKeyName());
-        SysLogEntity o = new SysLogEntity();
-        o.setId("aaa");
-        o.setUserName("bbb");
+//        System.out.println(sysLogEntity.getRedisKeyName());
+//        SysLogEntity o = new SysLogEntity();
+//        o.setId("aaa");
+//        o.setUserName("bbb");
+        int i = 1 / 0;
         Thread.sleep(10000);
         return RestResponse.success(sysLogEntity.toString());
-//        RLock aa = redissonClient.getLock("aa");
-//        boolean tryLock = aa.tryLock(1L, 15L, TimeUnit.SECONDS);
-//        if (tryLock) {
-//            log.info("获取锁成功");
-//        } else {
+//        RLock rLock = redissonClient.getLock("user_auth");
+//        boolean tryLock = rLock.tryLock(0L, 30L, TimeUnit.SECONDS);
+//        if (!tryLock) {
 //            log.info("获取锁失败");
-//            return;
+//            throw new Exception();
 //        }
+//        try {
+//            log.info("获取锁成功");
+//            // 执行业务逻辑
+//            // ...
+//        } finally {
+//            // 保证锁的释放
+//            rLock.unlock();
+//        }
+
 //
 //        Thread.sleep(5000);
 
