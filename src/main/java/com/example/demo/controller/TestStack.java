@@ -7,16 +7,26 @@ import com.example.demo.util.DateUtil;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author ChangLF 2022-01-28
  */
-public class TestSortMain {
+public class TestStack {
 
     public static void main(String[] args) {
         User user = new User();
-        user.setCreateTime(new Date());
 
-        System.out.println(DateUtil.getDateStr(new Date(1644373800000L), DateUtil.DateFormat.LONG_DATE_PATTERN_LINE));
+        user.setRearName("bbb");
+
+        User getUser = getUser(user);
+        System.out.println("getUser:" + getUser);
+        System.out.println("user:" + user);
+    }
+
+    public static User getUser(User user) {
+        user.setId("aaa");
+        user = new User("ccc");
+        return user;
     }
 }

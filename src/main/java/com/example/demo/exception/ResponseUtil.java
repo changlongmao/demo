@@ -1,6 +1,8 @@
 package com.example.demo.exception;
 
 
+import com.example.demo.common.BaseResponse;
+
 /**
  * Created by bzl on 2016-12-14 下午 1:16
  */

@@ -1,9 +1,11 @@
 package com.example.demo.util;
 
+import com.google.common.collect.Lists;
+import org.springframework.util.StringUtils;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,6 +21,7 @@ public class DateUtil {
 
     /**
      * 辅助将字符串的日期转换为Date格式
+     *
      * @author Chang
      * @date 2021/8/26 11:15
      **/
@@ -43,9 +46,12 @@ public class DateUtil {
 
     }
 
-    public static final String timeZone = "GMT+8";
-
     public static final List<DateFormatPattern> patternList = new ArrayList<>();
+
+    /**
+     * 维护员工工资上传excel可以匹配的日期格式
+     */
+    public static final List<String> SALARY_PATTERNS_FILTER = Lists.newArrayList("yyyy-MM-dd", "yyyy/MM/dd", "yyyy年MM月dd日", "dd-MM-yyyy", "yyyyMMdd");
 
     static {
         patternList.add(new DateFormatPattern("yyyy-MM-dd HH:mm:ss", "\\d{4}-\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{1,2}:\\d{1,2}"));
@@ -99,8 +105,9 @@ public class DateUtil {
      * @return 解析所得时间，如果不满足指定的格式类型，则返回null
      */
     public static Date parseDate(String sDate) {
-        if (sDate == null)
+        if (StringUtils.isEmpty(sDate)) {
             return null;
+        }
         for (DateFormatPattern pattern : patternList) {
             if (pattern.matchPattern(sDate)) {
                 SimpleDateFormat parser = new SimpleDateFormat(pattern.getPattern());
@@ -115,9 +122,31 @@ public class DateUtil {
     }
 
     /**
+     * 员工工资上传excel解析日期
+     *
+     * @param sDate 日期字符串
+     */
+    public static Date parseDateSalary(String sDate) {
+        if (StringUtils.isEmpty(sDate)) {
+            return null;
+        }
+        for (DateFormatPattern pattern : patternList) {
+            if (pattern.matchPattern(sDate) && SALARY_PATTERNS_FILTER.contains(pattern.getPattern())) {
+                SimpleDateFormat parser = new SimpleDateFormat(pattern.getPattern());
+                try {
+                    return parser.parse(sDate);
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        throw new RuntimeException("Cannot parse String to Date: " + sDate);
+    }
+
+    /**
      * 取得指定格式表示的日期/时间
      *
-     * @param date    待格式化的日期/时间
+     * @param date       待格式化的日期/时间
      * @param dateFormat 目标格式
      * @return 按目标格式格式化后的日期/时间，如果时间或者目标格式为null则返回null
      */
@@ -125,7 +154,7 @@ public class DateUtil {
         if (date == null || dateFormat == null) {
             return null;
         }
-        return dateFormat.df.format(date);
+        return new SimpleDateFormat(dateFormat.pattern).format(date);
     }
 
     /**
@@ -144,7 +173,7 @@ public class DateUtil {
      * @param date 待格式化的日期
      * @return yyyyMMdd格式化的日期
      */
-    public static String getDateYMD(Date date) {
+    public static String getDateYmd(Date date) {
         return getDateStr(date, DateFormat.SHORT_DATE_PATTERN_NONE);
     }
 
@@ -155,8 +184,9 @@ public class DateUtil {
      * @return 指定的日期的开始时间点
      */
     public static Date getDayBegin(Date d) {
-        if (d == null)
+        if (d == null) {
             return null;
+        }
         Calendar c = Calendar.getInstance();
         c.setTime(d);
         c.set(Calendar.HOUR_OF_DAY, 0);
@@ -173,8 +203,9 @@ public class DateUtil {
      * @return 指定的日期的结束时间点
      */
     public static Date getDayEnd(Date d) {
-        if (d == null)
+        if (d == null) {
             return null;
+        }
         Calendar c = Calendar.getInstance();
         c.setTime(d);
         c.set(Calendar.HOUR_OF_DAY, 23);
@@ -193,28 +224,17 @@ public class DateUtil {
      * @return
      */
     public static boolean isBetween(Date beginTime, Date endTime, Date theTime) {
-        if (theTime == null)
+        if (theTime == null) {
             return false;
+        }
         boolean flag = true;
-        if (beginTime != null)
+        if (beginTime != null) {
             flag = beginTime.getTime() <= theTime.getTime();
-        if (flag && endTime != null)
+        }
+        if (flag && endTime != null) {
             flag = endTime.getTime() >= theTime.getTime();
+        }
         return flag;
-    }
-
-    /**
-     * 得到n天前或者n天后的时间
-     *
-     * @param date--传入时间
-     * @param days--正的是n天后的,负的是n天之前的
-     * @return 处理后的时间
-     */
-    public static Date getDayAfterOrBefore(Date date, int days) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.add(Calendar.DATE, days);//当前时间减去或加上n天
-        return calendar.getTime();
     }
 
     /**
@@ -232,27 +252,6 @@ public class DateUtil {
     }
 
     /**
-     * @Param: date
-     * @Author Chang
-     * @Description 获取当前季度
-     * @Date 2020/11/19 8:38
-     * @Return int
-     **/
-    public static int getQuarter(Date date) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        int month = c.get(Calendar.MONTH) + 1;
-        if (month <= 3)
-            return 1;
-        else if (month <= 6)
-            return 2;
-        else if (month <= 9)
-            return 3;
-        else
-            return 4;
-    }
-
-    /**
      * 得到n小时前或者n小时后的时间
      *
      * @param date--传入时间
@@ -263,6 +262,20 @@ public class DateUtil {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) + hours);
+        return calendar.getTime();
+    }
+
+    /**
+     * 得到n天前或者n天后的时间
+     *
+     * @param date--传入时间
+     * @param days--正的是n天后的,负的是n天之前的
+     * @return 处理后的时间
+     */
+    public static Date getDayAfterOrBefore(Date date, int days) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DATE, days);//当前时间减去或加上n天
         return calendar.getTime();
     }
 
@@ -296,10 +309,11 @@ public class DateUtil {
 
     /**
      * 获取传入月份的月初时间
+     *
      * @param date
+     * @return java.util.Date
      * @author Chang
      * @date 2021/8/26 11:22
-     * @return java.util.Date
      **/
     public static Date getMonthStart(Date date) {
         Calendar calendar = Calendar.getInstance();
@@ -311,10 +325,11 @@ public class DateUtil {
 
     /**
      * 获取传入月份的月末时间
+     *
      * @param date
+     * @return java.util.Date
      * @author Chang
      * @date 2021/8/26 11:23
-     * @return java.util.Date
      **/
     public static Date getMonthEnd(Date date) {
         Calendar calendar = Calendar.getInstance();
@@ -325,46 +340,114 @@ public class DateUtil {
         return calendar.getTime();
     }
 
+
     /**
-     * 获取当前日期是星期几，周日为0
+     * 获取传入年份最初时间
      *
      * @param date
-     * @return 日期是星期几
-     */
-    public static int getWeekOfDate(Date date) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
-        if (w < 0)
-            w = 0;
-        return w;
+     * @return java.util.Date
+     * @author Chang
+     * @date 2021/8/26 11:22
+     **/
+    public static Date getYearStart(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.clear(Calendar.MONTH);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        //将小时至0
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        //将分钟至0
+        calendar.set(Calendar.MINUTE, 0);
+        //将秒至0
+        calendar.set(Calendar.SECOND, 0);
+        //将毫秒至0
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
     }
 
     /**
-     * Date 转 LocalDate
+     * 获取传入年份最后时间
      *
      * @param date
-     * @return LocalDate
+     * @return java.util.Date
+     * @author suns
+     * @date 2021/8/26 11:23
+     **/
+    public static Date getYearEnd(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.clear(Calendar.MONTH);
+        calendar.set(Calendar.MONTH, 11);
+        calendar.set(Calendar.DAY_OF_MONTH, 31);
+        //将小时至0
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        //将分钟至0
+        calendar.set(Calendar.MINUTE, 59);
+        //将秒至0
+        calendar.set(Calendar.SECOND, 59);
+        //将毫秒至0
+        calendar.set(Calendar.MILLISECOND, 999);
+        return calendar.getTime();
+    }
+
+    /**
+     * localDate Date 转换
      */
-    public static LocalDate parseLocalDate(Date date) {
-        ZoneId zoneId = ZoneId.systemDefault();
-        return date.toInstant().atZone(zoneId).toLocalDate();
+    public static Date transformToDate(LocalDate localDate) {
+        if (localDate == null) {
+            return null;
+        }
+        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    }
+
+    /**
+     * localDate Date 转换
+     */
+    public static LocalDate transformToLocalDate(Date date) {
+        if (date == null) {
+            return null;
+        }
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
     /**
      * 根据生日获取年龄
      *
-     * @param birthdayStr 生日
-     * @return 年龄
+     * @param birthDay
+     * @return
      */
-    public static int getAgeByBirthday(String birthdayStr) {
-        LocalDate endDate = LocalDate.now();
-        Period period = Period.between(parseLocalDate(parseDate(birthdayStr)), endDate);
-        return period.getYears();
+    public static Integer getAge(Date birthDay) {
+        if (birthDay == null) {
+            return null;
+        }
+        Calendar cal = Calendar.getInstance();
+        if (cal.before(birthDay)) { //出生日期晚于当前时间，无法计算
+            throw new IllegalArgumentException(
+                    "The birthDay is before Now.It's unbelievable!");
+        }
+        int yearNow = cal.get(Calendar.YEAR);  //当前年份
+        int monthNow = cal.get(Calendar.MONTH);  //当前月份
+        int dayOfMonthNow = cal.get(Calendar.DAY_OF_MONTH); //当前日期
+        cal.setTime(birthDay);
+        int yearBirth = cal.get(Calendar.YEAR);
+        int monthBirth = cal.get(Calendar.MONTH);
+        int dayOfMonthBirth = cal.get(Calendar.DAY_OF_MONTH);
+        int age = yearNow - yearBirth;   //计算整岁数
+        if (monthNow <= monthBirth) {
+            if (monthNow == monthBirth) {
+                if (dayOfMonthNow < dayOfMonthBirth) {
+                    age--;
+                }//当前日期在生日之前，年龄减一
+            } else {
+                age--;//当前月份在生日之前，年龄减1
+            }
+        }
+        return age;
     }
 
     /**
      * 辅助将Date转换为需要的时间字符串格式
+     *
      * @author Chang
      * @date 2021/8/26 11:15
      **/
@@ -418,10 +501,10 @@ public class DateUtil {
         LONG_DATE_PATTERN_WITH_MILSEC_NONE("yyyyMMdd HH:mm:ss.SSS"),
         LONG_DATE_PATTERN_WITH_MILSEC("(yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 
-        private transient SimpleDateFormat df;
+        private final String pattern;
 
         DateFormat(String pattern) {
-            df = new SimpleDateFormat(pattern);
+            this.pattern = pattern;
         }
 
     }

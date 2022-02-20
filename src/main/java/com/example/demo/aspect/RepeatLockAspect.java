@@ -2,7 +2,7 @@ package com.example.demo.aspect;
 
 import com.example.demo.annotation.RepeatLock;
 import com.example.demo.entity.RedisKeyNameLock;
-import com.example.demo.util.ApiException;
+import com.example.demo.exception.ApiException;
 import com.example.demo.util.IpUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;

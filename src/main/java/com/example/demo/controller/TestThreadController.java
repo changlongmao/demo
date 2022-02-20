@@ -1,35 +1,20 @@
 package com.example.demo.controller;
 
-import cn.hutool.core.lang.Singleton;
-import cn.hutool.core.math.MathUtil;
+import com.example.demo.common.BaseResDTO;
 import com.example.demo.entity.*;
 import com.example.demo.util.*;
-import com.sun.org.apache.bcel.internal.generic.ArithmeticInstruction;
-import jodd.exception.UncheckedException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.el.parser.ArithmeticNode;
 import org.assertj.core.util.Lists;
-import org.redisson.Redisson;
 import org.redisson.api.RAtomicLong;
-import org.redisson.api.RFuture;
-import org.redisson.api.RSemaphore;
 import org.redisson.api.RedissonClient;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.management.ServiceNotFoundException;
-import javax.naming.ServiceUnavailableException;
-import java.math.BigDecimal;
-import java.net.UnknownServiceException;
-import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -70,7 +55,7 @@ public class TestThreadController {
     @GetMapping("/testLock1")
     public RestResponse testLock1() throws Exception {
 
-        String redisKey = String.format("turing:taskNo:%s", DateUtil.getDateYMD(new Date()));
+        String redisKey = String.format("turing:taskNo:%s", DateUtil.getDateYmd(new Date()));
         RAtomicLong atomicLong = redissonClient.getAtomicLong(redisKey);
         long taskNo = atomicLong.incrementAndGet();
         atomicLong.expire(1, TimeUnit.DAYS);
@@ -314,7 +299,7 @@ public class TestThreadController {
         DateUtil.getDateStr(new Date(), DateUtil.DateFormat.SHORT_DATE_PATTERN_LINE);
         System.out.println(DateUtil.getMonthStart(new Date()));
         System.out.println(DateUtil.getMonthEnd(new Date()));
-        System.out.println(DateUtil.getDateYMD(new Date()));
+        System.out.println(DateUtil.getDateYmd(new Date()));
         System.out.println(DateUtil.getDateStr(new Date(), DateUtil.DateFormat.LONG_DATE_PATTERN_LINE));
         System.out.println(DateUtil.getYearAfterOrBefore(new Date(), 10));
         System.out.println(DateUtil.parseDate("2021-8-27 10"));

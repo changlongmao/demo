@@ -35,7 +35,7 @@ public class SendSms {
         request.putQueryParameter("TemplateCode", "SMS_167528384");
         Map<String, String> map = new HashMap<>();
         map.put("code","1234");
-        request.putQueryParameter("TemplateParam", JsonUtil.getBeanJson(map));
+        request.putQueryParameter("TemplateParam", JsonUtils.toJson(map));
         try {
             CommonResponse response = client.getCommonResponse(request);
             System.out.println(response.getData());

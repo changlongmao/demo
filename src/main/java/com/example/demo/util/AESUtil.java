@@ -10,11 +10,9 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 
 /**
- * @ClassName AESUtil
- * @Description: AES加解密工具类
- * @Author zhujb
- * @Date 2020/12/18
- * @Version V1.0
+ * AES加解密工具类
+ * @author changlf
+ * @date 2020/12/18
  **/
 public class AESUtil {
 

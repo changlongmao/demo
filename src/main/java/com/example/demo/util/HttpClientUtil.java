@@ -35,6 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -109,15 +110,11 @@ public class HttpClientUtil {
                     .setKeepAliveStrategy(keepAliveStrategy)
                     .build();
 
-            if (poolConnManager != null && poolConnManager.getTotalStats() != null) {
+            if (poolConnManager.getTotalStats() != null) {
                 System.out.println("连接池的状态：" + poolConnManager.getTotalStats().toString());
             }
             System.out.println("初始化HttpClient结束");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
-        } catch (KeyManagementException e) {
+        } catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {
             e.printStackTrace();
         }
     }
@@ -207,7 +204,7 @@ public class HttpClientUtil {
             if (params != null && params.size() > 0) {
                 params.forEach((k, v) -> builder.addTextBody(k, String.valueOf(v)));
             }
-            builder.setCharset(Charset.forName("UTF-8"));
+            builder.setCharset(StandardCharsets.UTF_8);
             builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
             httpPost.setEntity(builder.build());
             try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
@@ -215,13 +212,11 @@ public class HttpClientUtil {
                 HttpEntity entity = response.getEntity();
                 if (entity != null) {
                     // 将响应内容转换为字符串
-                    result = EntityUtils.toString(entity, Charset.forName("UTF-8"));
+                    result = EntityUtils.toString(entity, StandardCharsets.UTF_8);
                 }
                 // 关闭连接
                 EntityUtils.consume(entity);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }

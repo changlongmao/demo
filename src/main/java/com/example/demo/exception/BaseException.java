@@ -1,4 +1,4 @@
-package com.example.demo.util;
+package com.example.demo.exception;
 
 /**
  * 异常类基类

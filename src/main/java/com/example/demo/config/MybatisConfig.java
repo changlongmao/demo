@@ -1,9 +1,8 @@
 package com.example.demo.config;
 
-import com.example.demo.util.AuthDataIntercepter;
+import com.example.demo.aspect.AuthDataIntercepter;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;

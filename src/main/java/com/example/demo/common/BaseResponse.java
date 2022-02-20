@@ -1,4 +1,4 @@
-package com.example.demo.exception;
+package com.example.demo.common;
 
 import com.alibaba.fastjson.annotation.JSONField;
 

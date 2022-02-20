@@ -1,10 +1,14 @@
-package com.example.demo.entity;
+package com.example.demo.common;
 
+import com.example.demo.entity.ErrorCode;
+import com.example.demo.exception.GlobalExceptionHandler;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.apache.poi.ss.formula.functions.T;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 消息体
@@ -20,6 +24,13 @@ public class BaseResDTO<E> implements Serializable {
     protected String errorCode = ErrorCode.S000000.getCode();// 错误编码
 
     protected String errorMsg = ErrorCode.S000000.getDesc();// 错误信息
+
+    /**
+     * 参数校验不通过时，用于开发者自查的非法参数信息
+     */
+    @Getter
+    @Setter
+    protected List<GlobalExceptionHandler.InvalidDto> invalids;
 
     protected long pageCount = 0;// 分页数据的总数
 
@@ -76,28 +87,6 @@ public class BaseResDTO<E> implements Serializable {
 
     public String getErrorMsg() {
         return errorMsg;
-    }
-
-    public static BaseResDTO<Object> error(ErrorCode errorCode) {
-        BaseResDTO<Object> br = new BaseResDTO<>();
-        br.setError(errorCode.getCode(), errorCode.getDesc());
-        return br;
-    }
-
-    public static BaseResDTO<Object> error(String errorCode, String errorMsg) {
-        BaseResDTO<Object> br = new BaseResDTO<>();
-        br.setError(errorCode, errorMsg);
-        return br;
-    }
-
-    public static BaseResDTO<Object> success() {
-        return new BaseResDTO<>();
-    }
-
-    public static <V> BaseResDTO<V> success(V data) {
-        BaseResDTO<V> br = new BaseResDTO<>();
-        br.setData(data);
-        return br;
     }
 
     @Override
