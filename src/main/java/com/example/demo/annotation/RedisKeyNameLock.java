@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.example.demo.annotation;
 
 import com.example.demo.aspect.RepeatLockAspect;
 

@@ -1,8 +1,7 @@
 package com.example.demo.controller;
 
 import com.alibaba.excel.EasyExcel;
-import com.example.demo.entity.RestResponse;
-import com.example.demo.entity.User;
+import com.example.demo.common.RestResponse;
 import com.example.demo.entity.UserTestTime;
 import com.example.demo.util.EasyExcelListener;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +28,7 @@ public class TestEasyExcelController {
      * @param file
      * @author Chang
      * @date 2021/12/11 20:53
-     * @return com.example.demo.entity.RestResponse
+     * @return com.example.demo.common.RestResponse
      **/
     @PostMapping("/importExcel")
     public RestResponse importExcel(@RequestParam("file") MultipartFile file) throws IOException {

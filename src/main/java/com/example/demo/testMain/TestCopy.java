@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.example.demo.testMain;
 
 import com.example.demo.entity.TestCopyOne;
 import com.example.demo.entity.User;

@@ -1,16 +1,11 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.RestResponse;
+import com.example.demo.common.RestResponse;
 import com.example.demo.entity.TaskSettlementPriceReqDto;
-import com.example.demo.entity.User;
-import com.example.demo.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.redisson.api.RAtomicLong;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Date;
-import java.util.UUID;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -25,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Slf4j
 @RestController
 @RequestMapping("/testVolatile")
-public class TestVolatile {
+public class TestVolatileController {
 
     public AtomicInteger inc = new AtomicInteger();
     public void increase() {
@@ -43,7 +38,7 @@ public class TestVolatile {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        final TestVolatile test = new TestVolatile();
+        final TestVolatileController test = new TestVolatileController();
         ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 10, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
         for (int i = 0; i < 10; i++) {
             executor.execute(() -> {

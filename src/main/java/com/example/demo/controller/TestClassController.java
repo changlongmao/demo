@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.RestResponse;
+import com.example.demo.common.RestResponse;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
 import lombok.extern.slf4j.Slf4j;

@@ -33,7 +33,7 @@ import java.util.Map;
 @Component
 public class TestAspect {
 
-    @Pointcut("@annotation(com.example.demo.entity.SysLog)")
+    @Pointcut("@annotation(com.example.demo.annotation.SysLog)")
     public void pointCut() {
     }
 

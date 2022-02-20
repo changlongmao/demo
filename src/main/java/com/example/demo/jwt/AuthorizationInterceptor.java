@@ -2,8 +2,8 @@ package com.example.demo.jwt;
 
 
 import com.alibaba.fastjson.JSON;
-import com.example.demo.entity.RestResponse;
-import com.example.demo.entity.UserTypeEnum;
+import com.example.demo.common.RestResponse;
+import com.example.demo.enums.UserTypeEnum;
 import com.example.demo.exception.BusinessException;
 import com.example.demo.util.StringUtils;
 import io.jsonwebtoken.JwtException;

@@ -1,8 +1,8 @@
 package com.example.demo.entity;
 
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.example.demo.enums.SupplierOrderScopeTypeEnum;
 import lombok.Data;
-import lombok.Value;
 
 import java.sql.Timestamp;
 import java.util.Date;

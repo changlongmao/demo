@@ -1,4 +1,6 @@
-package com.example.demo.entity;
+package com.example.demo.enums;
+
+import com.example.demo.entity.BaseEnum;
 
 import java.util.HashMap;
 

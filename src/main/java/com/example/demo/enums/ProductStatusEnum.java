@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.example.demo.enums;
 
 /**
  * 项目状态枚举

@@ -2,12 +2,11 @@ package com.example.demo.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.demo.entity.CrUserInfoEntity;
-import com.example.demo.entity.RestResponse;
-import com.example.demo.entity.SysLog;
+import com.example.demo.common.RestResponse;
+import com.example.demo.annotation.SysLog;
 import com.example.demo.service.CrUserInfoService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

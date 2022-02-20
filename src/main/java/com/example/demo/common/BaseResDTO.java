@@ -1,6 +1,6 @@
 package com.example.demo.common;
 
-import com.example.demo.entity.ErrorCode;
+import com.example.demo.enums.ErrorCode;
 import com.example.demo.exception.GlobalExceptionHandler;
 import lombok.Getter;
 import lombok.Setter;

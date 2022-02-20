@@ -1,7 +1,6 @@
 package com.example.demo.annotation;
 
 import com.example.demo.aspect.RepeatLockAspect;
-import com.example.demo.entity.RedisKeyNameLock;
 
 import java.lang.annotation.*;
 

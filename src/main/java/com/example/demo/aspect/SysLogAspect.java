@@ -1,6 +1,6 @@
 package com.example.demo.aspect;
 
-import com.example.demo.entity.SysLog;
+import com.example.demo.annotation.SysLog;
 import com.example.demo.entity.SysLogEntity;
 import com.example.demo.entity.SysUserEntity;
 import com.example.demo.service.SysLogService;
@@ -14,7 +14,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
@@ -27,7 +26,7 @@ public class SysLogAspect {
     @Autowired
     private SysLogService sysLogService;
 
-    @Pointcut("@annotation(com.example.demo.entity.SysLog)")
+    @Pointcut("@annotation(com.example.demo.annotation.SysLog)")
     public void logPointCut() {
 
     }
