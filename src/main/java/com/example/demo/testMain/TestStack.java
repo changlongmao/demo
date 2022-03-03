@@ -4,10 +4,7 @@ import com.baomidou.mybatisplus.extension.api.R;
 import com.example.demo.entity.User;
 import com.example.demo.util.DateUtil;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author ChangLF 2022-01-28
@@ -15,18 +12,20 @@ import java.util.List;
 public class TestStack {
 
     public static void main(String[] args) {
-        User user = new User();
+        Stack<Object> objects = new Stack<>();
+        objects.push(1);
+        objects.push(2);
+        System.out.println(objects.pop());
+        System.out.println(objects.pop());
 
-        user.setRearName("bbb");
+        LinkedList<Object> linkedList = new LinkedList<>();
+        linkedList.push(1);
+        linkedList.push(2);
+        System.out.println(linkedList.pop());
 
-        User getUser = getUser(user);
-        System.out.println("getUser:" + getUser);
-        System.out.println("user:" + user);
-    }
-
-    public static User getUser(User user) {
-        user.setId("aaa");
-        user = new User("ccc");
-        return user;
+        ArrayDeque<Object> arrayDeque = new ArrayDeque<>();
+        arrayDeque.push("aaa");
+        arrayDeque.push("bbb");
+        System.out.println(arrayDeque.pop());
     }
 }

@@ -3,12 +3,15 @@ package com.example.demo.aspect;
 import com.example.demo.annotation.RepeatLock;
 import com.example.demo.annotation.RedisKeyNameLock;
 import com.example.demo.exception.ApiException;
+import com.example.demo.util.HttpContextUtils;
 import com.example.demo.util.IpUtils;
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.Signature;
+import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.core.annotation.Order;
@@ -20,6 +23,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -28,7 +33,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Aspect
-@Order(0)
+@Order(3)
 @Component
 public class RepeatLockAspect {
 
@@ -112,4 +117,24 @@ public class RepeatLockAspect {
         return proceed;
     }
 
+
+    @Before("pointCut()")
+    public void doBefore(JoinPoint joinPoint) {
+        log.info("TestAspect前置通知");
+    }
+
+    @AfterReturning(value = "pointCut()",returning = "keys")
+    public void doAfterReturn(JoinPoint joinPoint,Object keys) {
+        log.info("TestAspect后置返回通知" + keys);
+    }
+
+    @After("pointCut()")
+    public void doAfter(JoinPoint joinPoint) {
+        log.info("TestAspect后置通知");
+    }
+
+    @AfterThrowing(value = "pointCut()", throwing = "throwable")
+    public void doAfterThrowing(JoinPoint joinPoint, Throwable throwable) {
+        log.error("后置异常通知：", throwable);
+    }
 }

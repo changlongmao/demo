@@ -4,6 +4,8 @@ import com.example.demo.entity.TestObject;
 import com.example.demo.entity.User;
 import org.openjdk.jol.info.ClassLayout;
 
+import java.util.Arrays;
+
 /**
  * https://www.cnblogs.com/rickiyang/p/14206724.html
  * 测试对象占用内存大小
@@ -42,7 +44,13 @@ import org.openjdk.jol.info.ClassLayout;
 public class TestObjectSize {
 
     public static void main(String[] args) {
+        System.out.println(System.getProperties());
+        System.out.println(Arrays.toString(args));
         ClassLayout classLayout = ClassLayout.parseInstance(new TestObject());
         System.out.println(classLayout.toPrintable());
+//        ClassLayout classLayout = ClassLayout.parseInstance(new User());
+//        System.out.println(classLayout.toPrintable());
+//        ClassLayout classLayout = ClassLayout.parseInstance(new long[3]);
+//        System.out.println(classLayout.toPrintable());
     }
 }

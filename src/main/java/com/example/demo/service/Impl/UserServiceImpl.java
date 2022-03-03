@@ -1,6 +1,7 @@
 package com.example.demo.service.Impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.demo.annotation.SysLog;
 import com.example.demo.controller.TestThreadController;
 import com.example.demo.entity.User;
 import com.example.demo.mapper.UserMapper;
@@ -64,6 +65,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    @SysLog
+    @Transactional(rollbackFor = Exception.class)
     public User selectById(String id) {
         return baseMapper.getById(id);
     }

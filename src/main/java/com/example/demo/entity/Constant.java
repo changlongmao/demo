@@ -87,7 +87,7 @@ public class Constant {
 
     public static final int SYS_SEND = 0;
 
-    public static final int USER_SEND = 1;
+    public static final int one = 1;
 
 
     public enum MenuType {

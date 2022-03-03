@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.annotation.RepeatLock;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
 import com.example.demo.util.TimeUtil;
@@ -8,10 +9,7 @@ import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
 import java.math.BigDecimal;
@@ -37,17 +35,17 @@ public class TestTransactionalController {
     public static final String templates = "templates";
 
     @GetMapping("/tranCon")
-    @Transactional(rollbackFor = Exception.class)
-    public void tranCon() throws Exception {
+    @RepeatLock
+    public void tranCon(@RequestParam String param, @RequestHeader String header) throws Exception {
         User byId = userService.selectById("6");
 //        User byId = userService.getByUsername("6");
 
 
-        User user = new User("6");
-        user.setUsername("7");
-        userService.updateUserById(user);
+//        User user = new User("6");
+//        user.setUsername("7");
+//        userService.updateUserById(user);
 
-        Thread.sleep(20000);
+//        Thread.sleep(20000);
 
 //
 //        User user1 = new User("0000745742864e749b616bd0f7ac9b8a");

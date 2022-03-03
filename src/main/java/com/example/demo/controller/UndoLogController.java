@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.demo.common.RestResponse;
 import com.example.demo.entity.Result;
 import com.example.demo.entity.UndoLog;
 import com.example.demo.entity.UndoLogCondition;
@@ -69,12 +70,12 @@ public class UndoLogController {
     @ApiOperation(value = "新增信息")
     @ApiImplicitParam(name = "undoLog", value = "", required = true, dataType = "UndoLog", paramType = "body")
     @PostMapping("/add")
-    public Result<?> add(@RequestBody UndoLog undoLog) {
-        boolean bool = undoLogService.addUndoLog(undoLog);
-        if (bool) {
-            return Result.ok(undoLog);
-        }
-        return Result.failed();
+    public RestResponse add(@RequestBody UndoLog undoLog) {
+//        boolean bool = undoLogService.addUndoLog(undoLog);
+//        if (bool) {
+//            return Result.ok(undoLog);
+//        }
+        return RestResponse.success().put("aa", "bb");
     }
 
     @ApiOperation(value = "新增信息")

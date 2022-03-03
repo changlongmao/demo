@@ -1,0 +1,99 @@
+1、 JVM参数简介
+
+-XX 参数被称为不稳定参数，之所以这么叫是因为此类参数的设置很容易引起JVM 性能上的差异，使JVM 存在极大的不稳定性。如果此类参数设置合理将大大提高JVM 的性能及稳定性。
+不稳定参数语法规则：
+1.布尔类型参数值
+        -XX:+<option> '+'表示启用该选项
+        -XX:-<option> '-'表示关闭该选项
+2.数字类型参数值：
+       -XX:<option>=<number> 给选项设置一个数字类型值，可跟随单位，例如：'m'或'M'表示兆字节;'k'或'K'千字节;'g'或'G'千兆字节。32K与32768是相同大小的。
+3.字符串类型参数值：
+        -XX:<option>=<string> 给选项设置一个字符串类型值，通常用于指定一个文件、路径或一系列命令列表。
+       例如：-XX:HeapDumpPath=./dump.core
+范例：
+java -Xms4g -Xmx4g -Xss256k -XX:NewSize=1g -XX:MaxNewSize=2g -XX:MetaspaceSize=256m -XX:NewRatio=2 -XX:SurvivorRatio=8
+-XX:+DisableExplicitGC -XX:MaxTenuringThreshold=15 -XX:+UseParNewGC -XX:+UseBiasedLocking
+-XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=70 -XX:+CMSParallelRemarkEnabled -XX:ConcGCThreads=8
+-XX:ParallelGCThreads=8 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=logs -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -Xloggc:logs/Gc.log -jar .\demo.jar
+
+java -jar .\demo.jar启动jar包
+
+-Xms4g	初始堆大小4g
+-Xmx4g	最大堆大小4g
+-XX:NewSize=1g	设置年轻代大小=1g
+-XX:MaxNewSize=2g	年轻代最大值2g
+-Xss256k	每个线程的堆栈大小256k
+-XX:NewRatio=2	年轻代(包括Eden和两个Survivor区)与年老代的比值(除去持久代)， -XX:NewRatio=2表示年轻代与年老代所占比值为1:2,年轻代占整个堆栈的1/3
+-XX:SurvivorRatio=8	Eden区与Survivor区的大小比值，设置为8,则两个Survivor区与一个Eden区的比值为2:8,一个Survivor区占整个年轻代的1/10
+-XX:MetaspaceSize=256m     元数据空间的初始大小256m，java8后才有，将永久代替换为元数据区
+-XX:+DisableExplicitGC	关闭System.gc()
+-XX:MaxTenuringThreshold=15	 垃圾最大年龄，如果将此值设置为一个较大值,则年轻代对象会在Survivor区进行多次复制,这样可以增加对象再年轻代的存活 时间,增加在年轻代即被回收的概率
+-XX:+UseParNewGC	设置年轻代为并行收集
+-XX:ParallelGCThreads=8 	并行收集器的线程数为8，此值最好配置与处理器数目相等
+-XX:ConcGCThreads=8     CMS垃圾回收器并行线程线，推荐值为CPU核心数。
+-XX:+UseConcMarkSweepGC	    老年代使用CMS内存收集
+-XX:+UseBiasedLocking    启用一个优化了的线程锁，对于高并发访问很重要 ，太多的请求忙不过来它自动优化，对于各自长短不一的请求，出现的阻塞、排队现象，他自己优化。
+-XX:+CMSParallelRemarkEnabled	降低标记停顿
+-XX:CMSInitiatingOccupancyFraction=70	使用cms作为垃圾回收，使用70％后开始CMS收集
+-XX:+PrintGCDetails	 输出形式:[GC [DefNew: 8614K->781K(9088K), 0.0123035 secs] 118250K->113543K(130112K), 0.0124633 secs]
+-XX:+PrintGCTimeStamps  打印Gc时间戳
+-Xloggc:logs/Gc.log	把相关日志信息记录到logs/GcLog.log文件以便分析
+-XX:+HeapDumpOnOutOfMemoryError 出现堆内存溢出时，自动导出堆内存 dump 快照
+-XX:HeapDumpPath=logs 设置导出的堆内存快照的存放地址为logs
+
+jps命令，查看正在运行的jvm进程号
+19008 Jps
+3140 RemoteMavenServer36
+3604
+18108 demo.jar
+jmap –heap 18108 -heap 打印heap的概要信息，GC使用的算法，heap的配置及wise heap的使用情况.
+
+using thread-local object allocation.
+Concurrent Mark-Sweep GC   ##同步并行垃圾回收，也可能是这样：Parallel GC with 4 thread(s)
+Heap Configuration:  ##堆初始化配置情况
+   MinHeapFreeRatio = 40 ##最小堆使用比例：对应jvm启动参数-XX:MinHeapFreeRatio设置JVM堆最小空闲比率(default 40)
+   MaxHeapFreeRatio = 70 ##最大堆可用比例：对应jvm启动参数 -XX:MaxHeapFreeRatio设置JVM堆最大空闲比率(default 70)
+   MaxHeapSize      = 2147483648 (2048.0MB) ##最大堆空间大小：对应jvm启动参数-XX:MaxHeapSize=设置JVM堆的最大大小
+   NewSize          = 268435456 (256.0MB) ##新生代分配大小：对应jvm启动参数-XX:NewSize=设置JVM堆的‘新生代’的默认大小
+   MaxNewSize       = 268435456 (256.0MB) ##最大可新生代分配大小：对应jvm启动参数-XX:MaxNewSize=设置JVM堆的‘新生代’的最大大小
+   OldSize          = 5439488 (5.1875MB) ##老生代大小：对应jvm启动参数-XX:OldSize=<value>:设置JVM堆的‘老生代’的大小
+   NewRatio         = 2  ##新生代比例：对应jvm启动参数-XX:NewRatio=:‘新生代’和‘老生代’的大小比率
+   SurvivorRatio    = 8 ##新生代与suvivor的比例：对应jvm启动参数-XX:SurvivorRatio=设置年轻代中Eden区与Survivor区的大小比值
+   MetaspaceSize    = 268435456 (256.0MB) ##元数据空间大小，对应jvm启动参数-XX:MetaspaceSize=256m设置元数据区的初始大小
+
+Heap Usage: ##堆使用情况：堆内存分步
+New Generation (Eden + 1 Survivor Space):  ##新生代（伊甸区 + survior空间）
+capacity = 241631232 (230.4375MB)  ##伊甸区容量
+used     = 77776272 (74.17323303222656MB) ##已经使用大小
+free     = 163854960 (156.26426696777344MB) ##剩余容量
+32.188004570534986% used ##使用比例
+
+Eden Space:  ##Eden区内存分布
+   capacity = 214827008 (204.875MB) ##Eden区总容量
+   used     = 74442288 (70.99369812011719MB) ##Eden区已使用
+   free     = 140384720 (133.8813018798828MB) ##Eden区剩余容量
+   34.65220164496263% used ##Eden区使用比率
+
+From Space: ##survior1区
+   capacity = 26804224 (25.5625MB) ##survior1区容量
+   used     = 3333984 (3.179534912109375MB) ##surviror1区已使用情况
+   free     = 23470240 (22.382965087890625MB) ##surviror1区剩余容量
+   12.43827838477995% used ##survior1区使用比例
+
+To Space: ##survior2 区
+   capacity = 26804224 (25.5625MB) ##survior2区容量
+   used     = 0 (0.0MB) ##survior2区已使用情况
+   free     = 26804224 (25.5625MB) ##survior2区剩余容量
+   0.0% used ## survior2区使用比例
+concurrent mark-sweep generation: ##老年代
+  capacity = 2147483648 (2048.0MB)
+  used     = 42028568 (40.081565856933594MB)
+  free     = 2105455080 (2007.9184341430664MB)
+  1.9571077078580856% used
+
+
+
+java -Xms512m -Xmx512m -Xss512k -XX:NewSize=128m -XX:MaxNewSize=256m -XX:MetaspaceSize=256m -XX:NewRatio=2 -XX:SurvivorRatio=8 -XX:+DisableExplicitGC -XX:MaxTenuringThreshold=15 -XX:+UseParNewGC -XX:+UseBiasedLocking -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=70 -XX:+CMSParallelRemarkEnabled -XX:ConcGCThreads=8 -XX:ParallelGCThreads=8 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=logs -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -Xloggc:logs/Gc.log -jar ./demo.jar
+
+
+java -Xms512m -Xmx512m -Xss512k -XX:NewSize=128m -XX:MaxNewSize=256m -XX:MetaspaceSize=256m -XX:NewRatio=2 -XX:SurvivorRatio=8 -XX:+DisableExplicitGC -XX:MaxTenuringThreshold=15 -XX:+UseG1GC -XX:+UseBiasedLocking -XX:+CMSParallelRemarkEnabled -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=logs -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -Xloggc:logs/Gc.log -jar ./demo.jar
