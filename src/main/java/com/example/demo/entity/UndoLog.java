@@ -2,7 +2,9 @@ package com.example.demo.entity;
 
 import lombok.Data;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * undo_log
@@ -44,4 +46,18 @@ public class UndoLog implements java.io.Serializable {
     /** ext */
     private String ext;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UndoLog undoLog = (UndoLog) o;
+        return Objects.equals(id, undoLog.id) && Objects.equals(branchId, undoLog.branchId) && Objects.equals(xid, undoLog.xid) && Objects.equals(context, undoLog.context) && Arrays.equals(rollbackInfo, undoLog.rollbackInfo) && Objects.equals(logStatus, undoLog.logStatus) && Objects.equals(logCreated, undoLog.logCreated) && Objects.equals(logModified, undoLog.logModified) && Objects.equals(ext, undoLog.ext);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(id, branchId, xid, context, logStatus, logCreated, logModified, ext);
+        result = 31 * result + Arrays.hashCode(rollbackInfo);
+        return result;
+    }
 }

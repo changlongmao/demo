@@ -1,8 +1,10 @@
 package com.example.demo.testMain;
 
+import com.example.demo.entity.TestObject;
 import com.sun.jmx.remote.internal.ArrayQueue;
 
 import java.util.ArrayDeque;
+import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -19,6 +21,7 @@ public class TestQueue {
         ArrayDeque<Object> arrayDeque = new ArrayDeque<>();
 
         ArrayQueue<Object> arrayQueue = new ArrayQueue<>(10);
+        LinkedList<Object> objects = new LinkedList<>();
 
 
         LinkedBlockingQueue<Object> linkedBlockingQueue = new LinkedBlockingQueue<>();
@@ -26,5 +29,8 @@ public class TestQueue {
         linkedBlockingQueue.add("bbb");
         Object poll = linkedBlockingQueue.poll();
         Object peek = linkedBlockingQueue.peek();
+
     }
+
+
 }
