@@ -30,6 +30,8 @@ public class TestQueue {
         Object poll = linkedBlockingQueue.poll();
         Object peek = linkedBlockingQueue.peek();
 
+
+        System.out.println(Integer.MAX_VALUE);
     }
 
 

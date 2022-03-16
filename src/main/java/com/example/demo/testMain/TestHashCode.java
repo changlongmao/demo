@@ -21,5 +21,10 @@ public class TestHashCode {
         System.out.println(x + 1);
         System.out.println(y + 1);
         System.out.println(Integer.MAX_VALUE  * Integer.MAX_VALUE);
+        Character c = 'a';
+        System.out.println(Character.MAX_VALUE);
+        System.out.println(Character.MIN_CODE_POINT);
+        System.out.println(Character.MAX_CODE_POINT);
+        System.out.println(1 << 30);
     }
 }
