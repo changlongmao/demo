@@ -15,5 +15,7 @@ public class TestList {
         list.add("bbb");
         Object[] strings = list.toArray();
         System.out.println(Arrays.toString(strings));
+
+        System.out.println("aaa\taaa".replaceAll(" ",""));
     }
 }

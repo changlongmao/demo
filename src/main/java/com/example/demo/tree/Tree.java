@@ -3,7 +3,7 @@ package com.example.demo.tree;
 /**
  * @author ChangLF 2022-03-16
  */
-public interface Tree<T extends Comparable> {
+public interface Tree<T extends Comparable<T>> {
 
     /**
      * 判空

@@ -6,7 +6,7 @@ import java.io.Serializable;
  * 二叉树节点
  * @author ChangLF 2022-03-17
  */
-public class BinaryNode<T extends Comparable> implements Serializable {
+public class BinaryNode<T extends Comparable<T>> implements Serializable {
 
     private static final long serialVersionUID = -6477238039299912313L;
 
