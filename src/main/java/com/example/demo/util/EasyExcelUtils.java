@@ -1,25 +1,26 @@
 package com.example.demo.util;
 
 import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.context.AnalysisContext;
+import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.excel.metadata.CellData;
 import com.alibaba.excel.metadata.Head;
+import com.alibaba.excel.write.handler.AbstractCellWriteHandler;
 import com.alibaba.excel.write.metadata.holder.WriteSheetHolder;
-import com.alibaba.excel.write.style.column.AbstractColumnWidthStyleStrategy;
-import com.baomidou.mybatisplus.extension.exceptions.ApiException;
+import com.alibaba.excel.write.metadata.holder.WriteTableHolder;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.ss.util.SheetUtil;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @Author Chang
@@ -33,9 +34,9 @@ public class EasyExcelUtils {
      * 导出文件的后缀名
      */
     private static final String EXCEL_XLSX = ".xlsx";
-    private static final String EXCEL_XLS = ".xls";
+    private static final String EXCEL_XLS = "xls";
+
     private static final String XLSX_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-    private static final String XLS_CONTENT_TYPE = "application/vnd.ms-excel";
 
 
     /**
@@ -44,86 +45,32 @@ public class EasyExcelUtils {
     private static final Integer MAX_TOTAL = 20000;
 
     /**
-     * @Param: response
-     * @Param: data 数据来源
-     * @Param: clazz 泛型的class对象
-     * @Param: fileName 文件名，同时也是表单名称，不需要带后缀名，默认'.xlsx'
-     * @Author Chang
-     * @Description 导出excel输出到web页面，限制为一个表单
-     * @Date 2021/8/3 17:18
-     * @Return void
-     **/
-    public static <T> void exportToHttp(HttpServletResponse response, List<T> data, Class<T> clazz, String fileName) {
-        exportWithResponse(response, data, clazz, fileName);
-    }
-
-    /**
-     * @Param: data
-     * @Param: clazz
-     * @Param: fileName 文件名，同时也是表单名称，不需要带后缀名，默认'.xlsx'
-     * @Author Chang
-     * @Description 导出到web页面，可不传HttpServletResponse，自动从TheadLocal获取（若不是http请求则获取不到）
-     * @Date 2021/8/4 13:44
-     * @Return void
-     **/
-    public static <T> void exportToHttp(List<T> data, Class<T> clazz, String fileName) {
-        HttpServletResponse response =
-                ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getResponse();
-        exportWithResponse(response, data, clazz, fileName);
-    }
-
-    private static <T> void exportWithResponse(HttpServletResponse response, List<T> data, Class<T> clazz,
-                                               String fileName) {
-        if (CollectionUtils.isEmpty(data)) {
-            return;
-        }
-        if (data.size() > MAX_TOTAL) {
-            throw new ApiException("1220003");
-        }
-        try {
-            OutputStream out = response.getOutputStream();
-            response.setContentType(XLSX_CONTENT_TYPE);
-            response.setCharacterEncoding("UTF-8");
-            response.setHeader("Content-Disposition",
-                    "attachment;filename=" + URLEncoder.encode(fileName + EXCEL_XLSX, "UTF-8"));
-            // 这里需要指定写用哪个class去写，然后写到第一个sheet，名字为文件名,然后文件流会自动关闭
-            EasyExcel.write(out, clazz).registerWriteHandler(new AdaptiveColumnWidthStyleStrategy(data.size())).sheet(fileName).doWrite(data);
-        } catch (Exception e) {
-            log.error("生成excel发生异常", e);
-            response.setContentType("application/json;charset=UTF-8");
-        }
-    }
-
-    /**
-     * @Param: file
-     * @Param: data
-     * @Param: clazz
-     * @Param: sheetName
-     * @Author Chang
-     * @Description 导出输出到文件
-     * @Date 2021/8/3 18:18
-     * @Return void
+     * 导出输出到文件
+     *
+     * @param file 文件对象
+     * @date 2021/8/3 18:18
      **/
     public static <T> void exportToFile(File file, List<T> data, Class<T> clazz, String sheetName) {
         try {
-            EasyExcel.write(file, clazz).sheet(sheetName).doWrite(data);
+            EasyExcel.write(file, clazz)
+                    .registerWriteHandler(new CustomCellWriteHandler(data.size()))
+                    .sheet(sheetName).doWrite(data);
         } catch (Exception e) {
             log.error("生成excel发生异常", e);
         }
     }
 
     /**
-     * @Param: data
-     * @Param: clazz
-     * @Param: sheetName
-     * @Author Chang
-     * @Description 输出到InputStream，可拿着InputStream上传到云服务器
-     * @Date 2021/8/4 12:35
-     * @Return java.io.InputStream
+     * 输出到InputStream，可拿着InputStream上传到云服务器
+     *
+     * @date 2021/8/4 12:35
+     * @return java.io.InputStream
      **/
     public static <T> InputStream exportInputStream(List<T> data, Class<T> clazz, String sheetName) {
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-            EasyExcel.write(out, clazz).sheet(sheetName).doWrite(data);
+            EasyExcel.write(out, clazz)
+                    .registerWriteHandler(new CustomCellWriteHandler(data.size()))
+                    .sheet(sheetName).doWrite(data);
             return new ByteArrayInputStream(out.toByteArray());
         } catch (Exception e) {
             log.error("生成excel发生异常", e);
@@ -132,24 +79,121 @@ public class EasyExcelUtils {
     }
 
     /**
-     * easyExcel宽度自适应策略
+     * 导出到web页面，可不传HttpServletResponse，自动从ThreadLocal获取（若不是http请求则获取不到）
+     * @param data 数据来源
+     * @param clazz 泛型的class对象
+     * @param fileName 文件名，同时也是表单名称，不需要带后缀名，默认'.xlsx'
+     * @author Chang
+     * @date 2021/8/4 13:44
+     **/
+    public static <T> void exportToHttp(List<T> data, Class<T> clazz, String fileName) {
+        exportWithResponse(data, clazz, fileName, null, null, null);
+    }
+
+    /**
+     * exportToHttp重载方法，可设置表头对齐方式
+     *
+     * @param headAlign    设置表头水平对齐方式，不设置默认居中
+     */
+    public static <T> void exportToHttp(List<T> data, Class<T> clazz, String fileName, HorizontalAlignment headAlign) {
+        exportWithResponse(data, clazz, fileName, headAlign, null, null);
+    }
+
+    /**
+     * exportToHttp重载方法，可设置单元格下拉选
+     *
+	 * @param dropDownMap 设置单元格下拉选值，key为columnIndex，value为字符串集合
+     * @param dataRow 数据行起始行，不设置默认为1，即0为表头行
+     * @date 2022/2/18 14:01
+     **/
+    public static <T> void exportToHttp(List<T> data, Class<T> clazz, String fileName, Map<Integer, List<String>> dropDownMap, Integer dataRow) {
+        exportWithResponse(data, clazz, fileName, null, dropDownMap, dataRow);
+    }
+
+    /**
+     * 导出excel文件到HttpServletResponse方法
+	 * @param data 数据来源
+	 * @param clazz 泛型的class对象
+	 * @param fileName 文件名，同时也是表单名称
+	 * @param headAlign 表头水平对齐方式
+	 * @param dropDownMap 单元格下拉选集合
+     * @author Chang
+     * @date 2022/2/18 14:06
+     **/
+    private static <T> void exportWithResponse(List<T> data, Class<T> clazz,
+                                               String fileName, HorizontalAlignment headAlign,
+                                               Map<Integer, List<String>> dropDownMap, Integer dataRow) {
+        if (CollectionUtils.isEmpty(data)) {
+            return;
+        }
+        if (data.size() > MAX_TOTAL) {
+            throw new RuntimeException("超出最大数量");
+        }
+        HttpServletResponse response =
+                ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getResponse();
+        if (response == null) {
+            return;
+        }
+        try {
+            OutputStream out = response.getOutputStream();
+            response.setContentType(XLSX_CONTENT_TYPE);
+            response.setCharacterEncoding("UTF-8");
+            response.setHeader("Content-Disposition",
+                    "attachment;filename=" + URLEncoder.encode(fileName + EXCEL_XLSX, "UTF-8"));
+            // 这里需要指定写用哪个class去写，然后写到第一个sheet，名字为文件名,然后文件流会自动关闭
+            EasyExcel.write(out, clazz)
+                    .registerWriteHandler(new CustomCellWriteHandler(data.size(), headAlign, dropDownMap, dataRow))
+                    .sheet(fileName)
+                    .doWrite(data);
+        } catch (Exception e) {
+            log.error("生成excel发生异常", e);
+            response.setContentType("application/json;charset=UTF-8");
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * easyExcel自定义策略
+     * 1. 对列宽进行自适应，并处于最大最小之间
+     * 2. 若表头有'\n'换行符，进行换行并设置标题高度
+     * 3. HorizontalAlignment设置首行水平对齐方式，默认居中
+     * 4. dropDownMap设置单元格下拉选值，key为columnIndex，value为字符串集合
+     * 会设置除标题外后两万行的单元格下拉选
      *
      * @author Chang
      * @date 2021/10/9 9:49
      **/
-    public static class AdaptiveColumnWidthStyleStrategy extends AbstractColumnWidthStyleStrategy {
+    private static class CustomCellWriteHandler extends AbstractCellWriteHandler {
 
         /**
          * 最大最小宽度
          */
         private static final int MIN_COLUMN_WIDTH = 10;
         private static final int MAX_COLUMN_WIDTH = 50;
+        // 因EasyExcel是每500条清理缓存一次，故计算列宽时无法对所有列宽自适应，故做缓存记录并取最大值
         private final Map<Integer, Double> cache = new HashMap<>();
         // 数据条数，方便找到最后一行
         private final int size;
+        // 表头对齐方式
+        private final HorizontalAlignment headAlign;
+        // 下拉框值
+        private final Map<Integer, List<String>> dropDownMap;
+        // 数据起始行，即除去表头的数据行，默认为1
+        private Integer dataRow = 1;
 
-        public AdaptiveColumnWidthStyleStrategy(int size) {
+        public CustomCellWriteHandler(int size) {
             this.size = size;
+            headAlign = null;
+            dropDownMap = null;
+        }
+
+        public CustomCellWriteHandler(int size, HorizontalAlignment headAlign, Map<Integer, List<String>> dropDownMap, Integer dataRow) {
+            this.size = size;
+            this.headAlign = headAlign;
+            this.dropDownMap = dropDownMap;
+            if (dataRow != null) {
+                this.dataRow = dataRow;
+            }
         }
 
         /**
@@ -157,24 +201,46 @@ public class EasyExcelUtils {
          * 因为easyExcel有缓存，sheet只能拿到500条数据，只计算了最后500条的自适应列宽；
          * 基本能满足场景需求
          *
-         * @param writeSheetHolder
-         * @param cellDataList
-         * @param cell
-         * @param head
-         * @param relativeRowIndex
-         * @param isHead
          * @author Chang
          * @date 2021/10/9 9:56
          **/
         @Override
-        protected void setColumnWidth(WriteSheetHolder writeSheetHolder, List<CellData> cellDataList, Cell cell,
-                                      Head head,
-                                      Integer relativeRowIndex, Boolean isHead) {
-            // 先对表头计算自适应列宽并缓存
+        public void afterCellDispose(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder,
+                                        List<CellData> cellDataList, Cell cell, Head head, Integer relativeRowIndex, Boolean isHead) {
+            Sheet sheet = writeSheetHolder.getSheet();
             if (isHead) {
-                cache.put(cell.getColumnIndex(), SheetUtil.getColumnWidth(writeSheetHolder.getSheet(),
-                        cell.getColumnIndex()
+                // 表头自动换行高度设置
+                int maxHeight = 1;
+                if (cell.getCellType() == CellType.STRING) {
+                    if (cell.getStringCellValue().contains("\n")) {
+                        int length = cell.getStringCellValue().split("\n").length;
+                        maxHeight = Math.max(maxHeight, length);
+                    }
+                }
+                cell.getRow().setHeightInPoints((float) (maxHeight * 25));
+
+                // 首行居左对齐
+                if (cell.getRowIndex() == 0 && headAlign != null) {
+                    CellStyle style = sheet.getWorkbook().createCellStyle();
+                    style.cloneStyleFrom(cell.getCellStyle());
+                    style.setAlignment(headAlign);
+                    cell.setCellStyle(style);
+                }
+
+                // 先对表头计算自适应列宽并缓存
+                cache.put(cell.getColumnIndex(), SheetUtil.getColumnWidth(sheet, cell.getColumnIndex()
                         , false));
+
+                // 设置使用单元格下拉选
+                if (!CollectionUtils.isEmpty(dropDownMap) && dropDownMap.containsKey(cell.getColumnIndex())) {
+                    List<String> dataArr = dropDownMap.get(cell.getColumnIndex());
+                    DataValidationHelper dvHelper = sheet.getDataValidationHelper();
+                    DataValidationConstraint dvConstraint = dvHelper.createExplicitListConstraint(dataArr.toArray(new String[0]));
+                    // 除去表头之后的最大行设置单元格下拉框
+                    CellRangeAddressList addressList = new CellRangeAddressList(dataRow, MAX_TOTAL + dataRow - 1, cell.getColumnIndex(), cell.getColumnIndex());
+                    DataValidation validation = dvHelper.createValidation(dvConstraint, addressList);
+                    sheet.addValidationData(validation);
+                }
             }
 
             // 当处于最后一行的时候，计算一下列宽并设置，其他情况返回
@@ -182,7 +248,7 @@ public class EasyExcelUtils {
                 return;
             }
 
-            double columnWidth = Math.max(SheetUtil.getColumnWidth(writeSheetHolder.getSheet(), cell.getColumnIndex()
+            double columnWidth = Math.max(SheetUtil.getColumnWidth(sheet, cell.getColumnIndex()
                     , false), cache.get(cell.getColumnIndex()));
 
             // xlsx文档计算列表不准确，进行适当加宽
@@ -195,8 +261,71 @@ public class EasyExcelUtils {
             } else if (columnWidth < MIN_COLUMN_WIDTH) {
                 columnWidth = MIN_COLUMN_WIDTH;
             }
-            writeSheetHolder.getSheet().setColumnWidth(cell.getColumnIndex(), (int) (columnWidth * 256));
+            // 设置每列自适应列宽
+            sheet.setColumnWidth(cell.getColumnIndex(), (int) (columnWidth * 256));
         }
 
     }
+
+    /**
+     * Excel导入，MultipartFile格式，默认读取第一个sheet
+     * @param file MultipartFile
+	 * @param clazz 类对象
+     * @author Chang
+     * @date 2022/3/23 10:59
+     * @return java.util.List<T> 返回读取的数据
+     **/
+    public static <T> List<T> importExcel(MultipartFile file, Class<T> clazz) {
+        if (null == file) {
+            throw new RuntimeException("文件为空");
+        }
+
+        if (!file.getOriginalFilename().endsWith(EXCEL_XLSX) && !file.getOriginalFilename().endsWith(EXCEL_XLS)) {
+            throw new RuntimeException("文件格式错误");
+        }
+        try {
+            return parseExcel(file.getInputStream(), clazz);
+        } catch (IOException e) {
+            log.warn("获取输入流失败", e);
+            return null;
+        }
+    }
+
+    /**
+     * Excel导入，InputStream格式，默认读取第一个sheet
+     * @param inputStream 输入流
+	 * @param clazz 类对象
+     * @author Chang
+     * @date 2022/3/23 11:06
+     * @return java.util.List<T>
+     **/
+    public static <T> List<T> importExcel(InputStream inputStream, Class<T> clazz) {
+        return parseExcel(inputStream, clazz);
+    }
+
+    private static <T> List<T> parseExcel(InputStream inputStream, Class<T> clazz) {
+        EasyExcelListener<T> easyExcelListener = new EasyExcelListener<>();
+        EasyExcel.read(inputStream, clazz, easyExcelListener).sheet().doRead();
+        return easyExcelListener.getDataList();
+    }
+
+    private static class EasyExcelListener<T> extends AnalysisEventListener<T> {
+
+        private final List<T> dataList = new ArrayList<>();
+
+        public List<T> getDataList() {
+            return dataList;
+        }
+
+        @Override
+        public void invoke(T data, AnalysisContext context) {
+            dataList.add(data);
+        }
+
+        @Override
+        public void doAfterAllAnalysed(AnalysisContext context) {
+            log.info("excel所有数据解析完成！");
+        }
+    }
+
 }

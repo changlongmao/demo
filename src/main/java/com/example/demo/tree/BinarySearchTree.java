@@ -1,5 +1,8 @@
 package com.example.demo.tree;
 
+import java.util.LinkedList;
+import java.util.StringJoiner;
+
 /**
  * @author ChangLF 2022-03-17
  */
@@ -60,13 +63,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements Tree<T> {
 
     @Override
     public String preOrder() {
-        String sb = preOrder(root);
-        if (sb.length() > 0) {
-            //去掉尾部","号
-            sb = sb.substring(0, sb.length() - 1);
-        }
-
-        return sb;
+        return preOrder(root);
     }
 
     /**
@@ -76,14 +73,41 @@ public class BinarySearchTree<T extends Comparable<T>> implements Tree<T> {
      * @return
      */
     private String preOrder(BinaryNode<T> subtree) {
-        StringBuffer sb = new StringBuffer();
+        StringJoiner sb = new StringJoiner(",");
         if (subtree != null) {//递归结束条件
             //先访问根结点
-            sb.append(subtree.data + ",");
+            sb.add(String.valueOf(subtree.data));
             //遍历左子树
-            sb.append(preOrder(subtree.left));
+            sb.add(preOrder(subtree.left));
             //遍历右子树
-            sb.append(preOrder(subtree.right));
+            sb.add(preOrder(subtree.right));
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 非递归的先根遍历
+     *
+     * @return
+     */
+    public String preOrderTraverse() {
+        StringJoiner sb = new StringJoiner(",");
+        //构建用于存放结点的栈
+        LinkedList<BinaryNode<T>> stack = new LinkedList<>();
+
+        BinaryNode<T> p = this.root;
+        while (p != null || !stack.isEmpty()) {
+            if (p != null) {
+                //访问该结点
+                sb.add(String.valueOf(p.data));
+                //将已访问过的结点入栈
+                stack.push(p);
+                //继续访问其左孩子，直到p为null
+                p = p.left;
+            } else { //若p=null 栈不为空,则说明已沿左子树访问完一条路径, 从栈中弹出栈顶结点,并访问其右孩子
+                p = stack.pop();//获取已访问过的结点记录
+                p = p.right;
+            }
         }
         return sb.toString();
     }
