@@ -1,6 +1,7 @@
 package com.example.demo.tree;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * 二叉树节点
@@ -15,6 +16,7 @@ public class BinaryNode<T extends Comparable<T>> implements Serializable {
     public BinaryNode<T> right;//右结点
 
     public T data;
+
 
     public BinaryNode(T data, BinaryNode<T> left, BinaryNode<T> right) {
         this.data = data;
@@ -33,5 +35,14 @@ public class BinaryNode<T extends Comparable<T>> implements Serializable {
      */
     public boolean isLeaf() {
         return this.left == null && this.right == null;
+    }
+
+    @Override
+    public String toString() {
+        return "BinaryNode{" +
+                "left=" + left +
+                ", right=" + right +
+                ", data=" + data +
+                '}';
     }
 }
