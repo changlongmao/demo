@@ -1,6 +1,7 @@
 package com.example.demo.tree;
 
 import java.util.LinkedList;
+import java.util.StringJoiner;
 
 /**
  * @author ChangLF 2022-03-17
@@ -293,12 +294,12 @@ public class BinarySearchTree<T extends Comparable<T>> implements Tree<T> {
     @Override
     public String levelOrder() {
         LinkedList<BinaryNode<T>> queue = new LinkedList<>();
-        StringBuilder sb = new StringBuilder();
+        StringJoiner sb = new StringJoiner(",");
         BinaryNode<T> p = this.root;
 
         while (p != null) {
             //记录经过的结点
-            sb.append(p.data);
+            sb.add(String.valueOf(p.data));
 
             //先按层次遍历结点,左结点一定在右结点之前访问
             if (p.left != null) {

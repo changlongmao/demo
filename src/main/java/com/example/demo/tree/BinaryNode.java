@@ -39,10 +39,10 @@ public class BinaryNode<T extends Comparable<T>> implements Serializable {
 
     @Override
     public String toString() {
-        return "BinaryNode{" +
-                "left=" + left +
-                ", right=" + right +
-                ", data=" + data +
+        return "{" +
+                "\"data\": " + data +
+                (left == null ? "" : ",\"left\": " + left) +
+                (right == null ? "" : ",\"right\": " + right) +
                 '}';
     }
 }
