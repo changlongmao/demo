@@ -437,29 +437,30 @@ public class BinarySearchTree<T extends Comparable<T>> implements Tree<T> {
     }
 
     @Override
-    public BinaryNode<T> findNode(T data) {
-        if (data == null) throw new RuntimeException("data can not be null !");
-
-        BinaryNode<T> p = root;
-
-        //比较结点的值，决定向左子树还是右子树搜索
-        while (true) {
-            if (p == null) {
-                return null;
-            }
-            int compareResult = data.compareTo(p.data);
-
-            if (compareResult < 0) {
-                //左
-                p = p.left;
-            } else if (compareResult > 0) {
-                //右
-                p = p.right;
-            } else {
-                // 相同则返回
-                return p;
-            }
-        }
+    public AVLNode<T> findNode(T data) {
+//        if (data == null) throw new RuntimeException("data can not be null !");
+//
+//        BinaryNode<T> p = root;
+//
+//        //比较结点的值，决定向左子树还是右子树搜索
+//        while (true) {
+//            if (p == null) {
+//                return null;
+//            }
+//            int compareResult = data.compareTo(p.data);
+//
+//            if (compareResult < 0) {
+//                //左
+//                p = p.left;
+//            } else if (compareResult > 0) {
+//                //右
+//                p = p.right;
+//            } else {
+//                // 相同则返回
+//                return p;
+//            }
+//        }
+        return null;
     }
 
     @Override

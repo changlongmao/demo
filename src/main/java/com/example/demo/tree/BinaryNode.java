@@ -17,6 +17,22 @@ public class BinaryNode<T extends Comparable<T>> implements Serializable {
 
     public T data;
 
+    public static void main(String[] args) {
+        BinaryNode<Integer> root = new BinaryNode<>(1);
+        BinaryNode<Integer> a = new BinaryNode<>(2);
+        BinaryNode<Integer> b = new BinaryNode<>(3);
+        BinaryNode<Integer> c = new BinaryNode<>(4);
+        root.right = a;
+        a.right = b;
+        b.right = c;
+        System.out.println(root);
+        BinaryNode<Integer> e = a.right;
+        a.right = e.left;
+        e.left = a;
+        root.right = e;
+        System.out.println(root);
+    }
+
 
     public BinaryNode(T data, BinaryNode<T> left, BinaryNode<T> right) {
         this.data = data;

@@ -72,7 +72,7 @@ public interface Tree<T extends Comparable<T>> {
      * @param data
      * @return
      */
-    BinaryNode<T> findNode(T data);
+    AVLNode<T> findNode(T data);
 
     /**
      * 是否包含某个值
