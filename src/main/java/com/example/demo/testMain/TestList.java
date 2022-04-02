@@ -1,5 +1,7 @@
 package com.example.demo.testMain;
 
+import com.example.demo.tree.BinaryNode;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,12 +12,21 @@ import java.util.List;
 public class TestList {
 
     public static void main(String[] args) {
-        List<String> list = new ArrayList<>();
-        list.add("aaa");
-        list.add("bbb");
-        Object[] strings = list.toArray();
-        System.out.println(Arrays.toString(strings));
 
-        System.out.println("aaa\taaa".replaceAll(" ",""));
+        List<? super CharSequence> arrayList = new ArrayList<>();
+        arrayList.add("a");
+        Object object = arrayList.get(1);
+
+        List<? extends CharSequence> numberArrayList = new ArrayList<>();
+
+        CharSequence charSequence = numberArrayList.get(1);
+
+        List<?> list = new ArrayList<>();
+
+    }
+
+    public static void test(List<?> list){
+
+        Object o = list.get(1);
     }
 }

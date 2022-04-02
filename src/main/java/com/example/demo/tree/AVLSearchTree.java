@@ -2,8 +2,7 @@ package com.example.demo.tree;
 
 import org.apache.commons.math3.geometry.partitioning.utilities.AVLTree;
 
-import java.util.LinkedList;
-import java.util.StringJoiner;
+import java.util.*;
 
 /**
  * @author ChangLF 2022-03-27
@@ -459,7 +458,6 @@ public class AVLSearchTree<T extends Comparable<T>> implements Tree<T> {
     public  static void main(String arg[]) throws Exception {
 
         AVLSearchTree<Integer> avlTree=new AVLSearchTree<>();
-
         for (int i = 1; i <18 ; i++) {
             avlTree.insert(i);
         }

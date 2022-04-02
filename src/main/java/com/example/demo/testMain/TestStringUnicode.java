@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 /**
+ * string内存储使用Unicode编码，正编码为\u6b63，即27491，转换为utf-8编码为，e6ada3，
  * @author ChangLF 2022-03-12
  */
 public class TestStringUnicode {
@@ -42,26 +43,27 @@ public class TestStringUnicode {
         //Unicode = 262F表示太极符号：☯
         System.out.println("\u262F");
         //Unicode = 262FF表示上面一个横“目”，下面一个“曹”字.实际输出 ☯F
-        System.out.println("\u262FF");
-        String value = "a";
+        System.out.println("\u262F");
+        String value = "严";
         //输出 6c49
         System.out.println(unicodeToString(value));
-        //输出 e6b189
-        System.out.println(stringToUtf8HexCode(value));
         //输出”汉“字的Unicode编码为：6c49
         System.out.println(value+"字的Unicode编码为："+stringToUnicode(value,false));
         //输出”汉“字的Unicode编码为（带前缀）：\u6c49
         System.out.println(value+"字的Unicode编码为（带前缀）："+stringToUnicode(value));
         //输出”汉“字的UTF-8编码为：e6b189
         System.out.println(value+"字的UTF-8编码为："+stringToUtf8HexCode(value));
-        System.out.println('a' + 1);
         System.out.println(new String("中".getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
         int[] arr = new int[10];
         long l = 1000_00_000L;
         System.out.println(0x50);
         System.out.println(Arrays.toString("a".getBytes()));
-        System.out.println(Arrays.toString("正宗".getBytes()));
-        System.out.println(Arrays.toString("正宗".getBytes(StandardCharsets.UTF_8)));
+        System.out.println(Arrays.toString("严".getBytes()));
+        System.out.println(Arrays.toString("严".getBytes(StandardCharsets.UTF_8)));
+        System.out.println((byte)(56 + 127));
+        System.out.println((byte)(Byte.MAX_VALUE + 1));
+        System.out.println((byte) (128+256+512));
+        System.out.println('\u9fa5');
     }
 
     /**

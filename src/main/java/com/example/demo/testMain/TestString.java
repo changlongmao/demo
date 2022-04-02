@@ -19,6 +19,7 @@ public class TestString {
         String a = "aa";
         String b = a;
         System.out.println(a == b);
+        System.out.println('常' + 1);
     }
 
     public static void test(String a) {
