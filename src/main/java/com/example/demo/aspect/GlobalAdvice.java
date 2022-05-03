@@ -1,8 +1,11 @@
-package com.example.demo.config;
+package com.example.demo.aspect;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.deser.std.StdScalarDeserializer;
+import com.fasterxml.jackson.databind.ser.std.StdScalarSerializer;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.InitBinder;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 /**
  * @ClassName: advice
@@ -48,6 +52,21 @@ public class GlobalAdvice {
                     public String deserialize(JsonParser jsonParser, DeserializationContext ctx)
                             throws IOException {
                         return StringUtils.trimWhitespace(jsonParser.getValueAsString());
+                    }
+                });
+    }
+
+    @Bean
+    public Jackson2ObjectMapperBuilderCustomizer bigDecimalJackson2ObjectMapperBuilderCustomizer() {
+        return jacksonObjectMapperBuilder -> jacksonObjectMapperBuilder
+                .serializerByType(BigDecimal.class, new StdScalarSerializer<BigDecimal>(BigDecimal.class) {
+                    @Override
+                    public void serialize(BigDecimal value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+                        if (value != null) {
+                            gen.writeString(value.toString());
+                        } else {
+                            gen.writeString("");
+                        }
                     }
                 });
     }

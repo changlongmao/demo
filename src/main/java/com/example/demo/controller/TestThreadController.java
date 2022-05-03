@@ -39,10 +39,12 @@ public class TestThreadController {
 
     @Resource
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
-//    @Resource
+    @Resource
     private ScheduledThreadPoolExecutor scheduledThreadPoolExecutor;
     @Resource
     private RedissonClient redissonClient;
+    @Resource
+    private OkHttpTemplate okHttpTemplate;
 
     private static final List<Object> list = Collections.synchronizedList(new ArrayList<>());
 
@@ -52,7 +54,7 @@ public class TestThreadController {
 
     private static volatile Integer index = 0;
 
-    private static final List<String> token = Lists.newArrayList("a","b");
+    private static final List<String> token = Lists.newArrayList("a", "b");
 
     @GetMapping("/testLock1")
     public RestResponse testLock1() throws Exception {
@@ -61,7 +63,7 @@ public class TestThreadController {
         RAtomicLong atomicLong = redissonClient.getAtomicLong(redisKey);
         long taskNo = atomicLong.incrementAndGet();
         atomicLong.expire(1, TimeUnit.DAYS);
-        String taskNoStr = String.format("%04d",taskNo);
+        String taskNoStr = String.format("%04d", taskNo);
         System.out.println(taskNoStr);
         return RestResponse.success();
     }
@@ -80,7 +82,7 @@ public class TestThreadController {
             token.remove(integer);
 
             Thread.sleep(10000);
-        }finally {
+        } finally {
             log.info("我释放了锁：{}", integer);
             token.add(integer);
         }
@@ -109,24 +111,36 @@ public class TestThreadController {
 //            list.add(1);
 //            log.info(Thread.currentThread().getName());
 //        }, 3, TimeUnit.SECONDS);
-        List<String> urlList = Arrays.asList("https://juejin.cn/post/6958079172904222727", "https://juejin.cn/post/6958097237398257671");
+        // 刷赞列表
+        List<String> urlList = Arrays.asList("https://juejin.cn/post/7092340939506581540",
+                "https://juejin.cn/post/7057906316420841479",
+                "https://juejin.cn/post/7057922942952276005",
+                "https://juejin.cn/post/7074557788264857631",
+                "https://juejin.cn/post/7033796549821857822",
+                // 别人的文章，用作混淆
+                "https://juejin.cn/post/7081652062169071630", "https://juejin.cn/post/7063720230559711239", "https://juejin.cn/post/7091409827888365605");
         // scheduleWithFixedDelay 方法将会在上一个任务结束后，注意：**再等待 2 秒，**才开始执行，那么他和上一个任务的开始执行时间的间隔是 7 秒。
         ScheduledFuture<?> scheduledFuture = scheduledThreadPoolExecutor.scheduleWithFixedDelay(() -> {
             try {
                 for (String url : urlList) {
-                    HttpClientUtil.doGet(url, null);
+                    okHttpTemplate.doGet(url, null, null);
                     log.info("请求掘金页面{}，线程名为{}，共请求{}次", url, Thread.currentThread().getName(), atomicInteger.getAndIncrement());
+                    // 每隔十次休息30秒
                     if ((atomicInteger.get() % 10) == 0) {
                         TimeUnit.SECONDS.sleep(30);
                     } else {
-                        TimeUnit.SECONDS.sleep(5);
+                        Random random = new Random();
+                        // 生成5-10秒的随机数，混淆视听
+                        TimeUnit.SECONDS.sleep(random.nextInt(5) + 5);
                     }
                 }
+                // 打乱顺序，防止每次相同顺序
+                Collections.shuffle(urlList);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                log.error("异常信息为：", e);
             }
-        }, 0, 1, TimeUnit.SECONDS);
-//        TimeUnit.MILLISECONDS.sleep(7000);
+            // 每次任务结束，5秒后再次执行
+        }, 0, 5, TimeUnit.SECONDS);
 //        scheduledFuture.cancel(false);
         map.put(id, scheduledFuture);
         log.info("开启任务：{}", id);
@@ -155,11 +169,11 @@ public class TestThreadController {
     public RestResponse testThreadPoolTaskExecutor() throws Exception {
         ThreadPoolExecutor threadPoolExecutor = threadPoolTaskExecutor.getThreadPoolExecutor();
         for (int i = 0; i < 200; i++) {
-            threadPoolExecutor.submit(() ->{
+            threadPoolExecutor.submit(() -> {
                 for (int j = 0; j < 10; j++) {
                     atomicInteger.getAndIncrement();
                 }
-                System.out.println("atomicInteger："+ atomicInteger.get());
+                System.out.println("atomicInteger：" + atomicInteger.get());
                 log.info("threadName: {}", Thread.currentThread().getName());
             });
         }
@@ -173,7 +187,7 @@ public class TestThreadController {
     @GetMapping("/getListSize")
     public RestResponse getListSize() throws Exception {
         int andIncrement = atomicInteger.getAndIncrement();
-        System.out.println("atomicInteger"+andIncrement);
+        System.out.println("atomicInteger" + andIncrement);
         return RestResponse.success().put("listSize", list.size());
     }
 
@@ -185,7 +199,7 @@ public class TestThreadController {
         return RestResponse.success().put("threadLocal", threadLocal.get());
     }
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         long start = System.currentTimeMillis();
 //        User user = new User();
 //        user.setName("123");
@@ -305,7 +319,7 @@ public class TestThreadController {
         System.out.println(DateUtil.getDateStr(new Date(), DateUtil.DateFormat.LONG_DATE_PATTERN_LINE));
         System.out.println(DateUtil.getYearAfterOrBefore(new Date(), 10));
         System.out.println(DateUtil.parseDate("2021-8-27 10"));
-        String s = String.format("%04d",12);
+        String s = String.format("%04d", 12);
         String dateStr = DateUtil.getDateStr(new Date(), DateUtil.DateFormat.CUSTOM_DATE_PATTERN_NONE);
 
         System.out.println(dateStr);

@@ -225,6 +225,11 @@
             <version>1.0.2</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>3.6.0</version>
+        </dependency>
 
         <!-- 微信支付 -->
 <!--        <dependency>-->
