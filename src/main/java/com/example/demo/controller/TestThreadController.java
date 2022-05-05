@@ -111,27 +111,29 @@ public class TestThreadController {
 //            list.add(1);
 //            log.info(Thread.currentThread().getName());
 //        }, 3, TimeUnit.SECONDS);
-        // 刷赞列表
+        // 刷阅读量列表
         List<String> urlList = Arrays.asList("https://juejin.cn/post/7092340939506581540",
                 "https://juejin.cn/post/7057906316420841479",
                 "https://juejin.cn/post/7057922942952276005",
                 "https://juejin.cn/post/7074557788264857631",
                 "https://juejin.cn/post/7033796549821857822",
                 // 别人的文章，用作混淆
-                "https://juejin.cn/post/7081652062169071630", "https://juejin.cn/post/7063720230559711239", "https://juejin.cn/post/7091409827888365605");
+                "https://juejin.cn/post/7081652062169071630");
+        Random random = new Random();
         // scheduleWithFixedDelay 方法将会在上一个任务结束后，注意：**再等待 2 秒，**才开始执行，那么他和上一个任务的开始执行时间的间隔是 7 秒。
         ScheduledFuture<?> scheduledFuture = scheduledThreadPoolExecutor.scheduleWithFixedDelay(() -> {
             try {
                 for (String url : urlList) {
+                    // 生成10以内的随机数，混淆视听
+                    int randomInt = random.nextInt(10);
                     okHttpTemplate.doGet(url, null, null);
                     log.info("请求掘金页面{}，线程名为{}，共请求{}次", url, Thread.currentThread().getName(), atomicInteger.getAndIncrement());
-                    // 每隔十次休息30秒
-                    if ((atomicInteger.get() % 10) == 0) {
-                        TimeUnit.SECONDS.sleep(30);
+                    // 每隔10-20次休息20-30秒
+                    if ((atomicInteger.get() % (randomInt + 10)) == 0) {
+                        TimeUnit.SECONDS.sleep(randomInt + 20);
                     } else {
-                        Random random = new Random();
-                        // 生成5-10秒的随机数，混淆视听
-                        TimeUnit.SECONDS.sleep(random.nextInt(5) + 5);
+                        // 常规休息3-13秒
+                        TimeUnit.SECONDS.sleep(randomInt + 3);
                     }
                 }
                 // 打乱顺序，防止每次相同顺序
