@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -326,6 +327,10 @@ public class TestThreadController {
 
         System.out.println(dateStr);
 
+        System.out.println(new BigDecimal("2.01").scale());
+        List<String> strings = Arrays.asList("罗长龙", "祺林", "晨阳");
+        Collections.sort(strings);
+        System.out.println(strings.toString());
     }
 //
 //    static {
