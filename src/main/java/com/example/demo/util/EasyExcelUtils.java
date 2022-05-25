@@ -1,13 +1,19 @@
 package com.example.demo.util;
 
 import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.excel.metadata.CellData;
 import com.alibaba.excel.metadata.Head;
+import com.alibaba.excel.util.StringUtils;
 import com.alibaba.excel.write.handler.AbstractCellWriteHandler;
 import com.alibaba.excel.write.metadata.holder.WriteSheetHolder;
 import com.alibaba.excel.write.metadata.holder.WriteTableHolder;
+import com.example.demo.entity.Constants;
+import com.example.demo.entity.ExcelImportDto;
+import com.example.demo.enums.ExcelImportTypeEnum;
+import com.example.demo.exception.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddressList;
@@ -19,6 +25,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.lang.reflect.Field;
+import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.*;
 
@@ -40,11 +49,6 @@ public class EasyExcelUtils {
 
 
     /**
-     * 最大导出数量
-     */
-    private static final Integer MAX_TOTAL = 20000;
-
-    /**
      * 导出输出到文件
      *
      * @param file 文件对象
@@ -54,6 +58,16 @@ public class EasyExcelUtils {
         try {
             EasyExcel.write(file, clazz)
                     .registerWriteHandler(new CustomCellWriteHandler(data.size()))
+                    .sheet(sheetName).doWrite(data);
+        } catch (Exception e) {
+            log.error("生成excel发生异常", e);
+        }
+    }
+
+    public static <T> void exportToFile(File file, List<T> data, Class<T> clazz, String sheetName, HorizontalAlignment headAlign) {
+        try {
+            EasyExcel.write(file, clazz)
+                    .registerWriteHandler(new CustomCellWriteHandler(data.size(), headAlign, null, null))
                     .sheet(sheetName).doWrite(data);
         } catch (Exception e) {
             log.error("生成excel发生异常", e);
@@ -70,6 +84,24 @@ public class EasyExcelUtils {
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             EasyExcel.write(out, clazz)
                     .registerWriteHandler(new CustomCellWriteHandler(data.size()))
+                    .sheet(sheetName).doWrite(data);
+            return new ByteArrayInputStream(out.toByteArray());
+        } catch (Exception e) {
+            log.error("生成excel发生异常", e);
+        }
+        return null;
+    }
+
+    /**
+     * 输出到InputStream，可拿着InputStream上传到云服务器,HorizontalAlignment可指定表头居中或者居左
+     *
+     * @date 2021/8/4 12:35
+     * @return java.io.InputStream
+     **/
+    public static <T> InputStream exportInputStream(List<T> data, Class<T> clazz, String sheetName, HorizontalAlignment headAlign) {
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            EasyExcel.write(out, clazz)
+                    .registerWriteHandler(new CustomCellWriteHandler(data.size(), headAlign, null, null))
                     .sheet(sheetName).doWrite(data);
             return new ByteArrayInputStream(out.toByteArray());
         } catch (Exception e) {
@@ -126,8 +158,8 @@ public class EasyExcelUtils {
         if (CollectionUtils.isEmpty(data)) {
             return;
         }
-        if (data.size() > MAX_TOTAL) {
-            throw new RuntimeException("超出最大数量");
+        if (data.size() > Constants.TWENTY_THOUSAND) {
+            throw new ApiException("1221002");
         }
         HttpServletResponse response =
                 ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getResponse();
@@ -148,7 +180,7 @@ public class EasyExcelUtils {
         } catch (Exception e) {
             log.error("生成excel发生异常", e);
             response.setContentType("application/json;charset=UTF-8");
-            throw new RuntimeException(e);
+            throw new ApiException("1220101", e.getMessage());
         }
     }
 
@@ -237,7 +269,7 @@ public class EasyExcelUtils {
                     DataValidationHelper dvHelper = sheet.getDataValidationHelper();
                     DataValidationConstraint dvConstraint = dvHelper.createExplicitListConstraint(dataArr.toArray(new String[0]));
                     // 除去表头之后的最大行设置单元格下拉框
-                    CellRangeAddressList addressList = new CellRangeAddressList(dataRow, MAX_TOTAL + dataRow - 1, cell.getColumnIndex(), cell.getColumnIndex());
+                    CellRangeAddressList addressList = new CellRangeAddressList(dataRow, Constants.TWENTY_THOUSAND + dataRow - 1, cell.getColumnIndex(), cell.getColumnIndex());
                     DataValidation validation = dvHelper.createValidation(dvConstraint, addressList);
                     sheet.addValidationData(validation);
                 }
@@ -252,7 +284,8 @@ public class EasyExcelUtils {
                     , false), cache.get(cell.getColumnIndex()));
 
             // xlsx文档计算列表不准确，进行适当加宽
-            columnWidth += 7;
+            columnWidth *= 1.7;
+            columnWidth += 5;
             if (columnWidth < 0) {
                 return;
             }
@@ -268,45 +301,129 @@ public class EasyExcelUtils {
     }
 
     /**
-     * Excel导入，MultipartFile格式，默认读取第一个sheet
-     * @param file MultipartFile
-	 * @param clazz 类对象
+     * Excel导入，默认读取第一个sheet。
+     * 默认使用fileUrl导入方式，两行表头，数据行在第三行，默认会将表头行读为第一行数据，用来校验模板标题，导出结果数据会去除标题行
+     * @param excelImport 具体参数详见类内部
      * @author Chang
-     * @date 2022/3/23 10:59
-     * @return java.util.List<T> 返回读取的数据
+     * @date 2022/5/11 16:20
+     * @return java.util.List<T>
      **/
-    public static <T> List<T> importExcel(MultipartFile file, Class<T> clazz) {
-        if (null == file) {
-            throw new RuntimeException("文件为空");
-        }
+    public static <T> List<T> importExcel(ExcelImportDto<T> excelImport) {
+        log.info("----------EasyExcel导入解析开始----------");
+        InputStream inputStream;
+        ExcelImportTypeEnum importTypeEnum = excelImport.getImportTypeEnum();
+        switch (importTypeEnum == null ? ExcelImportTypeEnum.FILE_URL : importTypeEnum) {
+            case INPUT_STREAM:
+                inputStream = excelImport.getInputStream();
+                break;
+            case MULTIPART_FILE:
+                MultipartFile file = excelImport.getFile();
+                if (null == file) {
+                    throw new ApiException("1220104");
+                }
 
-        if (!file.getOriginalFilename().endsWith(EXCEL_XLSX) && !file.getOriginalFilename().endsWith(EXCEL_XLS)) {
-            throw new RuntimeException("文件格式错误");
+                String filename = file.getOriginalFilename();
+                checkFile(filename);
+                try {
+                    inputStream = file.getInputStream();
+                } catch (IOException e) {
+                    log.warn("获取输入流失败", e);
+                    return null;
+                }
+                break;
+            default:
+                // 不填枚举默认为fileUrl
+                String fileUrl = excelImport.getFileUrl();
+                checkFile(fileUrl);
+                inputStream = urlToInputStream(fileUrl);
         }
+        excelImport.setInputStream(inputStream);
+        excelImport.setHeadRowNumber(excelImport.getHeadRowNumber() == null ? 2 : (excelImport.getHeadRowNumber() < 0 ? 0 : excelImport.getHeadRowNumber()));
+        return parseExcel(excelImport);
+    }
+
+    private static <T> List<T> parseExcel(ExcelImportDto<T> excelImport) {
+        EasyExcelListener<T> easyExcelListener = new EasyExcelListener<>();
+        // headRowNumber不填默认为2，此处减1是从表头开始读，将表头行读入，用来校验模板标题是否被修改，返回结果会去除标题行
         try {
-            return parseExcel(file.getInputStream(), clazz);
-        } catch (IOException e) {
-            log.warn("获取输入流失败", e);
-            return null;
+            EasyExcel.read(excelImport.getInputStream(), excelImport.getClazz(), easyExcelListener)
+                    .headRowNumber(excelImport.getHeadRowNumber() - 1)
+                    .sheet().doRead();
+        } catch (Exception e) {
+            throw new ApiException("1220115");
         }
+        List<T> dataList = easyExcelListener.getDataList();
+
+        // 校验模板标题是否被修改，返回结果去除标题行
+        checkExcelTemplate(dataList, excelImport.getClazz(), excelImport.getHeadRowNumber() - 1);
+
+        if (CollectionUtils.isEmpty(dataList)) {
+            throw new ApiException("1220116");
+        }
+        if (dataList.size() > (excelImport.getMaxRowNumber() == null ? 500 : excelImport.getMaxRowNumber())) {
+            throw new ApiException("1220117", excelImport.getMaxRowNumber());
+        }
+        log.info("----------EasyExcel导入解析结束----------");
+        return dataList;
     }
 
     /**
-     * Excel导入，InputStream格式，默认读取第一个sheet
-     * @param inputStream 输入流
-	 * @param clazz 类对象
-     * @author Chang
-     * @date 2022/3/23 11:06
-     * @return java.util.List<T>
-     **/
-    public static <T> List<T> importExcel(InputStream inputStream, Class<T> clazz) {
-        return parseExcel(inputStream, clazz);
+     * 校验导入模板表头数据是否正确
+     */
+    private static <T> void checkExcelTemplate(List<T> tList, Class<T> clazz, Integer titleIndex) {
+        if (CollectionUtils.isEmpty(tList) || Objects.isNull(tList.get(0))) {
+            throw new ApiException("1220115");
+        }
+        T obj = tList.get(0);
+        Field[] entryFields = clazz.getDeclaredFields();
+        for (Field field : entryFields) {
+            ExcelProperty excelProperty = field.getAnnotation(ExcelProperty.class);
+            boolean notCheck = excelProperty == null || excelProperty.value().length <= 0 || (excelProperty.value().length == 1
+                            && StringUtils.isEmpty((excelProperty.value())[0]));
+            if (notCheck) {
+                continue;
+            }
+            field.setAccessible(true);
+            Object fieldValue;
+            try {
+                fieldValue = field.get(obj);
+            } catch (IllegalAccessException e) {
+                throw new ApiException("1210101");
+            }
+            if (Objects.isNull(fieldValue)) {
+                throw new ApiException("1220115");
+            }
+            String[] template = excelProperty.value();
+            if (!template[titleIndex].equals(fieldValue)) {
+                throw new ApiException("1220115");
+            }
+        }
+        // 移除 标题行，得到导入数据
+        tList.remove(0);
     }
 
-    private static <T> List<T> parseExcel(InputStream inputStream, Class<T> clazz) {
-        EasyExcelListener<T> easyExcelListener = new EasyExcelListener<>();
-        EasyExcel.read(inputStream, clazz, easyExcelListener).sheet().doRead();
-        return easyExcelListener.getDataList();
+    private static void checkFile(String filename) {
+        if (StringUtil.isEmpty(filename) || (!filename.endsWith(EXCEL_XLSX) && !filename.endsWith(EXCEL_XLS))) {
+            throw new ApiException("1220120");
+        }
+    }
+
+    private static InputStream urlToInputStream(String fileUrl) {
+        try {
+            if (StringUtil.isEmpty(fileUrl)) {
+                throw new ApiException("1220119");
+            }
+            URL url = new URL(fileUrl);
+            URLConnection conn = url.openConnection();
+            conn.setConnectTimeout(30 * 1000);
+            conn.setReadTimeout(30 * 1000);
+            conn.connect();
+            // 创建输入流读取文件
+            return conn.getInputStream();
+        } catch (IOException e) {
+            log.error("读取文件失败：", e);
+        }
+        return null;
     }
 
     private static class EasyExcelListener<T> extends AnalysisEventListener<T> {
@@ -327,5 +444,6 @@ public class EasyExcelUtils {
             log.info("excel所有数据解析完成！");
         }
     }
+
 
 }

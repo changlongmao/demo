@@ -1,7 +1,7 @@
 package com.example.demo.entity;
 
 
-public class Constant {
+public class Constants {
 
     /**
      * 用户信息注入标识
@@ -14,6 +14,10 @@ public class Constant {
     public static final String BEARER = "Bearer ";
     public static final String AUTHORIZATION = "Authorization";
 
+    /**
+     * 最大导出量
+     */
+    public static final int TWENTY_THOUSAND = 20000;
 
     public static final String SUPER_ADMIN = "1";
 

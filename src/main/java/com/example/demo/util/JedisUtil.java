@@ -1,6 +1,6 @@
 package com.example.demo.util;
 
-import com.example.demo.entity.Constant;
+import com.example.demo.entity.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.util.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -721,7 +721,7 @@ public class JedisUtil {
     }
 
     public void delByClass(String className, String methodName) {
-        String key = StringUtils.genKey(Constant.SYS_CACHE, className, methodName);
+        String key = StringUtils.genKey(Constants.SYS_CACHE, className, methodName);
         del(key);
         delObject(key);
     }

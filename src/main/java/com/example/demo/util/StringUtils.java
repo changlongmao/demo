@@ -1,6 +1,6 @@
 package com.example.demo.util;
 
-import com.example.demo.entity.Constant;
+import com.example.demo.entity.Constants;
 
 import java.util.Collection;
 import java.util.Map;
@@ -32,7 +32,7 @@ public class StringUtils {
 
     public static String addOne(String parentId, String maxId) {
         int ten = 10;
-        if (Constant.STR_ZERO.equals(parentId)) {
+        if (Constants.STR_ZERO.equals(parentId)) {
             parentId = "";
         }
         if (isNullOrEmpty(maxId)) {
