@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -331,6 +332,20 @@ public class TestThreadController {
         List<String> strings = Arrays.asList("罗长龙", "祺林", "晨阳");
         Collections.sort(strings);
         System.out.println(strings.toString());
+        Float aaa = 1222222222.222222F;
+        float aaaa = 211111112111111211111111111111111111111F;
+        double aaaaaa = 211111111111111111111111888888888888111111111211111111111111D;
+        int aaaaa = 2111111111;
+        float bbb = 2.11F;
+        System.out.println(Float.MAX_VALUE);
+        System.out.println(aaaaaa);
+        System.out.println(bbb);
+        new BigInteger("11");
+        new BigDecimal("11");
+        BigInteger n = new BigInteger("999999").pow(99);
+        float f = n.floatValue();
+        System.out.println(f);
+
     }
 //
 //    static {

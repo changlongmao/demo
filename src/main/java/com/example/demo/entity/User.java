@@ -67,7 +67,7 @@ public class User implements java.io.Serializable {
      */
     @ExcelProperty(value = "创建时间", index = 3)
     @DateTimeFormat("yyyy-MM-dd HH:mm")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+//    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     /** isDelete */
