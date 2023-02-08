@@ -68,7 +68,7 @@ public class UserController {
             }
             log.info("测试结束，字符串长度为：{}", sb.length());
         } catch (Exception e) {
-            log.info("----- java HeapDump OnOutOf Memory Error ------");
+            log.warn("----- java HeapDump OnOutOf Memory Error ------");
         }
     }
 

@@ -36,9 +36,9 @@ public class TestTransactionalController {
 
     @GetMapping("/tranCon")
     @RepeatLock
-    public void tranCon(@RequestParam String param, @RequestHeader String header) throws Exception {
+    public void tranCon() throws Exception {
         User byId = userService.selectById("6");
-//        User byId = userService.getByUsername("6");
+        User a = userService.getByUsername("aa");
 
 
 //        User user = new User("6");

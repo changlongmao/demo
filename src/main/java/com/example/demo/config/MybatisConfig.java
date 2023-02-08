@@ -1,6 +1,7 @@
 package com.example.demo.config;
 
 import com.example.demo.aspect.AuthDataIntercepter;
+import com.example.demo.aspect.TestMybatisInterceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -18,15 +19,12 @@ import java.util.List;
 public class MybatisConfig {
 
     @Autowired
-    private List<SqlSessionFactory> sqlSessionFactoryList;
+    private SqlSessionFactory sqlSessionFactory;
 
     @PostConstruct
     public void addMySqlInterceptor() {
-        AuthDataIntercepter interceptor = new AuthDataIntercepter();
-        for (SqlSessionFactory sqlSessionFactory : sqlSessionFactoryList) {
-            sqlSessionFactory.getConfiguration().addInterceptor(interceptor);
-
-        }
+        sqlSessionFactory.getConfiguration().addInterceptor(new AuthDataIntercepter());
+        sqlSessionFactory.getConfiguration().addInterceptor(new TestMybatisInterceptor());
     }
 
 }
