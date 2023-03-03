@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 public class HttpContextUtils {
 
     public static HttpServletRequest getHttpServletRequest() {
-        Servlet
         return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
     }
 

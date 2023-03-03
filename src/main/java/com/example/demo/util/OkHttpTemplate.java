@@ -36,6 +36,18 @@ public class OkHttpTemplate {
                 .build();
     }
 
+
+    /**
+     * 发送get请求
+     * @param url url
+     * @param params 参数
+     * @return 响应结果
+     */
+    public String doGet(String url, Map<String, Object> params) {
+        return doGet(url, params, null);
+    }
+
+
     /**
      * 发送get请求
      * @param url url
@@ -54,7 +66,7 @@ public class OkHttpTemplate {
             params.forEach((k,v) -> sj.add(k + "=" + v));
             url += sj.toString();
         }
-
+        log.info("request 最终地址：" + url);
         Request request = new Request.Builder()
                 .url(url)
                 .headers(builder.build())
@@ -66,6 +78,26 @@ public class OkHttpTemplate {
             log.error("发送Get请求失败", e);
         }
         return null;
+    }
+
+    /**
+     * 发送post请求
+     * @param url url
+     * @param body 请求体，若不为String则转为json
+     * @return 响应结果
+     */
+    public String doPost(String url, Object body) {
+        return doPost(url, body instanceof String ? (String) body : JsonUtils.toJson(body), null);
+    }
+
+    /**
+     * 发送post请求
+     * @param url url
+     * @param json json格式参数
+     * @return 响应结果
+     */
+    public String doPost(String url, String json) {
+        return doPost(url, json, null);
     }
 
     /**
@@ -88,6 +120,7 @@ public class OkHttpTemplate {
                 .post(body)
                 .headers(builder.build())
                 .build();
+        log.info("request 最终地址：" + url + " 入参：" + json);
         try (Response response = client.newCall(request).execute()) {
             return response.body().string();
         } catch (IOException e) {

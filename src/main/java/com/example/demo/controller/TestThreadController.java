@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
@@ -57,6 +58,24 @@ public class TestThreadController {
     private static volatile Integer index = 0;
 
     private static final List<String> token = Lists.newArrayList("a", "b");
+
+
+    @GetMapping("/testOkhttp")
+    public RestResponse testOkhttp(HttpServletRequest request) throws Exception {
+        HashMap<String, String> headers = new HashMap<String, String>() {{
+            put("Connection", "close");
+        }};
+        okHttpTemplate.doGet("http://127.0.0.1:8999/testThread/testLock1", null, null);
+        okHttpTemplate.doGet("http://127.0.0.1:8999/testThread/testThreadLocal", null, null);
+        okHttpTemplate.doGet("http://127.0.0.1:8999/testThread/getListSize", null, null);
+//        for (int i = 0; i < 5; i++) {
+//        }
+//        okHttpTemplate.testDoGet("https://baidu.com");
+
+        log.info("请求次数{}", index++);
+        log.info("Connection请求头{}", request.getHeader("Connection"));
+        return RestResponse.success();
+    }
 
     @GetMapping("/testLock1")
     public RestResponse testLock1() throws Exception {

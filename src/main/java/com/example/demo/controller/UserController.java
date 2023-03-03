@@ -28,6 +28,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.lang.String;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 @Slf4j
@@ -55,6 +56,8 @@ public class UserController {
             30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
 
     public static final List<User> userList = Collections.synchronizedList(new ArrayList<>());
+
+    public static final AtomicInteger i = new AtomicInteger();
 
 
     @GetMapping(value = "/testHeapMemoryError")
@@ -332,12 +335,12 @@ public class UserController {
     }
 
     @GetMapping(value = "/testMap")
-    public RestResponse testMap() throws Exception {
+    public synchronized RestResponse testMap() throws Exception {
         long startTime = System.currentTimeMillis();
 //        Map<String, User> users = new HashMap<>();
 //        Map<String, User> users = new Hashtable<>();
-        Map<String, User> users = Collections.synchronizedMap(new HashMap<>());
-//        Map<String, User> users = new ConcurrentHashMap<>();
+//        Map<String, User> users = Collections.synchronizedMap(new HashMap<>());
+        Map<String, User> users = new ConcurrentHashMap<>();
 //        for (int i = 0; i < 3000000; i++) {
 //            User user = new User();
 //            user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
@@ -405,8 +408,8 @@ public class UserController {
 
 
     @SysLog("获取token")
-    @PostMapping(value = "/getToken")
-    public RestResponse getToken(@RequestBody Map<String, Object> params) throws Exception {
+    @GetMapping(value = "/getToken")
+    public RestResponse getToken(@RequestParam Map<String, Object> params) throws Exception {
         System.out.println(params.toString());
         String token = jwtTokenUtil.generateToken("1154218600098865154", 1);
 

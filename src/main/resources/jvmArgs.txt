@@ -97,3 +97,26 @@ java -Xms512m -Xmx512m -Xss512k -XX:NewSize=128m -XX:MaxNewSize=256m -XX:Metaspa
 
 
 java -Xms512m -Xmx512m -Xss512k -XX:NewSize=128m -XX:MaxNewSize=256m -XX:MetaspaceSize=256m -XX:NewRatio=2 -XX:SurvivorRatio=8 -XX:+DisableExplicitGC -XX:MaxTenuringThreshold=15 -XX:+UseG1GC -XX:+UseBiasedLocking -XX:+CMSParallelRemarkEnabled -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=logs -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -Xloggc:logs/Gc.log -jar ./demo.jar
+
+
+以下先整理下G1垃圾收集器可以调整的重要参数：
+
+-XX:+UseG1GC：启用 G1 (Garbage First) 垃圾收集器
+-XX:MaxGCPauseMillis：设置允许的最大GC停顿时间(GC pause time)，这只是一个期望值，实际可能会超出，可以和年轻代大小调整一起并用来实现。默认是200ms。
+-XX:G1HeapRegionSize：每个分区的大小，默认值是会根据整个堆区的大小计算出来，范围是1M~32M，取值是2的幂，计算的倾向是尽量有2048个分区数。比如如果是2G的heap，那region=1M。16Gheap,region=8M。
+-XX:MaxTenuringThreshold=n：晋升到老年代的“年龄”阀值，默认值为 15。
+-XX:InitiatingHeapOccupancyPercent：一般会简写IHOP,默认是45%,这个占比跟并发周期的启动相关，当空间占比达到这个值时，会启动并发周期。如果经常出现FullGC，可以调低该值，尽早的回收可以减少FullGC的触发，但如果过低，则并发阶段会更加频繁，降低应用的吞吐。
+-XX:G1NewSizePercent：年轻代最小的堆空间占比，默认是5%。
+-XX:G1MaxNewSizePercent：年轻代最大的堆空间占比，默认是60%。
+-XX:ConcGCThreads：并发执行的线程数，默认值接近整个应用线程数的1/4。
+-XX:G1HeapWastePercent:允许的浪费堆空间的占比，默认是5%。如果并发标记可回收的空间小于5%,则不会触发MixedGC。
+-XX:G1MixedGCCountTarget:一次全局并发标记之后，后续最多执行的MixedGC次数。默认值是8.
+
+java -Xms4g -Xmx4g -Xss512k -XX:MetaspaceSize=256m -XX:+UseG1GC -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:/Users/changlongmao/logs/gc-%t.log -jar ./demo.jar
+
+java -Xms4g -Xmx4g -Xss512k -XX:MetaspaceSize=256m -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=70 -XX:+CMSParallelRemarkEnabled -XX:ConcGCThreads=8 -XX:ParallelGCThreads=8 -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:/Users/changlongmao/logs/gc-%t.log -jar ./demo.jar
+
+java -Xms4g -Xmx4g -Xss512k -XX:MetaspaceSize=256m -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:+UseCMSCompactAtFullCollection -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:/Users/changlongmao/logs/gc-%t.log -jar ./demo.jar
+
+java -Xms4g -Xmx4g -Xss512k -XX:MetaspaceSize=256m -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:/Users/changlongmao/logs/gc-%t.log -jar ./demo.jar
+

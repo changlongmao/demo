@@ -68,6 +68,7 @@ public class TestAspect {
         Object[] obj = joinPoint.getArgs();
         String params = new Gson().toJson(obj);
         log.info("Gson获取的参数：" + params);
+        log.info(request.getRequestURL().toString());
         //获取请求参数
         Enumeration<String> enumeration = request.getParameterNames();
         Map<String, Object> parameterMap = new HashMap<>();
