@@ -1,14 +1,14 @@
 package com.example.demo.testMain.netty;
 
+import com.example.demo.testMain.netty.echo.ChatServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
 
 /**
  * @author ChangLF 2023-02-15
@@ -30,7 +30,14 @@ public class DiscardServer {
                     .childHandler(new ChannelInitializer<SocketChannel>() { // (4)
                         @Override
                         public void initChannel(SocketChannel ch) throws Exception {
-                            ch.pipeline().addLast(new DiscardServerHandler());
+//                            ch.pipeline().addLast(new DiscardServerHandler());
+
+                            ChannelPipeline pipeline = ch.pipeline();
+                            //向pipeline加入解码器
+                            pipeline.addLast("decoder", new StringDecoder());
+                            //向pipeline加入编码器
+                            pipeline.addLast("encoder", new StringEncoder());
+                            pipeline.addLast(new ChatServerHandler());
                         }
                     })
                     // 设置连接配置参数

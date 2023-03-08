@@ -2,6 +2,7 @@ package com.example.demo.testMain;
 
 import com.google.common.collect.Multimap;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -57,24 +58,8 @@ public class TestMain {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         System.out.println(df.format(new Date((911273425874456576L >> 22) + 1420041600000L)));
         System.out.println(df.format(new Date(1420041600000L)));
+
+
     }
 
-    public static int test(int x, int[] arr) throws InterruptedException {
-        System.out.println("轮询次数：" + x);
-        for (int i = 0; i < 1000; i++) {
-            int xx = 1;
-        }
-//        TimeUnit.NANOSECONDS.sleep(1000000);
-        int y = x + 1;
-        arr[x] = y;
-        if (y < 50000) {
-//            test1();
-            return test(y, arr);
-        }
-        return y;
-    }
-
-    public static void test1() {
-        int i = 1;
-    }
 }

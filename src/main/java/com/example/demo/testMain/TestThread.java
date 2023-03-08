@@ -41,5 +41,7 @@ public class TestThread {
             log.warn("主线程报错了");
         }
 
+        Executors.newSingleThreadExecutor();
+
     }
 }

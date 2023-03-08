@@ -4,10 +4,7 @@ import com.example.demo.entity.TestObject;
 import com.sun.jmx.remote.internal.ArrayQueue;
 
 import java.util.*;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.*;
 
 /**
  * @author ChangLF 2022-02-27
@@ -52,6 +49,8 @@ public class TestQueue {
         System.out.println("priorityQueue" + priorityQueue.poll());
         System.out.println("priorityQueue" + priorityQueue.poll());
         System.out.println("priorityQueue" + priorityQueue.poll());
+
+        CountDownLatch downLatch = new CountDownLatch(10);
     }
 
 

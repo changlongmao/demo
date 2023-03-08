@@ -29,6 +29,7 @@ import java.util.*;
 import java.lang.String;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.ReentrantLock;
 
 
 @Slf4j
@@ -59,6 +60,16 @@ public class UserController {
 
     public static final AtomicInteger i = new AtomicInteger();
 
+
+    @PostMapping(value = "/testGlobalAdvice")
+    public RestResponse testGlobalAdvice(@RequestBody User user) {
+
+        System.out.println("controller层" +userService);
+
+        userService.updateUserById(user);
+
+        return RestResponse.success();
+    }
 
     @GetMapping(value = "/testHeapMemoryError")
     public void testHeapMemoryError() {
@@ -145,14 +156,6 @@ public class UserController {
             log.info("释放锁");
             lock.unlock();
         }
-
-        return RestResponse.success();
-    }
-
-    @PostMapping(value = "/testGlobalAdvice")
-    public RestResponse testGlobalAdvice(@RequestBody User user) {
-
-        System.out.println(user.toString());
 
         return RestResponse.success();
     }

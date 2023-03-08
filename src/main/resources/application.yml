@@ -1,7 +1,7 @@
 spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/changlf?characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://127.0.0.1:3306/changlf?characterEncoding=utf-8&serverTimezone=Asia/Shanghai
     username: root
     password: chang123
   servlet:
@@ -38,7 +38,7 @@ server:
     max-threads: 1024
     min-spare-threads: 30
     accept-count: 5000
-  port: 8999
+  port: 8990
   connection-timeout: 1000ms
   servlet:
     context-path: /

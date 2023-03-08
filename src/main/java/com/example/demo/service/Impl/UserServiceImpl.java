@@ -34,6 +34,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateUserById(User user) {
+        System.out.println("service层" + this);
         baseMapper.updateUserById(user);
     }
 

@@ -22,7 +22,7 @@ public class TimeClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        for (int i = 0; i < 10; ++i) {
+        for (int i = 0; i < 3; ++i) {
             ByteBuf firstMessage = Unpooled.buffer(req.length);
             firstMessage.writeBytes(req);
             ctx.writeAndFlush(firstMessage);
