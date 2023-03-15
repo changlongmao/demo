@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk8:ubi
+FROM adoptopenjdk/openjdk8
 WORKDIR /home/
 COPY target/*.jar  ./
 RUN rm -f *-sources.jar

@@ -33,7 +33,7 @@ import java.util.*;
  * @Date: 2020/06/04 11:30
  **/
 @Slf4j
-@RestController
+//@RestController
 @RequestMapping("/poi")
 public class PoiController {
 

@@ -41,7 +41,7 @@ public class UserController {
 
     public static int requestNum = 0;
 
-    @Resource
+    @Autowired
     private UserService userService;
     @Autowired
     private RedissonClient redisson;

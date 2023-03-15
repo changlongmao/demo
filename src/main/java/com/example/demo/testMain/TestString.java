@@ -20,6 +20,8 @@ public class TestString {
         String b = a;
         System.out.println(a == b);
         System.out.println('常' + 1);
+
+        System.out.println(new ArrayList<>().stream().count());
     }
 
     public static void test(String a) {

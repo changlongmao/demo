@@ -7,12 +7,15 @@ import com.example.demo.entity.UndoLog;
 import com.example.demo.entity.UndoLogCondition;
 import com.example.demo.mapper.UndoLogMapper;
 import com.example.demo.service.UndoLogService;
+import com.example.demo.service.UserService;
 import com.example.demo.service.UserTestTimeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
 
 /**
  * Service接口实现
