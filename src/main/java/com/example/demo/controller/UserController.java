@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.example.demo.annotation.RepeatLock;
 import com.example.demo.annotation.SysLog;
 import com.example.demo.common.RestResponse;
 import com.example.demo.entity.*;
@@ -297,6 +298,7 @@ public class UserController {
         return RestResponse.success();
     }
 
+    @RepeatLock
     @GetMapping(value = "/testList")
     public RestResponse testList(@RequestParam Map<String, Object> params, HttpSession httpSession) throws Exception {
         httpSession.setAttribute("aaa", "bbb");
@@ -306,19 +308,11 @@ public class UserController {
 //        List<User> users = new CopyOnWriteArrayList<>();
         List<User> users = new Vector<>();
 //        List<User> users = Collections.synchronizedList(new ArrayList<>());
-//        for (int i = 0; i < 500000; i++) {
-//            User user = new User();
-//            user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
-//            user.setPassword("setPassword" + i * 1000);
-//            user.setUsername("setUsername" + i * 1000);
-//            user.setRearName("setRearName" + i * 1000);
-//            users.add(user);
-//        }
 
-        ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 10, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
-        for (int j = 0; j < 10; j++) {
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(25, 25, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
+        for (int j = 0; j < 100; j++) {
             executor.execute(() -> {
-                for (int i = 0; i < 5000; i++) {
+                for (int i = 0; i < 50; i++) {
                     User user = new User();
                     user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
                     users.add(user);

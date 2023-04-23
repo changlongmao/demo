@@ -4,6 +4,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author ChangLF 2022-03-23
@@ -12,6 +13,8 @@ public class TestHashMap {
 
     public static void main(String[] args) {
         Map<Integer, String> map = new HashMap<>();
+
+        new ConcurrentHashMap<>();
 
         map.put(2, "2020-02-01");
         map.put(3, "2021-01-01");

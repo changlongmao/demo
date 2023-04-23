@@ -16,15 +16,10 @@ import org.springframework.web.client.RestTemplate;
  */
 @SpringBootApplication
 @EnableScheduling
-public class DemoApplication extends SpringBootServletInitializer {
+public class DemoApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
-    }
-
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(DemoApplication.class);
     }
 
     @Bean

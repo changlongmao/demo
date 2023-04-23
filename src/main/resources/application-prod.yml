@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://1.15.104.25:3306/changlf?characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: Chang!23
+  redis:
+    database: 0
+    host: 1.15.104.25
+    port: 6379
+    password: redis1244656FYKJ508HzBJYfdxFyZn # 密码（默认为空）
+

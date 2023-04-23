@@ -21,7 +21,7 @@ public class TestClass {
         System.out.println(JsonUtils.toJson(map));
 
         System.out.println(foo(4));
-        System.out.println(new User().getClass().getSimpleName());
+        System.out.println(new User().getClass().getClassLoader());
         System.out.println(new BigDecimal("1.40").compareTo(new BigDecimal("1.4")));
     }
     public static int foo(Integer x) {

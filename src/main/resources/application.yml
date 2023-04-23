@@ -1,19 +1,13 @@
 spring:
-  datasource:
-    driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/changlf?characterEncoding=utf-8&serverTimezone=Asia/Shanghai
-    username: root
-    password: chang123
   servlet:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
       enabled: true
+  # 环境 dev|prod
+  profiles:
+    active: prod
   redis:
-    database: 0
-    host: 127.0.0.1
-    port: 6379
-    password: # 密码（默认为空）
     timeout: 6000  # 连接超时时长（毫秒）
     expire-time: 1800 # redis过期时间是30分钟30*60
     jedis:
@@ -24,6 +18,8 @@ spring:
         min-idle: 0       # 连接池中的最小空闲连接
   main:
     allow-bean-definition-overriding: true
+  application:
+    name: demo
 #  thymeleaf:
 #    prefix: classpath:/templates/
 #    suffix: .html
@@ -39,9 +35,10 @@ server:
     min-spare-threads: 30
     accept-count: 5000
   port: 8990
-  connection-timeout: 1000ms
   servlet:
     context-path: /
+  shutdown: graceful
+
 
 mybatis-plus:
   typeAliasesPackage: com.example.demo.entity
@@ -61,3 +58,12 @@ mybatis-plus:
       logic-delete-value: 1
       #逻辑未删除值
       logic-not-delete-value: 0
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,logfile
+
+logging:
+  file: logs/cr-info.log

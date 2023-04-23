@@ -5,15 +5,17 @@ import com.example.demo.common.RestResponse;
 import com.example.demo.entity.*;
 import com.example.demo.util.JedisUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -34,14 +36,23 @@ public class TestRedisController {
     @Autowired
     private JedisUtil jedisUtil;
 
-    @Resource
-    private RedisTemplate redisTemplate;
 
     @Resource
     private RedissonClient redissonClient;
 
+    @Resource
+    private ApplicationContext applicationContext;
+
+
+    @GetMapping("getApplicationContext")
+    public RestResponse getApplicationContext(@RequestParam String name) {
+
+        Object bean = applicationContext.getBean(name);
+        return RestResponse.success().put(name, bean);
+    }
+
     @RepeatLock
-    @PostMapping("testRedissonClient")
+    @GetMapping("testRedissonClient")
     public RestResponse testRedissonClient(@Valid @RequestBody SysLogEntity sysLogEntity,
                                    @RequestParam("userId") Long userId,
                                    @RequestHeader("appCode") String appCode) throws Exception {
@@ -49,23 +60,23 @@ public class TestRedisController {
 //        SysLogEntity o = new SysLogEntity();
 //        o.setId("aaa");
 //        o.setUserName("bbb");
-        int i = 1 / 0;
-        Thread.sleep(10000);
+//        int i = 1 / 0;
+//        Thread.sleep(10000);
+        RLock rLock = redissonClient.getLock("user_auth");
+        boolean tryLock = rLock.tryLock(0L, 30L, TimeUnit.SECONDS);
+        if (!tryLock) {
+            log.info("获取锁失败");
+            throw new Exception();
+        }
+        try {
+            log.info("获取锁成功");
+            // 执行业务逻辑
+            // ...
+        } finally {
+            // 保证锁的释放
+            rLock.unlock();
+        }
         return RestResponse.success(sysLogEntity.toString());
-//        RLock rLock = redissonClient.getLock("user_auth");
-//        boolean tryLock = rLock.tryLock(0L, 30L, TimeUnit.SECONDS);
-//        if (!tryLock) {
-//            log.info("获取锁失败");
-//            throw new Exception();
-//        }
-//        try {
-//            log.info("获取锁成功");
-//            // 执行业务逻辑
-//            // ...
-//        } finally {
-//            // 保证锁的释放
-//            rLock.unlock();
-//        }
 
 //
 //        Thread.sleep(5000);
@@ -115,23 +126,6 @@ public class TestRedisController {
         System.out.println(jedisUtil.get("str"));
 
         System.out.println(jedisUtil.getKeysByPrefix(""));
-        return RestResponse.success();
-    }
-
-    @GetMapping("testRedisTemplate")
-    public RestResponse testRedisTemplate() throws Exception {
-        // 测试得知redis的自增数字能保证线程安全
-        for (int i = 0; i < 10; i++) {
-            threadPoolTaskExecutor.execute(() -> {
-                for (int j = 0; j < 10; j++) {
-                    Long abc = redisTemplate.opsForValue().increment("abc", 1);
-                    System.out.println(abc);
-                }
-                log.info(Thread.currentThread().getName());
-            });
-        }
-        log.info(Thread.currentThread().getName());
-
         return RestResponse.success();
     }
 

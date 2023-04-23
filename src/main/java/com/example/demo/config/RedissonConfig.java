@@ -40,6 +40,7 @@ public class RedissonConfig {
                 .setPingConnectionInterval(60)
                 .setKeepAlive(true)
                 .setAddress("redis://" + host + ":" + port)
+                .setPassword(password)
                 .setTimeout(timeout)
                 .setDatabase(database);
         return Redisson.create(config);

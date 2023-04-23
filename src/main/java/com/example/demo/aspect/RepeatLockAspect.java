@@ -118,23 +118,4 @@ public class RepeatLockAspect {
     }
 
 
-    @Before("pointCut()")
-    public void doBefore(JoinPoint joinPoint) {
-        log.info("TestAspect前置通知");
-    }
-
-    @AfterReturning(value = "pointCut()",returning = "keys")
-    public void doAfterReturn(JoinPoint joinPoint,Object keys) {
-        log.info("TestAspect后置返回通知" + keys);
-    }
-
-    @After("pointCut()")
-    public void doAfter(JoinPoint joinPoint) {
-        log.info("TestAspect后置通知");
-    }
-
-    @AfterThrowing(value = "pointCut()", throwing = "throwable")
-    public void doAfterThrowing(JoinPoint joinPoint, Throwable throwable) {
-        log.error("后置异常通知：", throwable);
-    }
 }

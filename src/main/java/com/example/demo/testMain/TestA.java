@@ -1,6 +1,11 @@
 package com.example.demo.testMain;
 
+import cn.hutool.bloomfilter.bitMap.BitMap;
+import com.example.demo.entity.User;
+import com.example.demo.util.IpUtils;
+
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.List;
 
 /**
@@ -24,5 +29,8 @@ public class TestA {
                 }
             }
         }
+
+        new BitSet();
+        System.out.println(null instanceof User);
     }
 }
