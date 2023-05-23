@@ -6,7 +6,7 @@ spring:
       enabled: true
   # 环境 dev|prod
   profiles:
-    active: prod
+    active: dev
   redis:
     timeout: 6000  # 连接超时时长（毫秒）
     expire-time: 1800 # redis过期时间是30分钟30*60
@@ -20,20 +20,13 @@ spring:
     allow-bean-definition-overriding: true
   application:
     name: demo
-#  thymeleaf:
-#    prefix: classpath:/templates/
-#    suffix: .html
-#    mode: HTML5
-#    encoding: UTF-8
-#    cache: false
-#    servlet:
-#      content-type: text/html
 server:
   tomcat:
     uri-encoding: UTF-8
-    max-threads: 1024
-    min-spare-threads: 30
     accept-count: 5000
+    threads:
+      max: 1024
+      min-spare: 30
   port: 8990
   servlet:
     context-path: /
@@ -63,7 +56,15 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,logfile
-
+        include: '*'
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      enabled: on
+    info:
+      enabled: on
 logging:
-  file: logs/cr-info.log
+  file:
+    name: logs/cr-info.log

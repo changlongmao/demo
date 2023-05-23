@@ -23,7 +23,9 @@ public class TestClass {
         System.out.println(foo(4));
         System.out.println(new User().getClass().getClassLoader());
         System.out.println(new BigDecimal("1.40").compareTo(new BigDecimal("1.4")));
+        System.out.println("请求参数不合法：\n不能为null\n用户名最长10个字符\n用户编码不能为空\n");
     }
+
     public static int foo(Integer x) {
         try {
             x = 1;

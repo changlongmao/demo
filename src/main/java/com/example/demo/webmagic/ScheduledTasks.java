@@ -14,7 +14,7 @@ public class ScheduledTasks {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-    @Scheduled(cron = "0 0/20 7-8 * * ? ")
+//    @Scheduled(cron = "0 0/20 7-8 * * ? ")
     public void reportCurrentTime() {
         System.out.println("现在时间：" + dateFormat.format(new Date()));
         Spider spider = Spider.create(new TestPageProcessor());
@@ -25,7 +25,7 @@ public class ScheduledTasks {
         spider.stop();
     }
 
-    @Scheduled(cron = "0 1/20 7-8 * * ? ")
+//    @Scheduled(cron = "0 1/20 7-8 * * ? ")
     public void getMarket(){
         System.out.println("现在时间：" + dateFormat.format(new Date()));
         Spider spider = Spider.create(new MarketPageProcessor());

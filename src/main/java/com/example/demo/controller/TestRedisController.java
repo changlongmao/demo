@@ -4,7 +4,11 @@ import com.example.demo.annotation.RepeatLock;
 import com.example.demo.common.RestResponse;
 import com.example.demo.entity.*;
 import com.example.demo.util.JedisUtil;
+import com.example.demo.util.StringUtil;
+import jdk.jfr.Frequency;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.LocalCachedMapOptions;
+import org.redisson.api.RLocalCachedMap;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +17,10 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.sql.PreparedStatement;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -51,9 +58,19 @@ public class TestRedisController {
         return RestResponse.success().put(name, bean);
     }
 
+
+    @GetMapping("getRLocalCachedMap")
+    public RestResponse getRLocalCachedMap() {
+        RLocalCachedMap<Object, Object> testRLocalCachedMap = redissonClient.getLocalCachedMap("testRLocalCachedMap", LocalCachedMapOptions.defaults());
+        testRLocalCachedMap.put("aaa", "bbb");
+        testRLocalCachedMap.put("ccc", "ddd");
+        testRLocalCachedMap.expire(30, TimeUnit.SECONDS);
+        return RestResponse.success();
+    }
+
     @RepeatLock
     @GetMapping("testRedissonClient")
-    public RestResponse testRedissonClient(@Valid @RequestBody SysLogEntity sysLogEntity,
+    public RestResponse testRedissonClient(@Valid @RequestParam SysLogEntity sysLogEntity,
                                    @RequestParam("userId") Long userId,
                                    @RequestHeader("appCode") String appCode) throws Exception {
 //        System.out.println(sysLogEntity.getRedisKeyName());
@@ -84,7 +101,12 @@ public class TestRedisController {
     }
 
     @GetMapping("testJedisObject")
-    public RestResponse testJedisObject() throws Exception {
+    public RestResponse testJedisObject(HttpServletRequest request) throws Exception {
+
+        for (Cookie cookie : request.getCookies()) {
+            cookie.setHttpOnly(true);
+        }
+
 
         List<Map<String, Object>> users = new ArrayList<>();
         Map<String, Object> map = new HashMap<>();
@@ -176,6 +198,7 @@ public class TestRedisController {
         System.out.println(Arrays.deepHashCode(arr));
         System.out.println(Arrays.hashCode(arr));
         System.out.println(Arrays.hashCode(arr1));
+        System.out.println(StringUtil.getUUID());
     }
 
 }

@@ -19,7 +19,7 @@
         <!-- wagon plugin 项目部署配置 -->
         <service-path>/var/www/jar</service-path>
         <pack-name>${artifactId}-${version}.jar</pack-name>
-        <remote-addr></remote-addr>
+        <remote-addr>1.15.104.25:22</remote-addr>
         <remote-username>root</remote-username>
         <remote-passwd></remote-passwd>
 

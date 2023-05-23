@@ -11,7 +11,7 @@
     </update>
 
     <select id="queryUserList" resultType="com.example.demo.entity.User">
-        select id from user
+        select id from user where ${sql}
     </select>
     <select id="getById" resultType="com.example.demo.entity.User">
         select id, username,rear_name, password from user where id = #{id} lock in share mode

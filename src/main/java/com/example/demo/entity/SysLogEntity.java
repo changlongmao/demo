@@ -3,6 +3,8 @@ package com.example.demo.entity;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.example.demo.annotation.RedisKeyNameLock;
+import com.example.demo.util.DateUtil;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -16,6 +18,7 @@ public class SysLogEntity implements RedisKeyNameLock, Serializable {
     @TableId
     private String id;
 
+    @JsonProperty
     private String userName;
 
     private String operation;
@@ -37,4 +40,7 @@ public class SysLogEntity implements RedisKeyNameLock, Serializable {
 
     public Boolean isUserIp(){return true;} ;
 
+    public static void main(String[] args) {
+        System.out.println(DateUtil.getYearStart(new Date()).getTime());
+    }
 }

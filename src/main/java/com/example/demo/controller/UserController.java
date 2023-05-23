@@ -233,6 +233,7 @@ public class UserController {
 //        userService.batchInsert(users);
 //        log.info("批量新增之后："+users.size());
 
+
         ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 20, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<>());
         int j = 0;
         int i = 1000;

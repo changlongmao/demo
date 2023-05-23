@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.annotation.RepeatLock;
 import com.example.demo.common.RestResponse;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
@@ -38,10 +39,14 @@ public class TestClassController {
         return RestResponse.success().put("user",user);
     }
 
+    @RepeatLock
     @GetMapping("/testClass")
     @Transactional(rollbackFor = Exception.class)
-    public void testClass(@RequestParam Map<String, Object> map) throws Exception{
-
+    public RestResponse testClass(@RequestParam Map<String, Object> map) throws Exception{
+        log.info("请求进来了");
+        Thread.sleep(1000);
+        log.info("请求结束了");
+        return RestResponse.success();
     }
 
     public static void main(String[] args) throws Exception {
