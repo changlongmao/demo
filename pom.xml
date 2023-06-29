@@ -21,7 +21,7 @@
         <pack-name>${artifactId}-${version}.jar</pack-name>
         <remote-addr>1.15.104.25:22</remote-addr>
         <remote-username>root</remote-username>
-        <remote-passwd>Chang273105</remote-passwd>
+        <remote-passwd></remote-passwd>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
