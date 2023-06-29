@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @since v1.0.0
  */
 @Configuration
-@EnableAsync
+//@EnableAsync
 public class ThreadPoolTaskExecutorConfig {
 
     /**

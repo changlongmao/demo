@@ -11,6 +11,7 @@ import com.example.demo.jwt.Authorization;
 import com.example.demo.jwt.JwtTokenUtil;
 import com.example.demo.service.UserService;
 import com.example.demo.util.*;
+import jodd.util.Base64;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -19,7 +20,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import sun.misc.BASE64Encoder;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -459,7 +459,7 @@ public class UserController {
         byte[] buffer = new byte[(int) tmp.length()];
         inputFile.read(buffer);
         inputFile.close();
-        String base64 = new BASE64Encoder().encode(buffer);
+        String base64 = new Base64().encodeToString(buffer);
 //        BASE64Encoder base64Encoder =new BASE64Encoder();
 //        String base64EncoderImg = file.getOriginalFilename()+","+ base64Encoder.encode(file.getBytes());
 

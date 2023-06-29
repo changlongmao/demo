@@ -2,6 +2,7 @@ package com.example.demo.service.Impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.demo.annotation.SysLog;
+import com.example.demo.controller.TestTTLExecutorController;
 import com.example.demo.controller.TestThreadController;
 import com.example.demo.controller.UserController;
 import com.example.demo.entity.User;
@@ -54,8 +55,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public void executeAsync() {
         System.out.println(this);
         log.info("start executeAsync");
+        log.info("TTL获取值为{}", TestTTLExecutorController.context.get());
+        log.info("threadLocal获取值为{}", TestTTLExecutorController.threadLocal.get());
+
         try{
-            Thread.sleep(5000);
+            Thread.sleep(1000);
         }catch(Exception e){
             e.printStackTrace();
         }

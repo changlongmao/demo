@@ -1,7 +1,6 @@
 package com.example.demo.testMain;
 
 import com.example.demo.entity.TestObject;
-import com.sun.jmx.remote.internal.ArrayQueue;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -17,7 +16,7 @@ public class TestQueue {
         arrayBlockingQueue.poll();
         ArrayDeque<Object> arrayDeque = new ArrayDeque<>();
 
-        ArrayQueue<Object> arrayQueue = new ArrayQueue<>(10);
+//        ArrayQueue<Object> arrayQueue = new ArrayQueue<>(10);
         LinkedList<Object> objects = new LinkedList<>();
 
 
