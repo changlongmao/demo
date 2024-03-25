@@ -3,7 +3,7 @@
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
     <property name="PATH" value="logs"/>
-    <property name="PATTERN" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{20} - [%method,%line] - %msg%n"/>
+    <property name="PATTERN" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{20} - [%method,%line] %X{traceId} - %msg%n"/>
     <property name="maxHistory" value="60"/>
     <property name="maxFileSize" value="10MB"/>
 
@@ -80,6 +80,44 @@
         </filter>
     </appender>
 
+    <springProperty scope="context" name="profileActive" source="spring.profiles.active" defaultValue="test"/>
+    <springProperty scope="context" name="appName" source="spring.application.name"/>
+<!--    <springProfile name="dev,test,prod">-->
+<!--        <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">-->
+<!--            &lt;!&ndash; logstash服务器地址 端口&ndash;&gt;-->
+<!--            <destination>127.0.0.1:4560</destination>-->
+<!--            &lt;!&ndash; 保活探测 &ndash;&gt;-->
+<!--            <keepAliveDuration>5 minutes</keepAliveDuration>-->
+<!--            &lt;!&ndash; 连接失败重试 &ndash;&gt;-->
+<!--            <reconnectionDelay>3 second</reconnectionDelay>-->
+<!--            &lt;!&ndash; 连接超时 &ndash;&gt;-->
+<!--            <connectionTimeout>10 seconds</connectionTimeout>-->
+<!--            &lt;!&ndash;输出的格式，推荐使用这个&ndash;&gt;-->
+<!--            <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">-->
+<!--                <providers>-->
+<!--                    <pattern>-->
+<!--                        <pattern>-->
+<!--                            {-->
+<!--                            "environment":"${profileActive}",-->
+<!--                            "server":"${appName}",-->
+<!--                            "create_time": "%d{yyyy-MM-dd HH:mm:ss.SSS}",-->
+<!--                            "thread": "%thread",-->
+<!--                            "log_level": "%level",-->
+<!--                            "log_code_address": "%logger{96} %line",-->
+<!--                            "traceId": "%X{traceId}",-->
+<!--                            "exception_first_line": "%ex{0}",-->
+<!--                            "message":"%msg%n %rEx%n",-->
+<!--                            "user_code": "%X{userCode}",-->
+<!--                            "user_name": "%X{userName}",-->
+<!--                            "dept_code": "%X{deptCode}",-->
+<!--                            "dept_name": "%X{deptName}"-->
+<!--                            }-->
+<!--                        </pattern>-->
+<!--                    </pattern>-->
+<!--                </providers>-->
+<!--            </encoder>-->
+<!--        </appender>-->
+<!--    </springProfile>-->
     <logger name="com.example.demo.mapper" level="DEBUG"/>
 
     <root level="INFO">
@@ -87,6 +125,7 @@
         <appender-ref ref="LOG_ERROR"/>
         <appender-ref ref="LOG_WARN"/>
         <appender-ref ref="LOG_INFO"/>
+<!--        <appender-ref ref="LOGSTASH"/>-->
     </root>
 
 </configuration>

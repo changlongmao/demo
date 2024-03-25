@@ -12,18 +12,26 @@ public class TestList {
 
     public static void main(String[] args) {
 
-        List<Integer> linkedList = new LinkedList<>();
-        new Stack<>();
-        List<? super CharSequence> arrayList = new ArrayList<>();
-        arrayList.add("a");
-        Object object = arrayList.get(1);
+//        List<Integer> linkedList = new LinkedList<>();
+//        new Stack<>();
+//        List<? super CharSequence> arrayList = new ArrayList<>();
+//        arrayList.add("a");
+//        Object object = arrayList.get(1);
+//
+//        List<? extends CharSequence> numberArrayList = new ArrayList<>();
+//
+//        CharSequence charSequence = numberArrayList.get(1);
 
-        List<? extends CharSequence> numberArrayList = new ArrayList<>();
+        long start = System.currentTimeMillis();
+        List<Integer> list = new ArrayList<>();
 
-        CharSequence charSequence = numberArrayList.get(1);
+        for (int i = 0; i < 100000000; i++) {
+            list.add(1);
+        }
 
-        List<User> list = new ArrayList<>();
-        list.sort(Comparator.comparing(User::getId));
+        List<Integer> list2 = new ArrayList<>();
+        list2.addAll(list);
+        System.out.println("时间" + (System.currentTimeMillis() - start));
 
     }
 

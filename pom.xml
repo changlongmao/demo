@@ -69,7 +69,7 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.1.0</version>
+            <version>3.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -111,7 +111,7 @@
         <dependency>
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
-            <version>5.1</version>
+            <version>7.2</version>
         </dependency>
         <dependency>
             <groupId>us.codecraft</groupId>
@@ -133,6 +133,11 @@
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
             <version>3.2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+            <version>3.3.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
@@ -200,7 +205,12 @@
             <artifactId>spring-boot-admin-starter-client</artifactId>
             <version>2.0.2</version>
         </dependency>
-
+        <!-- xxl job -->
+        <dependency>
+            <groupId>com.xuxueli</groupId>
+            <artifactId>xxl-job-core</artifactId>
+            <version>2.4.0</version>
+        </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
@@ -253,7 +263,18 @@
             <artifactId>fy-common</artifactId>
             <version>1.0.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>16</version> <!-- 你的 JavaFX 版本 -->
+        </dependency>
+            <!-- 其他 JavaFX 模块，根据需要添加 -->
+        <!-- shenyu网关上传服务状态 -->
+        <dependency>
+            <groupId>org.apache.shenyu</groupId>
+            <artifactId>shenyu-spring-boot-starter-client-springmvc</artifactId>
+            <version>2.6.1</version>
+        </dependency>
         <!-- 微信支付 -->
 <!--        <dependency>-->
 <!--            <groupId>com.github.wechatpay-apiv3</groupId>-->

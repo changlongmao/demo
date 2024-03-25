@@ -6,6 +6,8 @@ import com.example.demo.entity.*;
 import com.example.demo.enums.ProductStatusEnum;
 import com.example.demo.util.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shenyu.client.apidocs.annotations.ApiModule;
+import org.apache.shenyu.client.springmvc.annotation.ShenyuSpringMvcClient;
 import org.assertj.core.util.Lists;
 import org.redisson.api.RAtomicLong;
 import org.redisson.api.RedissonClient;
@@ -33,6 +35,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  **/
 @Slf4j
 @Scope
+@ShenyuSpringMvcClient("/")
 @RestController
 @RequestMapping("/testThread")
 public class TestThreadController {

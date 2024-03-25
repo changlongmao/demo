@@ -1,7 +1,6 @@
 package com.example.demo.config;
 
 
-import com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor;
 import com.example.demo.jwt.AuthArgumentResolver;
 import com.example.demo.jwt.AuthorizationInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,11 +35,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public AuthorizationInterceptor authorizationInterceptor() {
         return new AuthorizationInterceptor();
-    }
-
-    @Bean
-    public OptimisticLockerInterceptor optimisticLockerInterceptor() {
-        return new OptimisticLockerInterceptor();
     }
 
     @Override

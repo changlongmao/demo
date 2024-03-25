@@ -18,6 +18,7 @@ public class SemaphoreTest {
         for (int index = 0; index < 20; index++) {
             final int NO = index;
             Runnable run = new Runnable() {
+                @Override
                 public void run() {
                     try {
                         //使用acquire()获取锁

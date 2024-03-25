@@ -246,9 +246,6 @@ public class ParseTextResumeUtil {
                 }
                 if (StringUtil.isIDCard(result)) {
                     parseTextResumeDto.setIdCard(result);
-                    parseTextResumeDto.setSex(Byte.valueOf(StringUtil.getSexFromIdCard(result).getCode()));
-                    int age = StringUtil.getAgeByIdCard(result);
-                    parseTextResumeDto.setAge(age);
                 }
             default:
         }
@@ -295,9 +292,6 @@ public class ParseTextResumeUtil {
                 String idCard = StringUtil.getIdCard(result);
                 if (StringUtil.isNotEmpty(idCard)) {
                     parseTextResumeDto.setIdCard(idCard);
-                    parseTextResumeDto.setSex(Byte.valueOf(StringUtil.getSexFromIdCard(idCard).getCode()));
-                    int age = StringUtil.getAgeByIdCard(result);
-                    parseTextResumeDto.setAge(age);
                 }
             }
         }

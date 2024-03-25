@@ -374,7 +374,7 @@ public class UserController {
     public RestResponse count(String id) {
         long startTime = System.currentTimeMillis();
 
-        int b = userService.count();
+        long b = userService.count();
         Long endTime = System.currentTimeMillis();
         System.out.println("查询数据共用时" + (endTime - startTime) + "ms");
         return RestResponse.success().put("count", b);

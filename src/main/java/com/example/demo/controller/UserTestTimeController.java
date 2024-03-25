@@ -37,6 +37,12 @@ public class UserTestTimeController {
     @Autowired
     private UserTestTimeService userTestTimeService;
 
+    /**
+     * 根据查询参数分页查询列表
+     * @param condition
+     * @author ChangLF 2023/7/14 09:50
+     * @return com.baomidou.mybatisplus.core.metadata.IPage<com.example.demo.entity.UserTestTime>
+     **/
     @ApiOperation(value = "根据查询参数分页查询列表")
     @ApiImplicitParam(name = "condition", value = "查询条件", required = true, dataType = "UserTestTimeCondition", paramType = "body")
     @PostMapping("/list")

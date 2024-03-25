@@ -15,7 +15,7 @@ public class ServerTCP {
     public static void main(String[] args) throws IOException {
         System.out.println("服务端启动 , 等待连接 .... ");
         // 1.创建 ServerSocket对象，绑定端口，开始等待连接
-        ServerSocket ss = new ServerSocket(6666);
+        ServerSocket ss = new ServerSocket(0);
         while (true) {
             // 2.接收连接 accept 方法, 返回 socket 对象.
             Socket server = ss.accept();

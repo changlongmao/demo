@@ -9,9 +9,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.lang.Nullable;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +22,7 @@ import java.util.Map;
  * 支持JSON与对象间的互相转换
  * </pre>
  *
- * @author Deolin 2018-04-02
+ * @author changlf 2023-05-16
  */
 @Slf4j
 public class JsonUtils {
@@ -149,7 +149,7 @@ public class JsonUtils {
 
     /**
      * JSON -> 参数化的对象
-     *
+     * <p>
      * 示例： Collection<<User<UserAddress>> users = JsonUtils.toParameterizedObject(text);
      *
      * @throws JsonException 任何原因转化失败时，抛出这个异常，如果需要补偿处理，可以进行捕获
@@ -160,7 +160,7 @@ public class JsonUtils {
 
     /**
      * JSON -> 参数化的对象
-     *
+     * <p>
      * 示例： Collection<<User<UserAddress>> users = JsonUtils.toParameterizedObject(text);
      *
      * @throws JsonException 任何原因转化失败时，抛出这个异常，如果需要补偿处理，可以进行捕获
@@ -202,87 +202,47 @@ public class JsonUtils {
     }
 
     /**
-     * @deprecated 这个属性已被废弃，代替方案是<code>ObjectMapper yours = new ObjectMapper();</>
-     */
-    @Deprecated
-    public static final ObjectMapper mapper = new ObjectMapper();
+     * 获取JsonNode中的所有value值
+     * @param node 通过{@link JsonUtils#toTree(String)}获取的JsonNode
+	 * @param result 拼接的结果，入参时传初始空对象
+     * @author ChangLF 2023/7/10 17:21
+     **/
+    public static void parseNodeValue(JsonNode node, StringBuilder result) {
+        if (node.isValueNode()) {
+            if (node.isTextual()) {
+                result.append(node.textValue());
+            } else {
+                result.append(node);
+            }
+        }
 
-    /**
-     * @deprecated 这个方法已被废弃，代替方案是{@link JsonUtils#toJson(Object)}
-     */
-    @Deprecated
-    @Nullable
-    public static String serialize(Object obj) {
-        if (obj == null) {
-            return null;
+        if (node.isObject()) {
+            Iterator<Map.Entry<String, JsonNode>> it = node.fields();
+            while (it.hasNext()) {
+                Map.Entry<String, JsonNode> entry = it.next();
+                parseNodeValue(entry.getValue(), result);
+            }
         }
-        if (obj.getClass() == String.class) {
-            return (String) obj;
-        }
-        try {
-            return mapper.writeValueAsString(obj);
-        } catch (JsonProcessingException e) {
-            log.error("json序列化出错：" + obj, e);
-            return null;
+
+        if (node.isArray()) {
+            for (JsonNode jsonNode : node) {
+                parseNodeValue(jsonNode, result);
+            }
         }
     }
 
-    /**
-     * @deprecated 这个方法已被废弃，代替方案是{@link JsonUtils#toObject(String, Class)}
-     */
-    @Deprecated
-    @Nullable
-    public static <T> T parse(String json, Class<T> tClass) {
-        try {
-            return mapper.readValue(json, tClass);
-        } catch (IOException e) {
-            log.error("json解析出错：" + json, e);
-            return null;
-        }
-    }
-
-    /**
-     * @deprecated 这个方法已被废弃，代替方案是{@link JsonUtils#toListOfObject(String, Class<T>)}
-     */
-    @Deprecated
-    @Nullable
-    public static <E> List<E> parseList(String json, Class<E> eClass) {
-        try {
-            return mapper.readValue(json, mapper.getTypeFactory().constructCollectionType(List.class, eClass));
-        } catch (IOException e) {
-            log.error("json解析出错：" + json, e);
-            return null;
-        }
-    }
-
-    /**
-     * @deprecated 这个方法已被废弃，代替方案是{@link JsonUtils#toParameterizedObject(String,
-     *         TypeReference)}
-     */
-    @Deprecated
-    @Nullable
-    public static <K, V> Map<K, V> parseMap(String json, Class<K> kClass, Class<V> vClass) {
-        try {
-            return mapper.readValue(json, mapper.getTypeFactory().constructMapType(Map.class, kClass, vClass));
-        } catch (IOException e) {
-            log.error("json解析出错：" + json, e);
-            return null;
-        }
-    }
-
-    /**
-     * @deprecated 这个方法已被废弃，代替方案是{@link JsonUtils#toParameterizedObject(String,
-     *         TypeReference)}
-     */
-    @Deprecated
-    @Nullable
-    public static <T> T nativeRead(String json, TypeReference<T> type) {
-        try {
-            return mapper.readValue(json, type);
-        } catch (IOException e) {
-            log.error("json解析出错：" + json, e);
-            return null;
-        }
+    public static void main(String[] args) {
+        Map map = JsonUtils.toObject("{\n" +
+                "  \"service\": \"test_java::zdwp-java-demo\",\n" +
+                "  \"serviceInstance\": \"30059225ee3a42948c0d235de7cfa66c@10.10.1.104\",\n" +
+                "  \"properties\": [\n" +
+                "    {\n" +
+                "      \"key\": \"language\",\n" +
+                "      \"value\": \"Java\"\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}", Map.class);
+        System.out.println(map.toString());
     }
 
 }

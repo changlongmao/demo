@@ -1,6 +1,8 @@
 package com.example.demo.testMain;
 
+import cn.afterturn.easypoi.exception.excel.enums.ExcelExportEnum;
 import com.example.demo.entity.User;
+import com.example.demo.enums.ExcelImportTypeEnum;
 import com.example.demo.util.JsonUtils;
 
 import java.math.BigDecimal;
@@ -24,6 +26,8 @@ public class TestClass {
         System.out.println(new User().getClass().getClassLoader());
         System.out.println(new BigDecimal("1.40").compareTo(new BigDecimal("1.4")));
         System.out.println("请求参数不合法：\n不能为null\n用户名最长10个字符\n用户编码不能为空\n");
+        ExcelImportTypeEnum[] valus = ExcelImportTypeEnum.class.getEnumConstants();
+        System.out.println(valus);
     }
 
     public static int foo(Integer x) {

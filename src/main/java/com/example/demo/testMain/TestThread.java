@@ -3,7 +3,6 @@ package com.example.demo.testMain;
 import com.example.demo.entity.User;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import lombok.extern.slf4j.Slf4j;
-import sun.misc.Unsafe;
 
 import java.util.*;
 import java.util.concurrent.*;

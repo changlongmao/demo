@@ -46,13 +46,13 @@ public class Query<T> extends LinkedHashMap<String, Object> {
         this.page = new Page<>(currPage, limit);
 
 
-        if (StringUtils.isNotBlank(sidx)) {
-            if (asc) {
-                this.page.setAsc(sidx);
-            } else {
-                this.page.setDesc(sidx);
-            }
-        }
+//        if (StringUtils.isNotBlank(sidx)) {
+//            if (asc) {
+//                this.page.setAsc(sidx);
+//            } else {
+//                this.page.setDesc(sidx);
+//            }
+//        }
 
     }
 

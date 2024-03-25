@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import com.baomidou.mybatisplus.extension.api.R;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
